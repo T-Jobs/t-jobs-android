@@ -22,3 +22,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "TJob"
 include(":app")
+include(":core:ui")
+include(":core:designsystem")
