@@ -8,7 +8,6 @@ import com.android.build.api.dsl.ProductFlavor
 @Suppress("EnumEntryName")
 enum class FlavorDimension {
     contentType,
-    roleType,
 }
 
 // The content for the app can either come from local static data which is useful for demo
@@ -17,9 +16,6 @@ enum class FlavorDimension {
 
 @Suppress("EnumEntryName")
 enum class TjobFlavor(val dimension: FlavorDimension, val applicationIdSuffix: String? = null) {
-    hr(FlavorDimension.roleType, applicationIdSuffix = ".hr"),
-    interviewer(FlavorDimension.roleType, applicationIdSuffix = ".inter"),
-    tl(FlavorDimension.roleType, applicationIdSuffix = ".tl"),
     demo(FlavorDimension.contentType, applicationIdSuffix = ".demo"),
     prod(FlavorDimension.contentType, applicationIdSuffix = ".prod"),
 }
@@ -29,7 +25,7 @@ fun configureFlavors(
     flavorConfigurationBlock: ProductFlavor.(flavor: TjobFlavor) -> Unit = {}
 ) {
     commonExtension.apply {
-        flavorDimensions += listOf(FlavorDimension.roleType.name, FlavorDimension.contentType.name)
+        flavorDimensions += FlavorDimension.contentType.name
         productFlavors {
             TjobFlavor.values().forEach {
                 create(it.name) {

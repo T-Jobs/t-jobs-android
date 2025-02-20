@@ -10,9 +10,12 @@ import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
 import io.ktor.serialization.kotlinx.json.json
 import ru.nativespeakers.core.token.TokenLocalDataSource
 import javax.inject.Singleton
+
+private const val SERVER_URL = "http://localhost:1010/"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -22,6 +25,10 @@ internal object NetworkModule {
     fun provideHttpClient(tokenLocalDataSource: TokenLocalDataSource) = HttpClient(OkHttp) {
         install(ContentNegotiation) {
             json()
+        }
+
+        defaultRequest {
+            url(SERVER_URL)
         }
 
         install(Auth) {
