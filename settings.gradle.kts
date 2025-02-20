@@ -21,6 +21,10 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "TJob"
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
 include(":core:ui")
 include(":core:designsystem")
+include(":core:common")
+include(":core:token")
