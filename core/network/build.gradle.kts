@@ -11,5 +11,5 @@ android {
 dependencies {
     implementation(projects.core.token)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.bundles.ktor.client)
+    api(libs.bundles.ktor.client)
 }
