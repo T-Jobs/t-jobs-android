@@ -1,6 +1,6 @@
 [versions]
 activityCompose = "1.10.0"
-androidGradlePlugin = "8.8.1"
+androidGradlePlugin = "8.8.2"
 androidTools = "31.8.1"
 androidxAppCompat = "1.7.0"
 androidxComposeBom = "2025.02.00"
@@ -32,6 +32,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "androidxComposeFoundation" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
+androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4" }
@@ -86,8 +87,8 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 tjob-android-application = { id = "tjob.android.application" }
 tjob-android-application-compose = { id = "tjob.android.application.compose" }
 tjob-android-application-flavors = { id = "tjob.android.application.flavors" }
-tjob-android-feature = { id = "tjob.android.feature", version = "unspecified" }
+tjob-android-feature = { id = "tjob.android.feature" }
 tjob-android-library = { id = "tjob.android.library" }
 tjob-android-library-compose = { id = "tjob.android.library.compose" }
-tjob-hilt = { id = "tjob.android.hilt" }
+tjob-hilt = { id = "tjob.hilt" }
 tjob-jvm-library = { id = "tjob.jvm.library" }

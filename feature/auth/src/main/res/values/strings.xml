@@ -1,0 +1,11 @@
+<resources>
+    <string name="feature_auth_welcome_back">С возвращением!</string>
+    <string name="feature_auth_enter_login_and_password">Пожалуйста, введите логин и пароль</string>
+    <string name="feature_auth_forget_password">Забыли пароль?</string>
+    <string name="feature_auth_enter">Войти</string>
+    <string name="feature_auth_no_account">Нет аккаунта?</string>
+    <string name="feature_auth_register">Зарегистрироваться</string>
+    <string name="feature_auth_email">Электронная почта</string>
+    <string name="feature_auth_password">Пароль</string>
+    <string name="feature_auth_incorrect_login_or_password">Неверный логин или пароль</string>
+</resources>

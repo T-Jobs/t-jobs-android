@@ -35,19 +35,19 @@ tasks {
 gradlePlugin {
     plugins {
         register("androidApplicationCompose") {
-            id = "tjob.android.application.compose"
+            id = libs.plugins.tjob.android.application.compose.get().pluginId
             implementationClass = "AndroidApplicationComposeConventionPlugin"
         }
         register("androidApplication") {
-            id = "tjob.android.application"
+            id = libs.plugins.tjob.android.application.asProvider().get().pluginId
             implementationClass = "AndroidApplicationConventionPlugin"
         }
         register("androidLibraryCompose") {
-            id = "tjob.android.library.compose"
+            id = libs.plugins.tjob.android.library.compose.get().pluginId
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
         register("androidLibrary") {
-            id = "tjob.android.library"
+            id = libs.plugins.tjob.android.library.asProvider().get().pluginId
             implementationClass = "AndroidLibraryConventionPlugin"
         }
         register("hilt") {
@@ -59,11 +59,11 @@ gradlePlugin {
             implementationClass = "JvmLibraryConventionPlugin"
         }
         register("androidFeature") {
-            id = "tjob.android.feature"
+            id = libs.plugins.tjob.android.feature.get().pluginId
             implementationClass = "AndroidFeatureConventionPlugin"
         }
         register("androidFlavors") {
-            id = "tjob.android.application.flavors"
+            id = libs.plugins.tjob.android.application.flavors.get().pluginId
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
         }
     }
