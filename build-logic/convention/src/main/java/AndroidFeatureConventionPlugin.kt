@@ -11,6 +11,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
         with(target) {
             apply(plugin = "tjob.android.library")
             apply(plugin = "tjob.hilt")
+            apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
             extensions.configure<LibraryExtension> {
                 @Suppress("UnstableApiUsage")

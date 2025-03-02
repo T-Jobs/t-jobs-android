@@ -46,7 +46,6 @@ internal fun PasswordTextField(
             Text(
                 text = placeholder,
                 style = MaterialTheme.typography.bodyMedium,
-                fontSize = 16.sp
             )
         },
         trailingIcon = {

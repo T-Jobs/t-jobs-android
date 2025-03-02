@@ -40,7 +40,7 @@ import ru.nativespeakers.ui.setStatusBarMode
 import ru.nativespeakers.feature.auth.R as authRes
 
 @Composable
-fun LoginScreen(
+internal fun LoginScreen(
     loginViewModel: LoginViewModel = hiltViewModel(),
     navigateToHomeScreen: () -> Unit,
 ) {
