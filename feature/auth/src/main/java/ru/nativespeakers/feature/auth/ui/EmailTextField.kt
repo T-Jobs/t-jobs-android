@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.sp
 import ru.nativespeakers.feature.auth.R
 
 @Composable
-fun EmailTextField(
+internal fun EmailTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,

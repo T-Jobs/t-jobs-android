@@ -10,12 +10,12 @@ class AuthRepository @Inject constructor(
     private val authDataSource: AuthDataSource,
     private val tokenDataSource: TokenLocalDataSource,
 ) {
-    suspend fun login(loginDto: LoginDto): Result<List<AppRole>> {
+    suspend fun login(loginDto: LoginDto): Result<Unit> {
         val loginResult = authDataSource.login(loginDto)
         if (loginResult.isSuccess) {
             val loginResponse = loginResult.getOrThrow()
             tokenDataSource.putToken(loginResponse.token)
-            return Result.success(loginResponse.roles)
+            return Result.success(Unit)
         } else {
             return Result.failure(loginResult.exceptionOrNull()!!)
         }

@@ -14,7 +14,7 @@ import ru.nativespeakers.data.auth.exception.UnauthorizedException
 import javax.inject.Inject
 
 @Immutable
-data class LoginUiState(
+internal data class LoginUiState(
     val email: String = "",
     val password: String = "",
     val isLoading: Boolean = false,
@@ -23,7 +23,7 @@ data class LoginUiState(
 )
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
+internal class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
     var loginUiState by mutableStateOf(LoginUiState())
