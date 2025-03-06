@@ -1,8 +1,10 @@
 package ru.nativespeakers.ui
 
+import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -36,6 +38,7 @@ enum class InterviewStatus {
     WAITING_FOR_FEEDBACK,
     PASSED,
     FAILED,
+    NONE,
 }
 
 @Composable
@@ -48,6 +51,7 @@ fun InterviewStatusCard(
         InterviewStatus.WAITING_FOR_FEEDBACK -> WaitingForFeedbackCard(modifier)
         InterviewStatus.PASSED -> InterviewPassedCard(modifier)
         InterviewStatus.FAILED -> InterviewFailedCard(modifier)
+        InterviewStatus.NONE -> InterviewNoneCard(modifier)
     }
 }
 
@@ -153,6 +157,11 @@ private fun InterviewFailedCard(modifier: Modifier = Modifier) {
                 .align(Alignment.TopEnd),
         )
     }
+}
+
+@Composable
+private fun InterviewNoneCard(modifier: Modifier = Modifier) {
+    Spacer(modifier)
 }
 
 @Preview
