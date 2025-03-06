@@ -1,0 +1,6 @@
+<resources>
+    <string name="core_ui_waiting_for_date_approve">Требует согласования времени</string>
+    <string name="core_ui_interview_passed">Интервью успешно пройдено</string>
+    <string name="core_ui_waiting_for_feedback">Ожидается фидбэк</string>
+    <string name="core_ui_interview_failed">Интервью провалено</string>
+</resources>
