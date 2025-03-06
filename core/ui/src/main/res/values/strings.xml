@@ -3,4 +3,16 @@
     <string name="core_ui_interview_passed">Интервью успешно пройдено</string>
     <string name="core_ui_waiting_for_feedback">Ожидается фидбэк</string>
     <string name="core_ui_interview_failed">Интервью провалено</string>
+    <string name="core_ui_january">января</string>
+    <string name="core_ui_february">февраля</string>
+    <string name="core_ui_march">марта</string>
+    <string name="core_ui_april">апреля</string>
+    <string name="core_ui_may">мая</string>
+    <string name="core_ui_june">июня</string>
+    <string name="core_ui_july">июля</string>
+    <string name="core_ui_august">августа</string>
+    <string name="core_ui_september">сентября</string>
+    <string name="core_ui_october">октября</string>
+    <string name="core_ui_november">ноября</string>
+    <string name="core_ui_december">декабря</string>
 </resources>
