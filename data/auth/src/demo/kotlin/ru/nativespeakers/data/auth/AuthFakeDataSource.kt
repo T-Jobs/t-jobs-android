@@ -15,7 +15,6 @@ internal class AuthFakeDataSource @Inject constructor(): AuthDataSource {
             else -> Result.success(
                 LoginResponse(
                     token = "12345",
-                    roles = listOf(AppRole.HR, AppRole.TEAM_LEAD, AppRole.INTERVIEWER)
                 )
             )
         }
