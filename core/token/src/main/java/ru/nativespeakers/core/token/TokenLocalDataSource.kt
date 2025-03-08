@@ -1,11 +1,12 @@
 package ru.nativespeakers.core.token
 
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import ru.nativespeakers.core.common.IoDispatcher
 import javax.inject.Inject
@@ -16,9 +17,9 @@ class TokenLocalDataSource @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
-    suspend fun token(): String? = withContext(ioDispatcher) {
-        dataStore.data.first()[PreferencesKeys.ACCESS_TOKEN]
-    }
+    val token = dataStore.data.map { it[PreferencesKeys.ACCESS_TOKEN] }
+
+    suspend fun token() = token.first()
 
     suspend fun putToken(token: String) {
         withContext(ioDispatcher) {

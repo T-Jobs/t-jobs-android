@@ -37,6 +37,10 @@ internal object NetworkModule {
                     val token = tokenLocalDataSource.token() ?: return@loadTokens null
                     BearerTokens(accessToken = token, refreshToken = null)
                 }
+                refreshTokens {
+                    tokenLocalDataSource.deleteToken()
+                    null
+                }
             }
         }
     }
