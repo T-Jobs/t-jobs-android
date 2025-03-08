@@ -85,7 +85,7 @@ fun InterviewCard(
             interviewName = interviewCardUiState.interviewName,
             date = interviewCardUiState.date,
             modifier = Modifier
-                .padding(horizontal = 12.dp, vertical = 8.dp)
+                .padding(12.dp)
                 .fillMaxWidth()
         )
         InterviewCardFooter(
@@ -93,7 +93,7 @@ fun InterviewCard(
             candidateUiState = interviewCardUiState.candidateUiState,
             status = interviewCardUiState.status,
             modifier = Modifier
-                .padding(horizontal = 12.dp, vertical = 8.dp)
+                .padding(12.dp)
                 .fillMaxWidth()
         )
     }
