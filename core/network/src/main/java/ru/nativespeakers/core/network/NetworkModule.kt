@@ -15,7 +15,7 @@ import io.ktor.serialization.kotlinx.json.json
 import ru.nativespeakers.core.token.TokenLocalDataSource
 import javax.inject.Singleton
 
-private const val SERVER_URL = "http://localhost:1010/"
+private const val SERVER_URL = "http://10.0.2.2:8080/"
 
 @Module
 @InstallIn(SingletonComponent::class)
