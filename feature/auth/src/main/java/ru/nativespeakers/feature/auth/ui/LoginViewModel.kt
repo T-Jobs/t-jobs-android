@@ -66,6 +66,6 @@ internal class LoginViewModel @Inject constructor(
 
 private fun LoginUiState.toLoginDto() =
     LoginDto(
-        email = email,
+        login = email,
         password = password,
     )
