@@ -1,11 +1,10 @@
-package ru.nativespeakers.ui
+package ru.nativespeakers.ui.interview
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material3.Card
@@ -36,23 +34,27 @@ import kotlinx.datetime.LocalDateTime
 import ru.nativespeakers.core.designsystem.Primary10
 import ru.nativespeakers.core.designsystem.Primary2
 import ru.nativespeakers.core.designsystem.Primary3
-import ru.nativespeakers.core.designsystem.Primary4
 import ru.nativespeakers.core.designsystem.Primary6
 import ru.nativespeakers.core.designsystem.Primary8
+import ru.nativespeakers.core.designsystem.TJobTheme
+import ru.nativespeakers.ui.conditional
+import ru.nativespeakers.ui.photo.PersonPhoto
+import ru.nativespeakers.ui.toUi
 
 @Immutable
 data class InterviewCardUiState(
     val interviewName: String,
-    val interviewerUiState: InterviewCardPersonUiState?,
-    val candidateUiState: InterviewCardPersonUiState,
+    val interviewerUiState: PersonAndPhotoUiState?,
+    val candidateUiState: PersonAndPhotoUiState,
     val status: InterviewStatus,
     val date: LocalDateTime?,
 )
 
 @Immutable
-data class InterviewCardPersonUiState(
+data class PersonAndPhotoUiState(
     val name: String,
-    val photoUrl: String,
+    val surname: String,
+    val photoUrl: String?,
 )
 
 @Composable
@@ -93,7 +95,7 @@ fun InterviewCard(
             candidateUiState = interviewCardUiState.candidateUiState,
             status = interviewCardUiState.status,
             modifier = Modifier
-                .padding(12.dp)
+                .padding(start = 12.dp, end = 12.dp, bottom = 12.dp)
                 .fillMaxWidth()
         )
     }
@@ -135,8 +137,8 @@ private fun InterviewCardHeader(
 
 @Composable
 private fun InterviewCardFooter(
-    interviewerUiState: InterviewCardPersonUiState?,
-    candidateUiState: InterviewCardPersonUiState,
+    interviewerUiState: PersonAndPhotoUiState?,
+    candidateUiState: PersonAndPhotoUiState,
     status: InterviewStatus,
     modifier: Modifier = Modifier
 ) {
@@ -165,7 +167,7 @@ private fun InterviewCardFooter(
 
 @Composable
 private fun InterviewCardPerson(
-    personUiState: InterviewCardPersonUiState?,
+    personUiState: PersonAndPhotoUiState?,
     isInterviewer: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -190,29 +192,13 @@ private fun InterviewCardPerson(
             .padding(4.dp)
     ) {
         Spacer(Modifier.weight(1f))
-        if (personUiState == null) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .background(Primary4)
-                    .size(26.dp)
-            ) {
-                Text(
-                    text = "?",
-                    color = Primary8,
-                    style = MaterialTheme.typography.labelMedium,
-                )
-            }
-        } else {
-            AsyncImageWithLoading(
-                model = personUiState.photoUrl,
-                modifier = Modifier
-                    .size(26.dp)
-                    .clip(CircleShape)
-            )
+        PersonPhoto(
+            state = personUiState,
+            modifier = Modifier.size(26.dp)
+        )
+        if (personUiState != null) {
             Text(
-                text = personUiState.name,
+                text = "${personUiState.name} ${personUiState.surname}",
                 textAlign = TextAlign.Center,
                 color = Primary10,
                 style = MaterialTheme.typography.labelMedium,
@@ -226,29 +212,29 @@ private fun InterviewCardPerson(
 @Preview
 @Composable
 private fun InterviewCardPreview() {
-    InterviewCard(
-        interviewCardUiState = InterviewCardUiState(
-            interviewName = "Алгоритмическое интервью",
-            interviewerUiState = InterviewCardPersonUiState(
-                name = "Илья Бычков",
-                photoUrl = ""
+    TJobTheme {
+        InterviewCard(
+            interviewCardUiState = InterviewCardUiState(
+                interviewName = "Алгоритмическое интервью",
+                interviewerUiState = null,
+                candidateUiState = PersonAndPhotoUiState(
+                    name = "Алексей",
+                    surname = "Трясков",
+                    photoUrl = null
+                ),
+                status = InterviewStatus.PASSED,
+                date = LocalDateTime(
+                    year = 2025,
+                    monthNumber = 2,
+                    dayOfMonth = 8,
+                    hour = 13,
+                    minute = 45,
+                    second = 0,
+                    nanosecond = 0
+                )
             ),
-            candidateUiState = InterviewCardPersonUiState(
-                name = "Алексей Трясков",
-                photoUrl = ""
-            ),
-            status = InterviewStatus.PASSED,
-            date = LocalDateTime(
-                year = 2025,
-                monthNumber = 2,
-                dayOfMonth = 8,
-                hour = 13,
-                minute = 45,
-                second = 0,
-                nanosecond = 0
-            )
-        ),
-        onClick = {},
-        modifier = Modifier.width(400.dp)
-    )
+            onClick = {},
+            modifier = Modifier.width(400.dp)
+        )
+    }
 }

@@ -1,4 +1,4 @@
-package ru.nativespeakers.ui
+package ru.nativespeakers.ui.interview
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,6 +28,7 @@ import ru.nativespeakers.core.designsystem.Green3
 import ru.nativespeakers.core.designsystem.Green6
 import ru.nativespeakers.core.designsystem.Red3
 import ru.nativespeakers.core.designsystem.Red6
+import ru.nativespeakers.core.designsystem.TJobTheme
 import ru.nativespeakers.core.designsystem.Yellow2
 import ru.nativespeakers.core.designsystem.Yellow4
 import ru.nativespeakers.core.ui.R.string as coreUiStrings
@@ -166,31 +167,39 @@ private fun InterviewNoneCard(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun WaitingForTimeApprovalCardPreview() {
-    WaitingForTimeApprovalCard(
-        modifier = Modifier.size(width = 200.dp, height = 72.dp)
-    )
+    TJobTheme {
+        WaitingForTimeApprovalCard(
+            modifier = Modifier.size(width = 200.dp, height = 72.dp)
+        )
+    }
 }
 
 @Preview
 @Composable
 private fun WaitingForFeedbackCardPreview() {
-    WaitingForFeedbackCard(
-        modifier = Modifier.size(width = 200.dp, height = 72.dp)
-    )
+    TJobTheme {
+        WaitingForFeedbackCard(
+            modifier = Modifier.size(width = 200.dp, height = 72.dp)
+        )
+    }
 }
 
 @Preview
 @Composable
 private fun InterviewPassedCardPreview() {
-    InterviewPassedCard(
-        modifier = Modifier.size(width = 200.dp, height = 72.dp)
-    )
+    TJobTheme {
+        InterviewPassedCard(
+            modifier = Modifier.size(width = 200.dp, height = 72.dp)
+        )
+    }
 }
 
 @Preview
 @Composable
 private fun InterviewFailedCardPreview() {
-    InterviewFailedCard(
-        modifier = Modifier.size(width = 200.dp, height = 72.dp)
-    )
+    TJobTheme {
+        InterviewFailedCard(
+            modifier = Modifier.size(width = 200.dp, height = 72.dp)
+        )
+    }
 }
