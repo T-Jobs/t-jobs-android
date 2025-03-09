@@ -19,4 +19,5 @@
     <string name="core_ui_candidates">Кандидаты</string>
     <string name="core_ui_hrs">HRs</string>
     <string name="core_ui_team_leads">Team Leads</string>
+    <string name="core_ui_meetings">встреч</string>
 </resources>
