@@ -42,7 +42,6 @@ import ru.nativespeakers.feature.auth.R as authRes
 @Composable
 internal fun LoginScreen(
     loginViewModel: LoginViewModel = hiltViewModel(),
-    navigateToHomeScreen: () -> Unit,
 ) {
     val view = LocalView.current
     SideEffect {
@@ -136,7 +135,6 @@ internal fun LoginScreen(
         loginUiState = loginViewModel.loginUiState,
         snackbarHostState = snackbarHostState,
         onCredentialsInvalidShown = loginViewModel::credentialsInvalidMessageShown,
-        onLoggedIn = navigateToHomeScreen
     )
 }
 
@@ -145,27 +143,12 @@ private fun ObserveLoginStateChanges(
     loginUiState: LoginUiState,
     snackbarHostState: SnackbarHostState,
     onCredentialsInvalidShown: () -> Unit,
-    onLoggedIn: () -> Unit,
 ) {
-    ObserveIsLoggedIn(loginUiState, onLoggedIn)
     ObserveCredentialsInvalid(
         loginUiState = loginUiState,
         snackbarHostState = snackbarHostState,
         onCredentialsInvalidShown = onCredentialsInvalidShown,
     )
-}
-
-@Composable
-private fun ObserveIsLoggedIn(
-    loginUiState: LoginUiState,
-    onLoggedIn: () -> Unit,
-) {
-    val currentOnLoggedIn by rememberUpdatedState(onLoggedIn)
-    LaunchedEffect(loginUiState) {
-        if (loginUiState.isLoggedIn) {
-            currentOnLoggedIn()
-        }
-    }
 }
 
 @Composable

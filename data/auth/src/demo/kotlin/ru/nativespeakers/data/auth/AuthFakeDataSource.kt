@@ -10,7 +10,7 @@ internal class AuthFakeDataSource @Inject constructor(): AuthDataSource {
     override suspend fun login(loginDto: LoginDto): Result<LoginResponse> {
         delay(1000)
         return when {
-            loginDto.email != UserCredentials["email"] -> Result.failure(UnauthorizedException())
+            loginDto.login != UserCredentials["email"] -> Result.failure(UnauthorizedException())
             loginDto.password != UserCredentials["password"] -> Result.failure(UnauthorizedException())
             else -> Result.success(
                 LoginResponse(
@@ -18,5 +18,10 @@ internal class AuthFakeDataSource @Inject constructor(): AuthDataSource {
                 )
             )
         }
+    }
+
+    override suspend fun roles(): Result<List<AppRole>> {
+        delay(1000)
+        return Result.success(UserRoles)
     }
 }

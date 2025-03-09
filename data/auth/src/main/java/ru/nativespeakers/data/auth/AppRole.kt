@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 enum class AppRole {
-    @SerialName("hr") HR,
-    @SerialName("team_lead") TEAM_LEAD,
-    @SerialName("interviewer") INTERVIEWER,
+    @SerialName("HR") HR,
+    @SerialName("TL") TEAM_LEAD,
+    @SerialName("INTERVIEWER") INTERVIEWER,
 }

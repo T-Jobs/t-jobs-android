@@ -2,6 +2,7 @@ package ru.nativespeakers.data.auth
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -12,6 +13,7 @@ import kotlinx.coroutines.withContext
 import ru.nativespeakers.core.common.IoDispatcher
 import ru.nativespeakers.data.auth.dto.LoginDto
 import ru.nativespeakers.data.auth.dto.LoginResponse
+import ru.nativespeakers.data.auth.dto.UserRolesResponse
 import ru.nativespeakers.data.auth.exception.UnauthorizedException
 import javax.inject.Inject
 
@@ -29,7 +31,16 @@ internal class AuthRemoteDataSource @Inject constructor(
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(response.body())
                 HttpStatusCode.Unauthorized -> Result.failure(UnauthorizedException())
-                else -> throw IllegalStateException("Unknown code response - ${response.status.value}")
+                else -> Result.failure(Exception())
             }
         }
+
+    override suspend fun roles(): Result<List<AppRole>> = withContext(ioDispatcher) {
+        val response = httpClient.get("/user/roles")
+        when (response.status) {
+            HttpStatusCode.OK -> Result.success(response.body<UserRolesResponse>().roles)
+            HttpStatusCode.Unauthorized -> Result.failure(UnauthorizedException())
+            else -> Result.failure(Exception())
+        }
+    }
 }
