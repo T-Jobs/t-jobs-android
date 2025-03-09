@@ -15,4 +15,8 @@
     <string name="core_ui_october">октября</string>
     <string name="core_ui_november">ноября</string>
     <string name="core_ui_december">декабря</string>
+    <string name="core_ui_on_hands">на руки</string>
+    <string name="core_ui_candidates">Кандидаты</string>
+    <string name="core_ui_hrs">HRs</string>
+    <string name="core_ui_team_leads">Team Leads</string>
 </resources>
