@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "ru.nativespeakers.data.auth"
+    namespace = "ru.nativespeakers.data.user"
 }
 
 dependencies {
@@ -13,7 +13,7 @@ dependencies {
 
     implementation(projects.core.common)
     implementation(projects.core.network)
-    implementation(projects.core.token)
+    implementation(projects.data.auth)
 
     implementation(libs.kotlinx.serialization.json)
 }

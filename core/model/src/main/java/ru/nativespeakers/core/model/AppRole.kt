@@ -1,4 +1,4 @@
-package ru.nativespeakers.data.auth
+package ru.nativespeakers.core.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

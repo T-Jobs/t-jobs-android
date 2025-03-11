@@ -1,7 +1,7 @@
 package ru.nativespeakers.data.auth.dto
 
 import kotlinx.serialization.Serializable
-import ru.nativespeakers.data.auth.AppRole
+import ru.nativespeakers.core.model.AppRole
 
 @Serializable
 data class UserRolesResponse(

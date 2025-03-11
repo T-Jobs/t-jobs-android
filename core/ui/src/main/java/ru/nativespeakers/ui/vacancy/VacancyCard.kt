@@ -37,6 +37,7 @@ import ru.nativespeakers.core.designsystem.Primary2
 import ru.nativespeakers.core.designsystem.Primary8
 import ru.nativespeakers.core.designsystem.Primary9
 import ru.nativespeakers.core.designsystem.TJobTheme
+import ru.nativespeakers.ui.conditional
 import ru.nativespeakers.ui.interview.PersonAndPhotoUiState
 import ru.nativespeakers.ui.photo.PersonPhoto
 import ru.nativespeakers.core.ui.R.string as coreUiStrings
@@ -44,7 +45,7 @@ import ru.nativespeakers.core.ui.R.string as coreUiStrings
 @Immutable
 data class VacancyCardUiState(
     val name: String,
-    val city: String,
+    val city: String?,
     val firstTwoTags: List<String>,
     val firstTwoHrs: List<PersonAndPhotoUiState?>,
     val hrsCount: Int,
@@ -52,8 +53,8 @@ data class VacancyCardUiState(
     val teamLeadsCount: Int,
     val firstTwoCandidates: List<PersonAndPhotoUiState?>,
     val candidatesCount: Int,
-    val salaryLowerBoundRub: Int,
-    val salaryHigherBoundRub: Int,
+    val salaryLowerBoundRub: Int?,
+    val salaryHigherBoundRub: Int?,
 )
 
 @Composable
@@ -96,14 +97,20 @@ fun VacancyCard(
             teamLeadsCount = state.teamLeadsCount,
             firstTwoCandidates = state.firstTwoCandidates,
             candidatesCount = state.candidatesCount,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .conditional(state.city == null) {
+                    padding(bottom = 12.dp)
+                }
         )
-        Text(
-            text = state.city,
-            color = Primary8,
-            style = MaterialTheme.typography.labelMedium,
-            modifier = Modifier.padding(12.dp)
-        )
+        if (state.city != null) {
+            Text(
+                text = state.city,
+                color = Primary8,
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier.padding(12.dp)
+            )
+        }
     }
 }
 
@@ -111,8 +118,8 @@ fun VacancyCard(
 private fun Header(
     vacancyName: String,
     firstTwoTags: List<String>,
-    salaryLowerBoundRub: Int,
-    salaryHigherBoundRub: Int,
+    salaryLowerBoundRub: Int?,
+    salaryHigherBoundRub: Int?,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -126,22 +133,29 @@ private fun Header(
                 color = Primary8,
             )
             Spacer(modifier = Modifier.width(24.dp))
-            Tag(firstTwoTags[0])
-            Spacer(modifier = Modifier.width(10.dp))
-            Tag(firstTwoTags[1])
+            if (firstTwoTags.isNotEmpty()) {
+                Tag(firstTwoTags[0])
+            }
+            if (firstTwoTags.size > 1) {
+                Spacer(modifier = Modifier.width(10.dp))
+                Tag(firstTwoTags[1])
+            }
         }
-        Row {
-            Text(
-                text = "${salaryLowerBoundRub.moneyToString()} - ${salaryHigherBoundRub.moneyToString()} ₽",
-                color = Green5,
-                style = MaterialTheme.typography.labelMedium
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = stringResource(coreUiStrings.core_ui_on_hands),
-                color = Base6,
-                style = MaterialTheme.typography.labelMedium
-            )
+        val salaryString = getStringForSalary(salaryLowerBoundRub, salaryHigherBoundRub)
+        if (salaryString != null) {
+            Row {
+                Text(
+                    text = "$salaryString ₽",
+                    color = Green5,
+                    style = MaterialTheme.typography.labelMedium
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = stringResource(coreUiStrings.core_ui_on_hands),
+                    color = Base6,
+                    style = MaterialTheme.typography.labelMedium
+                )
+            }
         }
     }
 }
@@ -241,28 +255,30 @@ private fun PersonsPhotosOnTop(
         modifier = modifier
     ) {
         PersonPhoto(
-            state = firstTwoPersons[0],
+            state = if (firstTwoPersons.isNotEmpty()) firstTwoPersons[0] else null,
             modifier = Modifier.size(photoSize)
         )
         PersonPhoto(
-            state = firstTwoPersons[1],
+            state = if (firstTwoPersons.size > 1) firstTwoPersons[1] else null,
             modifier = Modifier
                 .border(width = 1.dp, color = Base0, shape = CircleShape)
                 .size(photoSize + 2.dp)
         )
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .clip(CircleShape)
-                .background(color = Primary2, shape = CircleShape)
-                .height(26.dp)
-                .widthIn(min = 26.dp)
-        ) {
-            Text(
-                text = "+$personsCount",
-                color = Primary9,
-                style = MaterialTheme.typography.labelMedium
-            )
+        if (personsCount > 0) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .background(color = Primary2, shape = CircleShape)
+                    .height(26.dp)
+                    .widthIn(min = 26.dp)
+            ) {
+                Text(
+                    text = "+$personsCount",
+                    color = Primary9,
+                    style = MaterialTheme.typography.labelMedium
+                )
+            }
         }
     }
 }
@@ -286,9 +302,22 @@ private fun Int.moneyToString(): String {
     return stringBuilder.toString().reversed()
 }
 
+@Composable
+private fun getStringForSalary(
+    salaryLowerBoundRub: Int?,
+    salaryHigherBoundRub: Int?,
+) = when {
+    salaryLowerBoundRub != null && salaryHigherBoundRub != null -> {
+        "${salaryLowerBoundRub.moneyToString()} - ${salaryHigherBoundRub.moneyToString()}"
+    }
+    salaryLowerBoundRub != null -> "${stringResource(coreUiStrings.core_ui_from)} ${salaryLowerBoundRub.moneyToString()}"
+    salaryHigherBoundRub != null -> "${stringResource(coreUiStrings.core_ui_until)} ${salaryHigherBoundRub.moneyToString()}"
+    else -> null
+}
+
 @Preview
 @Composable
-private fun VacancyCardPreview() {
+private fun VacancyCardPreview_FullInfo() {
     TJobTheme {
         VacancyCard(
             state = VacancyCardUiState(
@@ -336,6 +365,98 @@ private fun VacancyCardPreview() {
                 candidatesCount = 26,
                 salaryLowerBoundRub = 70000,
                 salaryHigherBoundRub = 120000,
+            ),
+            onClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun VacancyCardPreview_State1() {
+    TJobTheme {
+        VacancyCard(
+            state = VacancyCardUiState(
+                name = "Java-разработчик",
+                city = "Нижний Новгород",
+                firstTwoTags = listOf("Java"),
+                firstTwoHrs = listOf(
+                    PersonAndPhotoUiState(
+                        name = "Анна",
+                        surname = "Коренина",
+                        photoUrl = null
+                    ),
+                ),
+                hrsCount = 3,
+                firstTwoTeamLeads = listOf(
+                    PersonAndPhotoUiState(
+                        name = "Андрй",
+                        surname = "Болконский",
+                        photoUrl = null
+                    ),
+                    PersonAndPhotoUiState(
+                        name = "Евгений",
+                        surname = "Онегин",
+                        photoUrl = null
+                    )
+                ),
+                teamLeadsCount = 0,
+                firstTwoCandidates = listOf(
+                    PersonAndPhotoUiState(
+                        name = "Пьер",
+                        surname = "Безухов",
+                        photoUrl = null
+                    )
+                ),
+                candidatesCount = 26,
+                salaryLowerBoundRub = null,
+                salaryHigherBoundRub = 120000,
+            ),
+            onClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun VacancyCardPreview_State2() {
+    TJobTheme {
+        VacancyCard(
+            state = VacancyCardUiState(
+                name = "Java-разработчик",
+                city = null,
+                firstTwoTags = emptyList(),
+                firstTwoHrs = listOf(
+                    PersonAndPhotoUiState(
+                        name = "Анна",
+                        surname = "Коренина",
+                        photoUrl = null
+                    ),
+                ),
+                hrsCount = 3,
+                firstTwoTeamLeads = listOf(
+                    PersonAndPhotoUiState(
+                        name = "Андрй",
+                        surname = "Болконский",
+                        photoUrl = null
+                    ),
+                    PersonAndPhotoUiState(
+                        name = "Евгений",
+                        surname = "Онегин",
+                        photoUrl = null
+                    )
+                ),
+                teamLeadsCount = 0,
+                firstTwoCandidates = listOf(
+                    PersonAndPhotoUiState(
+                        name = "Пьер",
+                        surname = "Безухов",
+                        photoUrl = null
+                    )
+                ),
+                candidatesCount = 26,
+                salaryLowerBoundRub = null,
+                salaryHigherBoundRub = null,
             ),
             onClick = {},
         )

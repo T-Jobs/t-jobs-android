@@ -24,7 +24,7 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun roles(): Result<List<AppRole>> {
+    suspend fun roles(): Result<List<ru.nativespeakers.core.model.AppRole>> {
         val rolesResult = authDataSource.roles()
         if (rolesResult.isSuccess) {
             val userRoles = rolesResult.getOrThrow()

@@ -1,6 +1,7 @@
 package ru.nativespeakers.data.auth
 
 import kotlinx.coroutines.delay
+import ru.nativespeakers.core.model.AppRole
 import ru.nativespeakers.data.auth.dto.LoginDto
 import ru.nativespeakers.data.auth.dto.LoginResponse
 import ru.nativespeakers.data.auth.exception.UnauthorizedException

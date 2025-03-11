@@ -20,4 +20,6 @@
     <string name="core_ui_hrs">HRs</string>
     <string name="core_ui_team_leads">Team Leads</string>
     <string name="core_ui_meetings">встреч</string>
+    <string name="core_ui_from">от</string>
+    <string name="core_ui_until">до</string>
 </resources>
