@@ -8,7 +8,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class InterviewRemoteModule {
+internal abstract class InterviewRemoteModule {
     @Binds
     @Singleton
     abstract fun bindInterviewRemoteDataSource(

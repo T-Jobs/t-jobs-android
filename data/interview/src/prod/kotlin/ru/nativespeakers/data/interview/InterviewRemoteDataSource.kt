@@ -18,7 +18,7 @@ import ru.nativespeakers.core.model.InterviewTypeNetwork
 import ru.nativespeakers.data.interview.dto.CreateInterviewDto
 import javax.inject.Inject
 
-class InterviewRemoteDataSource @Inject constructor(
+internal class InterviewRemoteDataSource @Inject constructor(
     private val httpClient: HttpClient,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : InterviewDataSource {
