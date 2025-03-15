@@ -17,7 +17,7 @@ internal class CandidateRemoteDataSource @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : CandidateDataSource {
     override suspend fun searchByQuery(
-        @IntRange(from = 1)
+        @IntRange(from = 0)
         page: Int,
         pageSize: Int,
         query: String?,
