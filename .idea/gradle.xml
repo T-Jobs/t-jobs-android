@@ -37,6 +37,7 @@
             <option value="$PROJECT_DIR$/data/candidate" />
             <option value="$PROJECT_DIR$/data/interview" />
             <option value="$PROJECT_DIR$/data/paging" />
+            <option value="$PROJECT_DIR$/data/track" />
             <option value="$PROJECT_DIR$/data/user" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/auth" />
