@@ -8,11 +8,13 @@ import ru.nativespeakers.core.model.CandidateNetwork
 import ru.nativespeakers.core.model.ResumeNetwork
 import ru.nativespeakers.data.paging.PagingDataSource
 import javax.inject.Inject
+import javax.inject.Singleton
 
 private object PagingDefaults {
     val PagingConfig = PagingConfig(pageSize = 20)
 }
 
+@Singleton
 class CandidateRepository @Inject constructor(
     private val candidateDataSource: CandidateDataSource,
 ) {
