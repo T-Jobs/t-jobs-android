@@ -2,8 +2,8 @@ package ru.nativespeakers.data.auth
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.request.get
-import io.ktor.client.request.post
+import io.ktor.client.plugins.resources.get
+import io.ktor.client.plugins.resources.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
@@ -24,7 +24,7 @@ internal class AuthRemoteDataSource @Inject constructor(
 ) : AuthDataSource {
     override suspend fun login(loginDto: LoginDto): Result<LoginResponse> =
         withContext(ioDispatcher) {
-            val response = httpClient.post("/auth/login") {
+            val response = httpClient.post(Auth.Login()) {
                 contentType(ContentType.Application.Json)
                 setBody(loginDto)
             }
@@ -37,7 +37,7 @@ internal class AuthRemoteDataSource @Inject constructor(
         }
 
     override suspend fun roles(): Result<List<AppRole>> = withContext(ioDispatcher) {
-        val response = httpClient.get("/user/roles")
+        val response = httpClient.get(User.Roles())
         when (response.status) {
             HttpStatusCode.OK -> Result.success(response.body<UserRolesResponse>().roles)
             HttpStatusCode.Unauthorized -> Result.failure(UnauthorizedException())

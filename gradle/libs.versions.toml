@@ -27,7 +27,14 @@ shimmerCompose = "1.3.2"
 
 [bundles]
 androidx-compose-ui-test = ["androidx-compose-ui-test", "androidx-compose-ui-testManifest"]
-ktor-client = ["ktor-client-core", "ktor-client-contentNegotiation", "ktor-client-okhttp", "ktor-client-auth", "ktor-client-serialization-json"]
+ktor-client = [
+    "ktor-client-core",
+    "ktor-client-contentNegotiation",
+    "ktor-client-okhttp",
+    "ktor-client-auth",
+    "ktor-client-serialization-json",
+    "ktor-client-resources"
+]
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
@@ -68,6 +75,7 @@ ktor-client-auth = { group = "io.ktor", name = "ktor-client-auth", version.ref =
 ktor-client-contentNegotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-resources = { group = "io.ktor", name = "ktor-client-resources", version.ref = "ktor" }
 ktor-client-serialization-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 shimmer-compose = { group = "com.valentinilk.shimmer", name = "compose-shimmer", version.ref = "shimmerCompose" }
 

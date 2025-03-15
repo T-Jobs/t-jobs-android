@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.tjob.android.library)
     alias(libs.plugins.tjob.hilt)
-    id("kotlinx-serialization")
 }
 
 android {
@@ -13,7 +12,4 @@ dependencies {
 
     implementation(projects.core.common)
     implementation(projects.core.network)
-    implementation(projects.data.auth)
-
-    implementation(libs.kotlinx.serialization.json)
 }

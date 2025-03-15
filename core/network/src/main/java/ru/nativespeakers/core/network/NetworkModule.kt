@@ -11,11 +11,11 @@ import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.resources.Resources
+import io.ktor.http.URLProtocol
 import io.ktor.serialization.kotlinx.json.json
 import ru.nativespeakers.core.token.TokenLocalDataSource
 import javax.inject.Singleton
-
-private const val SERVER_URL = "http://10.0.2.2:8080/"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -27,8 +27,12 @@ internal object NetworkModule {
             json()
         }
 
+        install(Resources)
+
         defaultRequest {
-            url(SERVER_URL)
+            host = "10.0.2.2"
+            port = 8080
+            url { protocol = URLProtocol.HTTP }
         }
 
         install(Auth) {
