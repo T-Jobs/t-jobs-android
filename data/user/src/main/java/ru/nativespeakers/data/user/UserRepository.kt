@@ -9,33 +9,49 @@ import javax.inject.Singleton
 
 @Singleton
 class UserRepository @Inject constructor(
-    private val userDataSource: UserDataSource
+    private val userDataSource: UserDataSource,
 ) {
-    suspend fun findUserById(id: Long): Result<StaffNetwork?> {
+    suspend fun findUserById(id: Long): Result<StaffNetwork> {
         return userDataSource.findUserById(id)
     }
 
-    suspend fun findUserByQuery(query: String): Result<List<StaffNetwork>> {
-        return userDataSource.findUserByQuery(query)
+    suspend fun findUsersByIds(ids: List<Long>): Result<List<StaffNetwork>> {
+        return userDataSource.findUsersByIds(ids)
     }
 
-    suspend fun findUsersByIds(ids: List<Long>): Result<List<StaffNetwork?>> {
-        return userDataSource.findUsersByIds(ids)
+    suspend fun findUsersByQuery(query: String): Result<List<StaffNetwork>> {
+        return userDataSource.findUsersByQuery(query)
     }
 
     suspend fun userInfo(): Result<StaffNetwork> {
         return userDataSource.userInfo()
     }
 
-    suspend fun userInterviews(onlyActual: Boolean): Result<List<InterviewNetwork>> {
-        return userDataSource.userInterviews(onlyActual)
+    suspend fun userInterviews(onlyRelevant: Boolean): Result<List<InterviewNetwork>> {
+        return userDataSource.userInterviews(onlyRelevant)
     }
 
-    suspend fun userTracks(onlyActual: Boolean): Result<List<TrackNetwork>> {
-        return userDataSource.userTracks(onlyActual)
+    suspend fun userTracks(onlyRelevant: Boolean): Result<List<TrackNetwork>> {
+        return userDataSource.userTracks(onlyRelevant)
     }
 
-    suspend fun userVacancies(onlyActual: Boolean): Result<List<VacancyNetwork>> {
-        return userDataSource.userVacancies(onlyActual)
+    suspend fun userVacancies(onlyRelevant: Boolean): Result<List<VacancyNetwork>> {
+        return userDataSource.userVacancies(onlyRelevant)
+    }
+
+    suspend fun toggleInterviewerMode(value: Boolean): Result<Unit> {
+        return userDataSource.setInterviewerMode(value)
+    }
+
+    suspend fun addCompetency(interviewTypeId: Long): Result<Unit> {
+        return userDataSource.addCompetency(interviewTypeId)
+    }
+
+    suspend fun deleteCompetency(interviewTypeId: Long): Result<Unit> {
+        return userDataSource.deleteCompetency(interviewTypeId)
+    }
+
+    suspend fun followVacancy(vacancyId: Long): Result<Unit> {
+        return userDataSource.followVacancy(vacancyId)
     }
 }

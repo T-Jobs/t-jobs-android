@@ -2,8 +2,12 @@ package ru.nativespeakers.data.user
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.request.get
+import io.ktor.client.plugins.resources.delete
+import io.ktor.client.plugins.resources.get
+import io.ktor.client.plugins.resources.post
+import io.ktor.client.request.forms.submitForm
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.parameters
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import ru.nativespeakers.core.common.IoDispatcher
@@ -17,38 +21,27 @@ internal class UserRemoteDataSource @Inject constructor(
     private val httpClient: HttpClient,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : UserDataSource {
-    override suspend fun findUserById(id: Long): Result<StaffNetwork?> =
+    override suspend fun findUserById(id: Long): Result<StaffNetwork> =
         withContext(ioDispatcher) {
-            val response = httpClient.get("/user/${id}")
+            val response = httpClient.get(User.Id(id = id))
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(response.body())
                 else -> Result.failure(Exception())
             }
         }
 
-    override suspend fun findUsersByIds(ids: List<Long>): Result<List<StaffNetwork?>> =
+    override suspend fun findUsersByIds(ids: List<Long>): Result<List<StaffNetwork>> =
         withContext(ioDispatcher) {
-            val response = httpClient.get("/user") {
-                url {
-                    for (id in ids)
-                        parameters.append("ids", id.toString())
-                }
-            }
-
+            val response = httpClient.get(UsersByIds(ids = ids))
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(response.body())
                 else -> Result.failure(Exception())
             }
         }
 
-    override suspend fun findUserByQuery(query: String): Result<List<StaffNetwork>> =
+    override suspend fun findUsersByQuery(query: String): Result<List<StaffNetwork>> =
         withContext(ioDispatcher) {
-            val response = httpClient.get("/user/search") {
-                url {
-                    parameters.append("text", query)
-                }
-            }
-
+            val response = httpClient.get(User.Search(text = query))
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(response.body())
                 else -> Result.failure(Exception())
@@ -56,46 +49,82 @@ internal class UserRemoteDataSource @Inject constructor(
         }
 
     override suspend fun userInfo(): Result<StaffNetwork> = withContext(ioDispatcher) {
-        val response = httpClient.get("/user/info")
+        val response = httpClient.get(User.Info())
         when (response.status) {
             HttpStatusCode.OK -> Result.success(response.body())
             else -> Result.failure(Exception())
         }
     }
 
-    override suspend fun userInterviews(onlyActual: Boolean): Result<List<InterviewNetwork>> =
+    override suspend fun userInterviews(onlyRelevant: Boolean): Result<List<InterviewNetwork>> =
         withContext(ioDispatcher) {
-            val response = httpClient.get("/user/interviews") {
-                url {
-                    parameters.append("onlyActual", onlyActual.toString())
-                }
-            }
-
+            val response = httpClient.get(User.Interviews(onlyRelevant = onlyRelevant))
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(response.body())
                 else -> Result.failure(Exception())
             }
         }
 
-    override suspend fun userTracks(onlyActual: Boolean): Result<List<TrackNetwork>> =
+    override suspend fun userTracks(onlyRelevant: Boolean): Result<List<TrackNetwork>> =
         withContext(ioDispatcher) {
-            val response = httpClient.get("/user/tracks") {
-                url {
-                    parameters.append("onlyActual", onlyActual.toString())
-                }
-            }
-
+            val response = httpClient.get(User.Tracks(onlyRelevant = onlyRelevant))
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(response.body())
                 else -> Result.failure(Exception())
             }
         }
 
-    override suspend fun userVacancies(onlyActual: Boolean): Result<List<VacancyNetwork>> =
+    override suspend fun userVacancies(onlyRelevant: Boolean): Result<List<VacancyNetwork>> =
         withContext(ioDispatcher) {
-            val response = httpClient.get("/user/vacancies")
+            val response = httpClient.get(User.Vacancies(onlyRelevant = onlyRelevant))
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(response.body())
+                else -> Result.failure(Exception())
+            }
+        }
+
+    override suspend fun setInterviewerMode(value: Boolean): Result<Unit> =
+        withContext(ioDispatcher) {
+            val response = httpClient.submitForm(
+                url = "/user/set-interviewer-mode",
+                formParameters = parameters { append("value", value.toString()) }
+            )
+
+            when (response.status) {
+                HttpStatusCode.OK -> Result.success(Unit)
+                else -> Result.failure(Exception())
+            }
+        }
+
+    override suspend fun addCompetency(interviewTypeId: Long): Result<Unit> =
+        withContext(ioDispatcher) {
+            val response = httpClient.submitForm(
+                url = "/user/competencies",
+                formParameters = parameters {
+                    append("interview_type_id", interviewTypeId.toString())
+                }
+            )
+
+            when (response.status) {
+                HttpStatusCode.OK -> Result.success(Unit)
+                else -> Result.failure(Exception())
+            }
+        }
+
+    override suspend fun deleteCompetency(interviewTypeId: Long): Result<Unit> =
+        withContext(ioDispatcher) {
+            val response = httpClient.delete(User.Competencies(interviewTypeId = interviewTypeId))
+            when (response.status) {
+                HttpStatusCode.OK -> Result.success(Unit)
+                else -> Result.failure(Exception())
+            }
+        }
+
+    override suspend fun followVacancy(vacancyId: Long): Result<Unit> =
+        withContext(ioDispatcher) {
+            val response = httpClient.post(User.FollowVacancyById(id = vacancyId))
+            when (response.status) {
+                HttpStatusCode.OK -> Result.success(Unit)
                 else -> Result.failure(Exception())
             }
         }
