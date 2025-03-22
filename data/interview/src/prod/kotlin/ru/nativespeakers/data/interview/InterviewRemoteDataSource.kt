@@ -2,10 +2,10 @@ package ru.nativespeakers.data.interview
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.plugins.resources.delete
-import io.ktor.client.plugins.resources.get
-import io.ktor.client.plugins.resources.post
+import io.ktor.client.request.delete
 import io.ktor.client.request.forms.submitForm
+import io.ktor.client.request.get
+import io.ktor.client.request.post
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.parameters
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,7 +24,7 @@ internal class InterviewRemoteDataSource @Inject constructor(
 ) : InterviewDataSource {
     override suspend fun baseInterviewById(id: Long): Result<InterviewBaseNetwork> =
         withContext(ioDispatcher) {
-            val response = httpClient.get(Interview.BaseById(id = id))
+            val response = httpClient.get("/interview/base/$id")
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(response.body())
                 else -> Result.failure(Exception())
@@ -33,7 +33,14 @@ internal class InterviewRemoteDataSource @Inject constructor(
 
     override suspend fun baseInterviewById(ids: List<Long>): Result<List<InterviewBaseNetwork>> =
         withContext(ioDispatcher) {
-            val response = httpClient.get(Interview.BasesByIds(ids = ids))
+            val response = httpClient.get("/interview/base") {
+                if (ids.isNotEmpty()) {
+                    url {
+                        parameters.append("ids", ids.joinToString(separator = ","))
+                    }
+                }
+            }
+
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(response.body())
                 else -> Result.failure(Exception())
@@ -42,7 +49,7 @@ internal class InterviewRemoteDataSource @Inject constructor(
 
     override suspend fun findById(id: Long): Result<InterviewNetwork> =
         withContext(ioDispatcher) {
-            val response = httpClient.get(Interview.Id(id = id))
+            val response = httpClient.get("/interview/$id")
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(response.body())
                 else -> Result.failure(Exception())
@@ -51,7 +58,14 @@ internal class InterviewRemoteDataSource @Inject constructor(
 
     override suspend fun findById(ids: List<Long>): Result<List<InterviewNetwork>> =
         withContext(ioDispatcher) {
-            val response = httpClient.get(InterviewsByIds(ids))
+            val response = httpClient.get("/interview") {
+                if (ids.isNotEmpty()) {
+                    url {
+                        parameters.append("ids", ids.joinToString(separator = ","))
+                    }
+                }
+            }
+
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(response.body())
                 else -> Result.failure(Exception())
@@ -60,7 +74,10 @@ internal class InterviewRemoteDataSource @Inject constructor(
 
     override suspend fun searchInterviewTypeByName(name: String): Result<List<InterviewTypeNetwork>> =
         withContext(ioDispatcher) {
-            val response = httpClient.get(Interview.SearchTypeByName(name = name))
+            val response = httpClient.get("/interview/type/search") {
+                url { parameters.append("name", name) }
+            }
+
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(response.body())
                 else -> Result.failure(Exception())
@@ -68,7 +85,7 @@ internal class InterviewRemoteDataSource @Inject constructor(
         }
 
     override suspend fun deleteById(id: Long): Result<Unit> = withContext(ioDispatcher) {
-        val response = httpClient.delete(Interview.Id)
+        val response = httpClient.delete("/interview/$id")
         when (response.status) {
             HttpStatusCode.OK -> Result.success(Unit)
             else -> Result.failure(Exception())
@@ -77,7 +94,7 @@ internal class InterviewRemoteDataSource @Inject constructor(
 
     override suspend fun createInterview(createInterviewDto: CreateInterviewDto): Result<Unit> =
         withContext(ioDispatcher) {
-            val response = httpClient.post(Interview.AddToTrack)
+            val response = httpClient.post("/interview/add-to-track")
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(Unit)
                 else -> Result.failure(Exception())
@@ -86,12 +103,15 @@ internal class InterviewRemoteDataSource @Inject constructor(
 
     override suspend fun setInterviewer(interviewId: Long, interviewerId: Long): Result<Unit> =
         withContext(ioDispatcher) {
-            val url = Interview.SetInterviewer(
-                interviewId = interviewId,
-                interviewerId = interviewerId
-            )
+            val response = httpClient.post("/interview/set-interviewer") {
+                url {
+                    with(parameters) {
+                        append("interview_id", interviewId.toString())
+                        append("interviewer_id", interviewerId.toString())
+                    }
+                }
+            }
 
-            val response = httpClient.post(url)
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(Unit)
                 else -> Result.failure(Exception())
@@ -100,7 +120,12 @@ internal class InterviewRemoteDataSource @Inject constructor(
 
     override suspend fun setAutoInterviewer(interviewId: Long): Result<Unit> =
         withContext(ioDispatcher) {
-            val response = httpClient.post(Interview.SetAutoInterviewer(interviewId = interviewId))
+            val response = httpClient.post("/interview/set-auto-interviewer") {
+                url {
+                    parameters.append("interview_id", interviewId.toString())
+                }
+            }
+
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(Unit)
                 else -> Result.failure(Exception())
@@ -109,12 +134,15 @@ internal class InterviewRemoteDataSource @Inject constructor(
 
     override suspend fun setDate(interviewId: Long, date: LocalDateTime): Result<Unit> =
         withContext(ioDispatcher) {
-            val url = Interview.SetDate(
-                interviewId = interviewId,
-                date = date
-            )
+            val response = httpClient.post("/interview/set-date") {
+                url {
+                    with(parameters) {
+                        append("interview_id", interviewId.toString())
+                        append("date", "${date.year}-${date.month}-${date.hour} ${date.hour}:${date.minute}:${date.second}")
+                    }
+                }
+            }
 
-            val response = httpClient.post(url)
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(Unit)
                 else -> Result.failure(Exception())
@@ -123,7 +151,12 @@ internal class InterviewRemoteDataSource @Inject constructor(
 
     override suspend fun setAutoDate(interviewId: Long): Result<Unit> =
         withContext(ioDispatcher) {
-            val response = httpClient.post(Interview.SetAutoDate(interviewId = interviewId))
+            val response = httpClient.post("/interview/set-auto-date") {
+                url {
+                    parameters.append("interview_id", interviewId.toString())
+                }
+            }
+
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(Unit)
                 else -> Result.failure(Exception())
@@ -132,12 +165,15 @@ internal class InterviewRemoteDataSource @Inject constructor(
 
     override suspend fun setLink(interviewId: Long, link: String): Result<Unit> =
         withContext(ioDispatcher) {
-            val url = Interview.SetLink(
-                interviewId = interviewId,
-                link = link
-            )
+            val response = httpClient.post("/interview/set-link") {
+                url {
+                    with(parameters) {
+                        append("interview_id", interviewId.toString())
+                        append("link", link)
+                    }
+                }
+            }
 
-            val response = httpClient.post(url)
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(Unit)
                 else -> Result.failure(Exception())
@@ -165,7 +201,12 @@ internal class InterviewRemoteDataSource @Inject constructor(
 
     override suspend fun approveTime(interviewId: Long): Result<Unit> =
         withContext(ioDispatcher) {
-            val response = httpClient.post(Interview.ApproveTime(interviewId = interviewId))
+            val response = httpClient.post("/interview/approve-time") {
+                url {
+                    parameters.append("interview_id", interviewId.toString())
+                }
+            }
+
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(Unit)
                 else -> Result.failure(Exception())
@@ -174,7 +215,12 @@ internal class InterviewRemoteDataSource @Inject constructor(
 
     override suspend fun declineTime(interviewId: Long): Result<Unit> =
         withContext(ioDispatcher) {
-            val response = httpClient.post(Interview.DeclineTime(interviewId = interviewId))
+            val response = httpClient.post("/interview/decline-time") {
+                url {
+                    parameters.append("interview_id", interviewId.toString())
+                }
+            }
+
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(Unit)
                 else -> Result.failure(Exception())

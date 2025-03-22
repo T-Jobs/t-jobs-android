@@ -14,13 +14,13 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
             extensions.configure<LibraryExtension> {
-                @Suppress("UnstableApiUsage")
                 testOptions.animationsDisabled = true
             }
 
             dependencies {
                 "implementation"(project(":core:ui"))
                 "implementation"(project(":core:designsystem"))
+                "implementation"(project(":core:model"))
 
                 "implementation"(libs.findLibrary("androidx-compose-foundation").get())
                 "implementation"(libs.findLibrary("androidx.hilt.navigation.compose").get())

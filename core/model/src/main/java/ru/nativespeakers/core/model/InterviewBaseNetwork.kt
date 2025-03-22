@@ -1,13 +1,15 @@
 package ru.nativespeakers.core.model
 
-import kotlinx.serialization.SerialName
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class InterviewBaseNetwork(
     val id: Long,
-    @SerialName("interview_type")
+    @JsonNames("interview_type")
     val interviewType: InterviewTypeNetwork,
-    @SerialName("vacancy_id")
+    @JsonNames("vacancy_id")
     val vacancyId: Long,
 )

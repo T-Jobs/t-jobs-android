@@ -1,24 +1,26 @@
 package ru.nativespeakers.core.model
 
-import kotlinx.serialization.SerialName
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
 @Serializable
+@OptIn(ExperimentalSerializationApi::class)
 data class StaffNetwork(
     val id: Long,
     val name: String,
     val surname: String,
-    @SerialName("photo_url")
+    @JsonNames("photo_url")
     val photoUrl: String? = null,
-    @SerialName("tracks")
+    @JsonNames("tracks")
     val tracksIds: List<Long>,
-    @SerialName("interview_types")
+    @JsonNames("interview_types")
     val interviewTypeNetworks: List<InterviewTypeNetwork>,
-    @SerialName("vacancies")
+    @JsonNames("vacancies")
     val vacanciesIds: List<Long>,
     val roles: List<AppRole>,
-    @SerialName("interviews")
+    @JsonNames("interviews")
     val interviewsIds: List<Long>,
-    @SerialName("interviewer_mode")
+    @JsonNames("interviewer_mode")
     val isInterviewModeOn: Boolean,
 )

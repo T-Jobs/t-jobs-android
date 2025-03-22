@@ -1,24 +1,27 @@
 package ru.nativespeakers.core.model
 
-import kotlinx.serialization.SerialName
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class VacancyNetwork(
     val id: Long,
     val name: String,
     val description: String,
-    @SerialName("salary_min")
+    @JsonNames("salary_min")
     val salaryMin: Int?,
-    @SerialName("salary_max")
+    @JsonNames("salary_max")
     val salaryMax: Int?,
     val town: String? = null,
+    @JsonNames("interviews")
     val interviewsBaseIds: List<Long>,
     val tags: List<TagNetwork>,
-    @SerialName("staff")
+    @JsonNames("staff")
     val staffIds: List<Long>,
-    @SerialName("tracks")
+    @JsonNames("tracks")
     val trackIds: List<Long>,
-    @SerialName("applied_candidates")
+    @JsonNames("applied_candidates")
     val appliedCandidatesIds: List<Long>,
 )

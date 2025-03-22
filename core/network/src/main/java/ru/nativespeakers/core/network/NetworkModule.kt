@@ -11,7 +11,9 @@ import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.resources.Resources
+import io.ktor.client.plugins.logging.ANDROID
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.URLProtocol
 import io.ktor.serialization.kotlinx.json.json
 import ru.nativespeakers.core.token.TokenLocalDataSource
@@ -27,7 +29,9 @@ internal object NetworkModule {
             json()
         }
 
-        install(Resources)
+        install(Logging) {
+            logger = Logger.ANDROID
+        }
 
         defaultRequest {
             host = "10.0.2.2"

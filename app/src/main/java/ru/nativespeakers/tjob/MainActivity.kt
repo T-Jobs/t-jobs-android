@@ -15,11 +15,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.nativespeakers.core.designsystem.TJobTheme
+import ru.nativespeakers.core.ui.LocalAppRoles
 import ru.nativespeakers.feature.auth.ui.AuthViewModel
-import ru.nativespeakers.feature.auth.ui.LocalAppRoles
 import ru.nativespeakers.feature.auth.ui.LoginRoute
 import ru.nativespeakers.feature.auth.ui.loginScreen
 import ru.nativespeakers.feature.auth.ui.navigateToLogin
+import ru.nativespeakers.feature.filters.filtersScreen
+import ru.nativespeakers.feature.filters.navigateToFilters
+import ru.nativespeakers.feature.home.homeScreen
+import ru.nativespeakers.feature.home.navigateToHome
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -41,7 +45,24 @@ fun TJobApp() {
 
         LaunchedEffect(roles) {
             if (roles.isNotEmpty()) {
-                // navigate to home screen
+                val currentDestination = navController.currentDestination?.id
+                if (currentDestination != null) {
+                    navController.navigateToHome(
+                        navOptions = NavOptions.Builder()
+                            .setLaunchSingleTop(true)
+                            .setPopUpTo(
+                                destinationId = currentDestination,
+                                inclusive = true
+                            )
+                            .build()
+                    )
+                } else {
+                    navController.navigateToHome(
+                        navOptions = NavOptions.Builder()
+                            .setLaunchSingleTop(true)
+                            .build()
+                    )
+                }
             } else {
                 val currentDestination = navController.currentDestination?.id
                 if (currentDestination != null) {
@@ -72,6 +93,15 @@ fun TJobApp() {
                 startDestination = LoginRoute
             ) {
                 loginScreen()
+                homeScreen(
+                    navigateToProfile = {},
+                    navigateToVacancyWithId = {},
+                    navigateToInterviewWithId = {},
+                    navigateToCandidateWithId = {},
+                    navigateToTrackWithId = {},
+                    navigateToFilters = navController::navigateToFilters
+                )
+                filtersScreen(navController)
             }
         }
     }

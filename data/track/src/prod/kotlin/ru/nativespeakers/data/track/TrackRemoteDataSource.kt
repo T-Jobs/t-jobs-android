@@ -2,9 +2,9 @@ package ru.nativespeakers.data.track
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.plugins.resources.get
-import io.ktor.client.plugins.resources.post
 import io.ktor.client.request.forms.submitForm
+import io.ktor.client.request.get
+import io.ktor.client.request.post
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.parameters
 import kotlinx.coroutines.CoroutineDispatcher
@@ -18,7 +18,7 @@ internal class TrackRemoteDataSource @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : TrackDataSource {
     override suspend fun findById(id: Long): Result<TrackNetwork> = withContext(ioDispatcher) {
-        val response = httpClient.get(Track.Id(id = id))
+        val response = httpClient.get("/track/$id")
         when (response.status) {
             HttpStatusCode.OK -> Result.success(response.body())
             else -> Result.failure(Exception())
@@ -27,7 +27,12 @@ internal class TrackRemoteDataSource @Inject constructor(
 
     override suspend fun findById(ids: List<Long>): Result<List<TrackNetwork>> =
         withContext(ioDispatcher) {
-            val response = httpClient.get(TracksByIds(ids = ids))
+            val response = httpClient.get("/track") {
+                url {
+                    parameters.append("ids", ids.joinToString(separator = ","))
+                }
+            }
+
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(response.body())
                 else -> Result.failure(Exception())
@@ -52,12 +57,15 @@ internal class TrackRemoteDataSource @Inject constructor(
 
     override suspend fun setHrForTrack(trackId: Long, hrId: Long): Result<Unit> =
         withContext(ioDispatcher) {
-            val url = Track.SetHr(
-                trackId = trackId,
-                hrId = hrId
-            )
+            val response = httpClient.post("/track/set-hr") {
+                url {
+                    with(parameters) {
+                        append("track_id", trackId.toString())
+                        append("hr_id", hrId.toString())
+                    }
+                }
+            }
 
-            val response = httpClient.post(url)
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(Unit)
                 else -> Result.failure(Exception())
@@ -65,7 +73,10 @@ internal class TrackRemoteDataSource @Inject constructor(
         }
 
     override suspend fun finishTrackById(id: Long): Result<Unit> = withContext(ioDispatcher) {
-        val response = httpClient.post(Track.Finish(id = id))
+        val response = httpClient.post("/track/finish") {
+            url { parameters.append("id", id.toString()) }
+        }
+
         when (response.status) {
             HttpStatusCode.OK -> Result.success(Unit)
             else -> Result.failure(Exception())
@@ -74,12 +85,15 @@ internal class TrackRemoteDataSource @Inject constructor(
 
     override suspend fun createTrack(candidateId: Long, vacancyId: Long): Result<TrackNetwork> =
         withContext(ioDispatcher) {
-            val url = Track.Create(
-                candidateId = candidateId,
-                vacancyId = vacancyId
-            )
+            val response = httpClient.post("/track/create") {
+                url {
+                    with(parameters) {
+                        append("candidate_id", candidateId.toString())
+                        append("vacancy_id", vacancyId.toString())
+                    }
+                }
+            }
 
-            val response = httpClient.post(url)
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(response.body())
                 else -> Result.failure(Exception())

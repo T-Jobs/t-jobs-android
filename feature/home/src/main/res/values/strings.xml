@@ -1,0 +1,11 @@
+<resources>
+    <string name="feature_home_search">Поиск</string>
+    <string name="feature_home_interview">Интерьвью</string>
+    <string name="feature_home_vacancies">Вакансии</string>
+    <string name="feature_home_following">Отслеживаемое</string>
+    <string name="feature_home_candidates">Кандидаты</string>
+    <string name="feature_home_empty_interviews">Интервью с вами пока не назначены</string>
+    <string name="feature_home_empty_vacancies">Список ваших вакансий пуст</string>
+    <string name="feature_home_tracks">Треки</string>
+    <string name="feature_home_empty_tracks">Список ваших треков пуст</string>
+</resources>

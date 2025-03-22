@@ -1,15 +1,17 @@
 package ru.nativespeakers.core.model
 
 import kotlinx.datetime.LocalDateTime
-import kotlinx.serialization.SerialName
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class ResumeNetwork(
     val id: Long,
-    @SerialName("candidate_id")
+    @JsonNames("candidate_id")
     val candidateId: Long,
-    @SerialName("salary_min")
+    @JsonNames("salary_min")
     val salaryMin: Int,
     val description: String,
     val tags: List<TagNetwork>,

@@ -19,8 +19,8 @@ class CandidateRepository @Inject constructor(
     private val candidateDataSource: CandidateDataSource,
 ) {
     fun searchByQuery(
-        query: String?,
-        salaryUpperBound: Int,
+        query: String,
+        salaryUpperBound: Int?,
         tagIds: List<Long>,
     ): Flow<PagingData<CandidateNetwork>> {
         val pagingConfig = PagingDefaults.PagingConfig

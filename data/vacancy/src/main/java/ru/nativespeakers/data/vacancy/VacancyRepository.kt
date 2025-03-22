@@ -26,7 +26,11 @@ class VacancyRepository @Inject constructor(
         return vacancyDataSource.findVacancyById(ids)
     }
 
-    fun searchForVacancies(salaryLowerBound: Int): Flow<PagingData<VacancyNetwork>> {
+    fun searchForVacancies(
+        salaryLowerBound: Int?,
+        query: String,
+        tagIds: List<Long>
+    ): Flow<PagingData<VacancyNetwork>> {
         val pagingConfig = VacancyDefaults.PagingConfig
         return Pager(config = pagingConfig) {
             val pageSize = pagingConfig.pageSize
@@ -34,7 +38,9 @@ class VacancyRepository @Inject constructor(
                 searchForVacancies(
                     page = page,
                     pageSize = pageSize,
-                    salaryLowerBound = salaryLowerBound
+                    salaryLowerBound = salaryLowerBound,
+                    query = query,
+                    tagIds = tagIds
                 )
             }
         }.flow

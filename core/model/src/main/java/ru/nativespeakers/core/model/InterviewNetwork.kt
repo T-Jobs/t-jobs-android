@@ -1,24 +1,27 @@
 package ru.nativespeakers.core.model
 
 import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class InterviewNetwork(
     val id: Long,
-    @SerialName("interviewer_id")
+    @JsonNames("interviewer_id")
     val interviewerId: Long? = null,
-    @SerialName("interview_type")
+    @JsonNames("interview_type")
     val interviewType: InterviewTypeNetwork,
-    @SerialName("track_id")
+    @JsonNames("track_id")
     val trackId: Long,
-    @SerialName("date_picked")
+    @JsonNames("date_picked")
     val datePicked: LocalDateTime? = null,
-    @SerialName("date_approved")
+    @JsonNames("date_approved")
     val dateApproved: Boolean,
     val feedback: String? = null,
     val status: InterviewStatus,
-    @SerialName("able_set_time")
+    @JsonNames("able_set_time")
     val isAbleToSetTime: Boolean,
 )

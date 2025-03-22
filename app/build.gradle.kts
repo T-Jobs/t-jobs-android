@@ -41,6 +41,8 @@ dependencies {
     implementation(projects.core.designsystem)
     implementation(projects.core.ui)
     implementation(projects.feature.auth)
+    implementation(projects.feature.home)
+    implementation(projects.feature.filters)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)

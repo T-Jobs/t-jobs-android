@@ -36,7 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import ru.nativespeakers.core.designsystem.Primary2
 import ru.nativespeakers.core.designsystem.Primary4
-import ru.nativespeakers.ui.setStatusBarMode
+import ru.nativespeakers.core.ui.setStatusBarMode
 import ru.nativespeakers.feature.auth.R as authRes
 
 @Composable

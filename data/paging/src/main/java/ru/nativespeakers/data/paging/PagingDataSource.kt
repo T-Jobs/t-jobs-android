@@ -15,13 +15,13 @@ class PagingDataSource<DataSource, Model : Any>(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Model> {
-        val page = params.key ?: 1
+        val page = params.key ?: 0
         val requestResult = dataSource.request(page)
         if (requestResult.isSuccess) {
             val result = requestResult.getOrThrow()
             return LoadResult.Page(
                 data = result,
-                prevKey = if (page == 1) null else page - 1,
+                prevKey = if (page == 0) null else page - 1,
                 nextKey = if (result.isEmpty()) null else page + 1
             )
         }

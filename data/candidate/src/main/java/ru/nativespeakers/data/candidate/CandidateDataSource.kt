@@ -7,8 +7,8 @@ interface CandidateDataSource {
     suspend fun searchByQuery(
         page: Int,
         pageSize: Int,
-        query: String?,
-        salaryUpperBound: Int,
+        query: String,
+        salaryUpperBound: Int?,
         tagIds: List<Long>,
     ): Result<List<CandidateNetwork>>
     suspend fun findById(id: Long): Result<CandidateNetwork>
