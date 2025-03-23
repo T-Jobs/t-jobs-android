@@ -24,6 +24,8 @@ import ru.nativespeakers.feature.filters.filtersScreen
 import ru.nativespeakers.feature.filters.navigateToFilters
 import ru.nativespeakers.feature.home.homeScreen
 import ru.nativespeakers.feature.home.navigateToHome
+import ru.nativespeakers.feature.profile.navigateToProfile
+import ru.nativespeakers.feature.profile.profileScreen
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -94,7 +96,7 @@ fun TJobApp() {
             ) {
                 loginScreen()
                 homeScreen(
-                    navigateToProfile = {},
+                    navigateToProfile = navController::navigateToProfile,
                     navigateToVacancyWithId = {},
                     navigateToInterviewWithId = {},
                     navigateToCandidateWithId = {},
@@ -102,6 +104,11 @@ fun TJobApp() {
                     navigateToFilters = navController::navigateToFilters
                 )
                 filtersScreen(navController)
+                profileScreen(
+                    navigateBack = navController::popBackStack,
+                    navigateToCompetenciesScreen = {},
+                    navigateToCreateVacancyClick = {}
+                )
             }
         }
     }

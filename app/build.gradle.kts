@@ -43,6 +43,7 @@ dependencies {
     implementation(projects.feature.auth)
     implementation(projects.feature.home)
     implementation(projects.feature.filters)
+    implementation(projects.feature.profile)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)

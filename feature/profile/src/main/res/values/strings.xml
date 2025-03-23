@@ -1,0 +1,6 @@
+<resources>
+    <string name="feature_profile_profile">Профиль</string>
+    <string name="feature_profile_interviewer_mode">Режим интервьюера</string>
+    <string name="feature_profile_competencies">Компетенции</string>
+    <string name="feature_profile_create_vacancy">Создать вакансию</string>
+</resources>

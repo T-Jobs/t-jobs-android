@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import ru.nativespeakers.core.designsystem.Primary4
 import ru.nativespeakers.core.designsystem.Primary8
+import ru.nativespeakers.core.model.CandidateNetwork
+import ru.nativespeakers.core.model.StaffNetwork
 import ru.nativespeakers.core.ui.AsyncImageWithLoading
 import ru.nativespeakers.core.ui.interview.PersonAndPhotoUiState
 
@@ -34,6 +36,7 @@ fun PersonPhoto(
                 )
             }
         }
+
         state.photoUrl == null -> {
             EmptyPersonPhoto(
                 name = state.name,
@@ -41,6 +44,7 @@ fun PersonPhoto(
                 modifier = modifier
             )
         }
+
         else -> {
             AsyncImageWithLoading(
                 model = state.photoUrl,
@@ -49,3 +53,15 @@ fun PersonPhoto(
         }
     }
 }
+
+fun CandidateNetwork.toPersonAndPhotoUiState() = PersonAndPhotoUiState(
+    name = name,
+    surname = surname,
+    photoUrl = photoUrl
+)
+
+fun StaffNetwork.toPersonAndPhotoUiState() = PersonAndPhotoUiState(
+    name = name,
+    surname = surname,
+    photoUrl = photoUrl
+)

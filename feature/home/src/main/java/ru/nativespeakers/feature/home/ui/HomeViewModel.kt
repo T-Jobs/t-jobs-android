@@ -31,6 +31,7 @@ import ru.nativespeakers.core.ui.candidate.CandidateCardUiState
 import ru.nativespeakers.core.ui.interview.InterviewCardUiState
 import ru.nativespeakers.core.ui.interview.PersonAndPhotoUiState
 import ru.nativespeakers.core.ui.paging.PagingDataUiState
+import ru.nativespeakers.core.ui.photo.toPersonAndPhotoUiState
 import ru.nativespeakers.core.ui.track.TrackCardUiState
 import ru.nativespeakers.core.ui.vacancy.VacancyCardUiState
 import ru.nativespeakers.data.candidate.CandidateRepository
@@ -361,18 +362,6 @@ private fun mapToInterviewCardUiState(
     ),
     status = interview.status,
     date = interview.datePicked
-)
-
-private fun CandidateNetwork.toPersonAndPhotoUiState() = PersonAndPhotoUiState(
-    name = name,
-    surname = surname,
-    photoUrl = photoUrl
-)
-
-private fun StaffNetwork.toPersonAndPhotoUiState() = PersonAndPhotoUiState(
-    name = name,
-    surname = surname,
-    photoUrl = photoUrl
 )
 
 private fun mapToVacancyCardUiState(
