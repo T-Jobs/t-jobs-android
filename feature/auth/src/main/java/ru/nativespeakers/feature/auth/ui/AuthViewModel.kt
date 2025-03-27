@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import ru.nativespeakers.data.auth.AuthRepository
@@ -15,7 +14,6 @@ class AuthViewModel @Inject constructor(
     authRepository: AuthRepository,
 ) : ViewModel() {
     val roles = authRepository.isAuthenticated
-        .distinctUntilChanged()
         .mapLatest { authenticated ->
             if (authenticated) {
                 val userRolesResult = authRepository.roles()
@@ -30,7 +28,7 @@ class AuthViewModel @Inject constructor(
         }
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
+            started = SharingStarted.Eagerly,
             initialValue = emptyList()
         )
 }

@@ -42,12 +42,12 @@ internal object NetworkModule {
         install(Auth) {
             bearer {
                 loadTokens {
-                    val token = tokenLocalDataSource.token() ?: return@loadTokens null
+                    val token = tokenLocalDataSource.token.value ?: return@loadTokens null
                     BearerTokens(accessToken = token, refreshToken = null)
                 }
                 refreshTokens {
-                    tokenLocalDataSource.deleteToken()
-                    null
+                    val token = tokenLocalDataSource.token.value ?: return@refreshTokens null
+                    BearerTokens(accessToken = token, refreshToken = null)
                 }
             }
         }

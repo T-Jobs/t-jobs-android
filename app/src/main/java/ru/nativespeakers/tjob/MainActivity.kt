@@ -17,9 +17,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.nativespeakers.core.designsystem.TJobTheme
 import ru.nativespeakers.core.ui.LocalAppRoles
 import ru.nativespeakers.feature.auth.ui.AuthViewModel
-import ru.nativespeakers.feature.auth.ui.LoginRoute
-import ru.nativespeakers.feature.auth.ui.loginScreen
-import ru.nativespeakers.feature.auth.ui.navigateToLogin
+import ru.nativespeakers.feature.auth.LoginRoute
+import ru.nativespeakers.feature.auth.loginScreen
+import ru.nativespeakers.feature.auth.navigateToLogin
 import ru.nativespeakers.feature.filters.filtersScreen
 import ru.nativespeakers.feature.filters.navigateToFilters
 import ru.nativespeakers.feature.home.homeScreen

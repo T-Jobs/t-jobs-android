@@ -5,8 +5,10 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 import ru.nativespeakers.core.common.IoDispatcher
 import javax.inject.Inject
@@ -17,9 +19,13 @@ class TokenLocalDataSource @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
-    val token = dataStore.data.map { it[PreferencesKeys.ACCESS_TOKEN] }
-
-    suspend fun token() = token.first()
+    val token = dataStore.data
+        .mapLatest { it[PreferencesKeys.ACCESS_TOKEN] }
+        .stateIn(
+            scope = CoroutineScope(ioDispatcher),
+            started = SharingStarted.Eagerly,
+            initialValue = null
+        )
 
     suspend fun putToken(token: String) {
         withContext(ioDispatcher) {
