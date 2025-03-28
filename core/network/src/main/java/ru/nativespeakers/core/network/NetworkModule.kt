@@ -16,6 +16,9 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.URLProtocol
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
 import ru.nativespeakers.core.token.TokenLocalDataSource
 import javax.inject.Singleton
 
@@ -26,7 +29,11 @@ internal object NetworkModule {
     @Singleton
     fun provideHttpClient(tokenLocalDataSource: TokenLocalDataSource) = HttpClient(OkHttp) {
         install(ContentNegotiation) {
-            json()
+            json(Json {
+                serializersModule = SerializersModule {
+                    contextual(LocalDateTime::class, LocalDateTimeSerializer)
+                }
+            })
         }
 
         install(Logging) {

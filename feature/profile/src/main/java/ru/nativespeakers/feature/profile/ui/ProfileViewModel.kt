@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ru.nativespeakers.core.model.InterviewTypeNetwork
 import ru.nativespeakers.core.model.StaffNetwork
 import ru.nativespeakers.core.ui.BasicUiState
 import ru.nativespeakers.data.auth.AuthRepository
@@ -48,6 +49,46 @@ class ProfileViewModel @Inject constructor(
             if (result.isFailure) {
                 userInfo = userInfo.copy(
                     value = userInfo.value.copy(isInterviewModeOn = !value)
+                )
+            }
+        }
+    }
+
+    fun addCompetency(interviewType: InterviewTypeNetwork) {
+        userInfo = userInfo.copy(
+            value = userInfo.value.copy(
+                interviewTypeNetworks = userInfo.value.interviewTypeNetworks + interviewType
+            )
+        )
+
+        viewModelScope.launch {
+            val result = userRepository.addCompetency(interviewType.id)
+            if (result.isFailure) {
+                userInfo = userInfo.copy(
+                    value = userInfo.value.copy(
+                        interviewTypeNetworks = userInfo.value.interviewTypeNetworks - interviewType
+                    )
+                )
+            }
+        }
+    }
+
+    fun deleteCompetencyById(id: Long) {
+        val oldValue = userInfo.value.interviewTypeNetworks
+
+        userInfo = userInfo.copy(
+            value = userInfo.value.copy(
+                interviewTypeNetworks = oldValue.filter { it.id != id }
+            )
+        )
+
+        viewModelScope.launch {
+            val result = userRepository.deleteCompetency(id)
+            if (result.isFailure) {
+                userInfo = userInfo.copy(
+                    value = userInfo.value.copy(
+                        interviewTypeNetworks = oldValue
+                    )
                 )
             }
         }

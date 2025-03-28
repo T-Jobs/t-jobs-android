@@ -20,6 +20,8 @@ import ru.nativespeakers.feature.auth.ui.AuthViewModel
 import ru.nativespeakers.feature.auth.LoginRoute
 import ru.nativespeakers.feature.auth.loginScreen
 import ru.nativespeakers.feature.auth.navigateToLogin
+import ru.nativespeakers.feature.competencies.competenciesScreen
+import ru.nativespeakers.feature.competencies.navigateToCompetencies
 import ru.nativespeakers.feature.filters.filtersScreen
 import ru.nativespeakers.feature.filters.navigateToFilters
 import ru.nativespeakers.feature.home.homeScreen
@@ -106,9 +108,10 @@ fun TJobApp() {
                 filtersScreen(navController)
                 profileScreen(
                     navigateBack = navController::popBackStack,
-                    navigateToCompetenciesScreen = {},
+                    navigateToCompetenciesScreen = navController::navigateToCompetencies,
                     navigateToCreateVacancyClick = {}
                 )
+                competenciesScreen(navController)
             }
         }
     }

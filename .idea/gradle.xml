@@ -43,6 +43,7 @@
             <option value="$PROJECT_DIR$/data/vacancy" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/auth" />
+            <option value="$PROJECT_DIR$/feature/competencies" />
             <option value="$PROJECT_DIR$/feature/filters" />
             <option value="$PROJECT_DIR$/feature/home" />
             <option value="$PROJECT_DIR$/feature/profile" />

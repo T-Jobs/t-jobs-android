@@ -1,8 +1,8 @@
 package ru.nativespeakers.core.model
 
 import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonNames
 
@@ -17,6 +17,7 @@ data class InterviewNetwork(
     @JsonNames("track_id")
     val trackId: Long,
     @JsonNames("date_picked")
+    @Contextual
     val datePicked: LocalDateTime? = null,
     @JsonNames("date_approved")
     val dateApproved: Boolean,
@@ -24,4 +25,5 @@ data class InterviewNetwork(
     val status: InterviewStatus,
     @JsonNames("able_set_time")
     val isAbleToSetTime: Boolean,
+    val link: String? = null,
 )
