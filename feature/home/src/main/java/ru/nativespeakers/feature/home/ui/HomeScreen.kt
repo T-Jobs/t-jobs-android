@@ -56,12 +56,12 @@ import ru.nativespeakers.core.designsystem.Primary3
 import ru.nativespeakers.core.designsystem.Primary4
 import ru.nativespeakers.core.designsystem.Primary6
 import ru.nativespeakers.core.designsystem.Primary8
-import ru.nativespeakers.core.model.AppRole
-import ru.nativespeakers.core.ui.LocalAppRoles
 import ru.nativespeakers.core.ui.candidate.CandidateCard
 import ru.nativespeakers.core.ui.interview.InterviewCard
 import ru.nativespeakers.core.ui.paging.LazyPagingItemsColumn
 import ru.nativespeakers.core.ui.photo.PersonPhoto
+import ru.nativespeakers.core.ui.role.isHr
+import ru.nativespeakers.core.ui.role.isTeamLead
 import ru.nativespeakers.core.ui.screen.EmptyScreen
 import ru.nativespeakers.core.ui.screen.ErrorScreen
 import ru.nativespeakers.core.ui.screen.LoadingScreen
@@ -444,61 +444,6 @@ private fun Header(
     }
 }
 
-/*@Composable
-private fun SearchTextField(
-    searchValue: String,
-    onSearchValueChange: (String) -> Unit,
-    userPhotoUiState: PersonAndPhotoUiState,
-    onUserPhotoClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    TextField(
-        value = searchValue,
-        onValueChange = onSearchValueChange,
-        textStyle = MaterialTheme.typography.titleMedium,
-        singleLine = true,
-        shape = RoundedCornerShape(40.dp),
-        leadingIcon = {
-            PersonPhoto(
-                state = userPhotoUiState,
-                modifier = Modifier
-                    .size(32.dp)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        onClick = onUserPhotoClick
-                    )
-            )
-        },
-        placeholder = {
-            Text(
-                text = stringResource(homeStrings.feature_home_search),
-                style = MaterialTheme.typography.titleMedium,
-                color = Primary8,
-                maxLines = 1
-            )
-        },
-        trailingIcon = {
-            Icon(
-                imageVector = Icons.Outlined.Notifications,
-                contentDescription = "notification_icon",
-                tint = Primary8,
-                modifier = Modifier.size(20.dp)
-            )
-        },
-        colors = TextFieldDefaults.colors(
-            focusedTextColor = Primary10,
-            focusedContainerColor = Primary2,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedTextColor = Primary10,
-            unfocusedContainerColor = Primary3,
-            unfocusedIndicatorColor = Color.Transparent,
-            cursorColor = Primary8,
-        ),
-        modifier = modifier
-    )
-}*/
-
 @Composable
 private fun TabRow(
     isSearchExpanded: Boolean,
@@ -511,8 +456,10 @@ private fun TabRow(
     onRelevantTracksClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val roles = LocalAppRoles.current
-    if (AppRole.HR !in roles && AppRole.TEAM_LEAD !in roles && !isSearchExpanded) return
+    if (!isHr() && !isTeamLead() && !isSearchExpanded) {
+        Spacer(modifier = Modifier.height(16.dp))
+        return
+    }
 
     var indicatorSize by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
@@ -589,7 +536,7 @@ private fun TabRow(
                 )
         )
 
-        if (AppRole.HR in roles && !isSearchExpanded) {
+        if (isHr() && !isSearchExpanded) {
             Text(
                 text = stringResource(homeStrings.feature_home_tracks),
                 style = MaterialTheme.typography.bodyLarge,

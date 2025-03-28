@@ -11,5 +11,6 @@ android {
 dependencies {
     implementation(projects.core.token)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.datetime)
     api(libs.bundles.ktor.client)
 }
