@@ -43,6 +43,8 @@ class CandidateRepository @Inject constructor(
     }
 
     suspend fun findById(ids: List<Long>): Result<List<CandidateNetwork>> {
+        if (ids.isEmpty()) return Result.success(emptyList())
+
         return candidateDataSource.findById(ids)
     }
 

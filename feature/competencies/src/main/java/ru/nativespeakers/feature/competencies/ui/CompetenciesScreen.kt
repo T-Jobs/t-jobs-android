@@ -18,11 +18,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.ArrowBackIosNew
-import androidx.compose.material.icons.outlined.Construction
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -49,11 +46,11 @@ import ru.nativespeakers.core.designsystem.Base10
 import ru.nativespeakers.core.designsystem.Base3
 import ru.nativespeakers.core.designsystem.Base5
 import ru.nativespeakers.core.designsystem.Base8
-import ru.nativespeakers.core.designsystem.Primary6
 import ru.nativespeakers.core.designsystem.Primary7
 import ru.nativespeakers.core.model.InterviewTypeNetwork
 import ru.nativespeakers.core.ui.BottomSheetWithSearch
 import ru.nativespeakers.core.ui.Competency
+import ru.nativespeakers.core.ui.interview.SearchInterviewType
 import ru.nativespeakers.core.ui.screen.ErrorScreen
 import ru.nativespeakers.core.ui.screen.LoadingScreen
 import ru.nativespeakers.feature.competencies.R
@@ -141,51 +138,6 @@ private fun CompetenciesScreenContent(
             },
             sheetState = bottomSheetState,
             modifier = Modifier.fillMaxWidth()
-        )
-    }
-}
-
-@Composable
-private fun SearchInterviewType(
-    interviewType: InterviewTypeNetwork,
-    selected: Boolean,
-    onCheckedChange: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = onCheckedChange
-            )
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(vertical = 8.dp)
-    ) {
-        Icon(
-            imageVector = Icons.Outlined.Construction,
-            contentDescription = null,
-            tint = Primary6,
-            modifier = Modifier.size(17.dp)
-        )
-
-        Text(
-            text = interviewType.name,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.weight(1f)
-        )
-
-        Checkbox(
-            checked = selected,
-            onCheckedChange = { onCheckedChange() },
-            colors = CheckboxDefaults.colors(
-                checkedColor = MaterialTheme.colorScheme.primary,
-                uncheckedColor = Base5,
-                checkmarkColor = MaterialTheme.colorScheme.onPrimary
-            )
         )
     }
 }

@@ -47,6 +47,8 @@
             <option value="$PROJECT_DIR$/feature/filters" />
             <option value="$PROJECT_DIR$/feature/home" />
             <option value="$PROJECT_DIR$/feature/profile" />
+            <option value="$PROJECT_DIR$/feature/vacancy" />
+            <option value="$PROJECT_DIR$/feature/vacancy/create" />
           </set>
         </option>
       </GradleProjectSettings>

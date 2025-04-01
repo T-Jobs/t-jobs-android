@@ -45,6 +45,7 @@ dependencies {
     implementation(projects.feature.filters)
     implementation(projects.feature.profile)
     implementation(projects.feature.competencies)
+    implementation(projects.feature.vacancy.create)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)

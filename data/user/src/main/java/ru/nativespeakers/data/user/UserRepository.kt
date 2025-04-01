@@ -16,6 +16,8 @@ class UserRepository @Inject constructor(
     }
 
     suspend fun findUsersByIds(ids: List<Long>): Result<List<StaffNetwork>> {
+        if (ids.isEmpty()) return Result.success(emptyList())
+
         return userDataSource.findUsersByIds(ids)
     }
 

@@ -28,6 +28,8 @@ import ru.nativespeakers.feature.home.homeScreen
 import ru.nativespeakers.feature.home.navigateToHome
 import ru.nativespeakers.feature.profile.navigateToProfile
 import ru.nativespeakers.feature.profile.profileScreen
+import ru.nativespeakers.feature.vacancy.create.createVacancyScreen
+import ru.nativespeakers.feature.vacancy.create.navigateToCreateVacancy
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -109,9 +111,12 @@ fun TJobApp() {
                 profileScreen(
                     navigateBack = navController::popBackStack,
                     navigateToCompetenciesScreen = navController::navigateToCompetencies,
-                    navigateToCreateVacancyClick = {}
+                    navigateToCreateVacancyClick = navController::navigateToCreateVacancy
                 )
                 competenciesScreen(navController)
+                createVacancyScreen(
+                    navigateBack = navController::popBackStack
+                )
             }
         }
     }
