@@ -9,13 +9,12 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.nativespeakers.core.model.InterviewTypeNetwork
-import ru.nativespeakers.core.model.TagCategoryNetwork
-import ru.nativespeakers.core.model.TagNetwork
 import ru.nativespeakers.core.ui.BasicUiState
 import ru.nativespeakers.data.interview.InterviewRepository
 import ru.nativespeakers.data.tag.TagRepository
 import ru.nativespeakers.data.vacancy.VacancyRepository
 import ru.nativespeakers.data.vacancy.dto.EditOrCreateVacancyDto
+import ru.nativespeakers.feature.vacancy.common.EditVacancyUiState
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,14 +23,7 @@ class CreateVacancyViewModel @Inject constructor(
     private val vacancyRepository: VacancyRepository,
     private val interviewRepository: InterviewRepository,
 ) : ViewModel() {
-    var name by mutableStateOf("")
-        private set
-    var description by mutableStateOf("")
-        private set
-    var city by mutableStateOf("")
-        private set
-
-    var availableTags by mutableStateOf(BasicUiState(emptyMap<TagCategoryNetwork, List<TagNetwork>>()))
+    var editVacancyUiState by mutableStateOf(BasicUiState(EditVacancyUiState()))
         private set
 
     var selectedTags = mutableStateListOf<Long>()
@@ -46,8 +38,7 @@ class CreateVacancyViewModel @Inject constructor(
         private set
 
     init {
-        loadAvailableTags()
-        loadAllInterviewTypes()
+        loadData()
     }
 
     fun removeInterview(id: Long) {
@@ -63,30 +54,40 @@ class CreateVacancyViewModel @Inject constructor(
     }
 
     fun updateName(value: String) {
-        name = value
+        editVacancyUiState = editVacancyUiState.copy(
+            value = editVacancyUiState.value.copy(name = value)
+        )
     }
 
     fun updateDescription(value: String) {
-        description = value
+        editVacancyUiState = editVacancyUiState.copy(
+            value = editVacancyUiState.value.copy(description = value)
+        )
     }
 
     fun updateCity(value: String) {
-        city = value
+        editVacancyUiState = editVacancyUiState.copy(
+            value = editVacancyUiState.value.copy(city = value)
+        )
     }
 
-    fun addTag(tagId: Long) {
-        selectedTags.add(tagId)
+    fun onTagClick(tagId: Long) {
+        if (tagId in selectedTags) {
+            selectedTags -= tagId
+        } else {
+            selectedTags += tagId
+        }
     }
 
-    fun removeTag(tagId: Long) {
-        selectedTags.remove(tagId)
+    fun onSearchInterviewTypeClick(interview: InterviewTypeNetwork) {
+        if (interview in selectedInterviews) {
+            selectedInterviews -= interview
+        } else {
+            selectedInterviews += interview
+        }
     }
 
-    fun addInterview(interview: InterviewTypeNetwork) {
-        selectedInterviews.add(interview)
-    }
-
-    fun createVacancy(salaryLowerBound: Float, salaryHigherBound: Float) {
+    fun createVacancy(salaryLowerBound: Int, salaryHigherBound: Int) {
         viewModelScope.launch {
             val result = vacancyRepository.createVacancy(toDto(salaryLowerBound, salaryHigherBound))
             vacancyCreated = result.isSuccess
@@ -109,6 +110,11 @@ class CreateVacancyViewModel @Inject constructor(
         }
     }
 
+    fun loadData() {
+        loadAvailableTags()
+        loadAllInterviewTypes()
+    }
+
     private fun loadAllInterviewTypes() {
         viewModelScope.launch {
             val result = interviewRepository.searchInterviewTypeByName("")
@@ -120,36 +126,38 @@ class CreateVacancyViewModel @Inject constructor(
         }
     }
 
-    fun loadAvailableTags() {
-        availableTags = availableTags.copy(isLoading = true)
+    private fun loadAvailableTags() {
+        editVacancyUiState = editVacancyUiState.copy(isLoading = true)
 
         viewModelScope.launch {
             val tagsResult = tagRepository.availableTags()
             if (tagsResult.isFailure) {
-                availableTags = availableTags.copy(
+                editVacancyUiState = editVacancyUiState.copy(
                     isLoading = false,
-                    isLoaded = availableTags.isLoaded,
+                    isLoaded = editVacancyUiState.isLoaded,
                     isError = true
                 )
                 return@launch
             }
 
             val tags = tagsResult.getOrThrow()
-            availableTags = availableTags.copy(
-                value = tags.groupBy { it.category },
+            editVacancyUiState = editVacancyUiState.copy(
+                value = editVacancyUiState.value.copy(
+                    tags = tags.groupBy { it.category },
+                ),
                 isLoading = false,
                 isLoaded = true,
-                isError = false
+                isError = false,
             )
         }
     }
 
-    private fun toDto(salaryLowerBound: Float, salaryHigherBound: Float) = EditOrCreateVacancyDto(
-        name = name,
-        description = description,
-        salaryMin = salaryLowerBound.toInt(),
-        salaryMax = salaryHigherBound.toInt(),
-        town = city,
+    private fun toDto(salaryLowerBound: Int, salaryHigherBound: Int) = EditOrCreateVacancyDto(
+        name = editVacancyUiState.value.name,
+        description = editVacancyUiState.value.description,
+        salaryMin = salaryLowerBound,
+        salaryMax = salaryHigherBound,
+        town = editVacancyUiState.value.city,
         interviews = selectedInterviews.map { it.id },
         tags = selectedTags
     )

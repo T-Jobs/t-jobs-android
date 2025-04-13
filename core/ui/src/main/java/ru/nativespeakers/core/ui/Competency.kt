@@ -30,6 +30,7 @@ fun Competency(
     text: String,
     withDraggableIcon: Boolean,
     withHelperIcon: Boolean,
+    withDeleteIcon: Boolean,
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -65,18 +66,20 @@ fun Competency(
             modifier = Modifier.weight(1f)
         )
 
-        Icon(
-            imageVector = Icons.Outlined.DeleteOutline,
-            contentDescription = null,
-            tint = Red5,
-            modifier = Modifier
-                .size(24.dp)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = onDeleteClick
-                )
-        )
+        if (withDeleteIcon) {
+            Icon(
+                imageVector = Icons.Outlined.DeleteOutline,
+                contentDescription = null,
+                tint = Red5,
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = onDeleteClick
+                    )
+            )
+        }
     }
 }
 
@@ -88,6 +91,7 @@ private fun CompetencyPreview1() {
             text = "Алгоритмическое интервью",
             withDraggableIcon = false,
             withHelperIcon = true,
+            withDeleteIcon = true,
             onDeleteClick = {}
         )
     }
@@ -101,6 +105,7 @@ private fun CompetencyPreview2() {
             text = "Алгоритмическое интервью",
             withDraggableIcon = true,
             withHelperIcon = true,
+            withDeleteIcon = true,
             onDeleteClick = {}
         )
     }
@@ -114,6 +119,7 @@ private fun CompetencyPreview3() {
             text = "Алгоритмическое интервью",
             withDraggableIcon = true,
             withHelperIcon = false,
+            withDeleteIcon = true,
             onDeleteClick = {}
         )
     }
@@ -127,6 +133,7 @@ private fun CompetencyPreview4() {
             text = "Алгоритмическое интервью",
             withDraggableIcon = false,
             withHelperIcon = false,
+            withDeleteIcon = true,
             onDeleteClick = {}
         )
     }

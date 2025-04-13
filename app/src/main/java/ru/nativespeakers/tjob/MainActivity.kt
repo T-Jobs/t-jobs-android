@@ -28,8 +28,16 @@ import ru.nativespeakers.feature.home.homeScreen
 import ru.nativespeakers.feature.home.navigateToHome
 import ru.nativespeakers.feature.profile.navigateToProfile
 import ru.nativespeakers.feature.profile.profileScreen
+import ru.nativespeakers.feature.vacancy.alltracks.allTracksScreen
+import ru.nativespeakers.feature.vacancy.alltracks.navigateToAllTracks
+import ru.nativespeakers.feature.vacancy.appliedcandidates.appliedCandidatesScreen
+import ru.nativespeakers.feature.vacancy.appliedcandidates.navigateToAppliedCandidates
 import ru.nativespeakers.feature.vacancy.create.createVacancyScreen
 import ru.nativespeakers.feature.vacancy.create.navigateToCreateVacancy
+import ru.nativespeakers.feature.vacancy.details.navigateToVacancyDetails
+import ru.nativespeakers.feature.vacancy.details.vacancyDetailsScreen
+import ru.nativespeakers.feature.vacancy.edit.editVacancyScreen
+import ru.nativespeakers.feature.vacancy.edit.navigateToEditVacancy
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -101,7 +109,7 @@ fun TJobApp() {
                 loginScreen()
                 homeScreen(
                     navigateToProfile = navController::navigateToProfile,
-                    navigateToVacancyWithId = {},
+                    navigateToVacancyWithId = navController::navigateToVacancyDetails,
                     navigateToInterviewWithId = {},
                     navigateToCandidateWithId = {},
                     navigateToTrackWithId = {},
@@ -116,6 +124,22 @@ fun TJobApp() {
                 competenciesScreen(navController)
                 createVacancyScreen(
                     navigateBack = navController::popBackStack
+                )
+                vacancyDetailsScreen(
+                    navigateBack = navController::popBackStack,
+                    navigateToShowAllAppliedCandidatesScreen = navController::navigateToAppliedCandidates,
+                    navigateToTrackWithId = {},
+                    navigateToShowAllTracksScreen = navController::navigateToAllTracks,
+                    navigateToRelevantResumeScreen = {},
+                    navigateToEditVacancyScreenWithId = navController::navigateToEditVacancy
+                )
+                editVacancyScreen(navController::popBackStack)
+                allTracksScreen(
+                    navigateBack = navController::popBackStack,
+                    navigateToTrackWithId = {}
+                )
+                appliedCandidatesScreen(
+                    navigateBack = navController::popBackStack,
                 )
             }
         }

@@ -48,7 +48,7 @@ import ru.nativespeakers.core.designsystem.Base5
 import ru.nativespeakers.core.designsystem.Base8
 import ru.nativespeakers.core.designsystem.Primary7
 import ru.nativespeakers.core.model.InterviewTypeNetwork
-import ru.nativespeakers.core.ui.BottomSheetWithSearch
+import ru.nativespeakers.core.ui.bottomsheet.BottomSheetWithSearch
 import ru.nativespeakers.core.ui.Competency
 import ru.nativespeakers.core.ui.interview.SearchInterviewType
 import ru.nativespeakers.core.ui.screen.ErrorScreen
@@ -185,6 +185,7 @@ private fun CompetenciesSection(
                         text = competencies[i].name,
                         withDraggableIcon = false,
                         withHelperIcon = true,
+                        withDeleteIcon = true,
                         onDeleteClick = { onDeleteCompetencyClick(competencies[i].id) },
                         modifier = Modifier
                             .fillMaxWidth()

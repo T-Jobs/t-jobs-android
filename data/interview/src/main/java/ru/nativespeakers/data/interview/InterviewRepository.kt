@@ -17,6 +17,8 @@ class InterviewRepository @Inject constructor(
     }
 
     suspend fun baseInterviewById(ids: List<Long>): Result<List<InterviewBaseNetwork>> {
+        if (ids.isEmpty()) return Result.success(emptyList())
+
         return interviewDataSource.baseInterviewById(ids)
     }
 

@@ -1,0 +1,13 @@
+<resources>
+    <string name="feature_vacancy_common_add">Добавить</string>
+    <string name="feature_vacancy_common_apply">Принять</string>
+    <string name="feature_vacancy_common_city">Город</string>
+    <string name="feature_vacancy_common_complete">Завершить</string>
+    <string name="feature_vacancy_common_default_track">Стандартный трек</string>
+    <string name="feature_vacancy_common_description">Описание</string>
+    <string name="feature_vacancy_common_interviews_empty">Список интервью пуст</string>
+    <string name="feature_vacancy_common_name">Название</string>
+    <string name="feature_vacancy_common_salary_higher_bound">Верхняя планка ЗП</string>
+    <string name="feature_vacancy_common_salary_lower_bound">Нижняя планка ЗП</string>
+    <string name="feature_vacancy_common_start_writing">Начните писать</string>
+</resources>

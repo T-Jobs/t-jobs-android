@@ -153,4 +153,14 @@ internal class UserRemoteDataSource @Inject constructor(
                 else -> Result.failure(Exception())
             }
         }
+
+    override suspend fun unfollowVacancy(vacancyId: Long): Result<Unit> =
+        withContext(ioDispatcher) {
+            val response = httpClient.post("/user/unfollow-vacancy/${vacancyId}")
+
+            when (response.status) {
+                HttpStatusCode.OK -> Result.success(Unit)
+                else -> Result.failure(Exception())
+            }
+        }
 }

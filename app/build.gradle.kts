@@ -39,13 +39,19 @@ android {
 
 dependencies {
     implementation(projects.core.designsystem)
+    implementation(projects.core.model)
     implementation(projects.core.ui)
+
     implementation(projects.feature.auth)
-    implementation(projects.feature.home)
-    implementation(projects.feature.filters)
-    implementation(projects.feature.profile)
     implementation(projects.feature.competencies)
+    implementation(projects.feature.filters)
+    implementation(projects.feature.home)
+    implementation(projects.feature.profile)
+    implementation(projects.feature.vacancy.alltracks)
+    implementation(projects.feature.vacancy.appliedcandidates)
     implementation(projects.feature.vacancy.create)
+    implementation(projects.feature.vacancy.details)
+    implementation(projects.feature.vacancy.edit)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)

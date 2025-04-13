@@ -1,13 +1,3 @@
 <resources>
     <string name="feature_vacancy_create_title">Создание вакансии</string>
-    <string name="feature_vacancy_create_name">Название</string>
-    <string name="feature_vacancy_create_city">Город</string>
-    <string name="feature_vacancy_create_description">Описание</string>
-    <string name="feature_vacancy_create_salary_lower_bound">Нижняя планка ЗП</string>
-    <string name="feature_vacancy_create_salary_higher_bound">Верхняя планка ЗП</string>
-    <string name="feature_vacancy_create_start_writing">Начните писать</string>
-    <string name="feature_vacancy_create_complete">Завершить</string>
-    <string name="feature_vacancy_create_default_track">Стандартный трек</string>
-    <string name="feature_vacancy_create_add">Добавить</string>
-    <string name="feature_vacancy_create_interviews_empty">Список интервью пуст</string>
 </resources>

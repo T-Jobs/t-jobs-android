@@ -17,4 +17,5 @@ interface UserDataSource {
     suspend fun addCompetency(interviewTypeId: Long): Result<Unit>
     suspend fun deleteCompetency(interviewTypeId: Long): Result<Unit>
     suspend fun followVacancy(vacancyId: Long): Result<Unit>
+    suspend fun unfollowVacancy(vacancyId: Long): Result<Unit>
 }

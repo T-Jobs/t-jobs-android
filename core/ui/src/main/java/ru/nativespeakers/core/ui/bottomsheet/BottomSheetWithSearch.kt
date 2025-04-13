@@ -1,4 +1,4 @@
-package ru.nativespeakers.core.ui
+package ru.nativespeakers.core.ui.bottomsheet
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.nativespeakers.core.designsystem.Base5
+import ru.nativespeakers.core.ui.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

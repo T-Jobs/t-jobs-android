@@ -48,7 +48,12 @@
             <option value="$PROJECT_DIR$/feature/home" />
             <option value="$PROJECT_DIR$/feature/profile" />
             <option value="$PROJECT_DIR$/feature/vacancy" />
+            <option value="$PROJECT_DIR$/feature/vacancy/alltracks" />
+            <option value="$PROJECT_DIR$/feature/vacancy/appliedcandidates" />
+            <option value="$PROJECT_DIR$/feature/vacancy/common" />
             <option value="$PROJECT_DIR$/feature/vacancy/create" />
+            <option value="$PROJECT_DIR$/feature/vacancy/details" />
+            <option value="$PROJECT_DIR$/feature/vacancy/edit" />
           </set>
         </option>
       </GradleProjectSettings>

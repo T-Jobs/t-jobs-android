@@ -142,21 +142,33 @@ private fun Header(
                 Tag(firstTwoTags[1])
             }
         }
-        val salaryString = getStringForSalary(salaryLowerBoundRub, salaryHigherBoundRub)
-        if (salaryString != null) {
-            Row {
-                Text(
-                    text = "$salaryString ₽",
-                    color = Green5,
-                    style = MaterialTheme.typography.labelMedium
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = stringResource(coreUiStrings.core_ui_on_hands),
-                    color = Base6,
-                    style = MaterialTheme.typography.labelMedium
-                )
-            }
+        SalaryBlock(
+            salaryLowerBoundRub = salaryLowerBoundRub,
+            salaryHigherBoundRub = salaryHigherBoundRub
+        )
+    }
+}
+
+@Composable
+fun SalaryBlock(
+    salaryLowerBoundRub: Int?,
+    salaryHigherBoundRub: Int?,
+    modifier: Modifier = Modifier
+) {
+    val salaryString = getStringForSalary(salaryLowerBoundRub, salaryHigherBoundRub)
+    if (salaryString != null) {
+        Row(modifier = modifier) {
+            Text(
+                text = "$salaryString ₽",
+                color = Green5,
+                style = MaterialTheme.typography.labelMedium
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = stringResource(coreUiStrings.core_ui_on_hands),
+                color = Base6,
+                style = MaterialTheme.typography.labelMedium
+            )
         }
     }
 }

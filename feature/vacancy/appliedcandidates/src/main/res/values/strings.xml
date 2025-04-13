@@ -1,0 +1,4 @@
+<resources>
+    <string name="feature_vacancy_appliedcandidates_title">Подавшие заявку</string>
+    <string name="feature_vacancy_appliedcandidates_apply_error">Ошибка при попытке принять заявку</string>
+</resources>

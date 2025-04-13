@@ -41,8 +41,10 @@ import ru.nativespeakers.core.designsystem.Red4
 import ru.nativespeakers.core.designsystem.TJobTheme
 import ru.nativespeakers.core.designsystem.Yellow4
 import ru.nativespeakers.core.model.InterviewStatus
+import ru.nativespeakers.core.model.TrackNetwork
 import ru.nativespeakers.core.ui.interview.PersonAndPhotoUiState
 import ru.nativespeakers.core.ui.photo.PersonPhoto
+import ru.nativespeakers.core.ui.photo.toPersonAndPhotoUiState
 import ru.nativespeakers.core.ui.R.string as coreUiStrings
 
 @Immutable
@@ -217,6 +219,15 @@ private fun getStatusColor(interviewStatus: InterviewStatus) = when (interviewSt
     InterviewStatus.WAITING_FOR_FEEDBACK -> Blue4
     InterviewStatus.WAITING_FOR_TIME_APPROVAL -> Yellow4
 }
+
+fun TrackNetwork.toTrackCardUiState() = TrackCardUiState(
+    id = id,
+    hr = hr.toPersonAndPhotoUiState(),
+    candidate = candidate.toPersonAndPhotoUiState(),
+    interviewsCount = interviewsIds.size,
+    lastInterviewStatus = lastStatus,
+    vacancy = vacancy.name
+)
 
 @Preview
 @Composable

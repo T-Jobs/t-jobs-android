@@ -11,6 +11,5 @@ dependencies {
     implementation(projects.data.tag)
     implementation(projects.data.vacancy)
     implementation(projects.data.interview)
-
-    implementation(libs.composeReorderable)
+    implementation(projects.feature.vacancy.common)
 }

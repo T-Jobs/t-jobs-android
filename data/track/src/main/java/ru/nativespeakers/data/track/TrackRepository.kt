@@ -13,6 +13,8 @@ class TrackRepository @Inject constructor(
     }
 
     suspend fun findById(ids: List<Long>): Result<List<TrackNetwork>> {
+        if (ids.isEmpty()) return Result.success(emptyList())
+
         return trackDataSource.findById(ids)
     }
 

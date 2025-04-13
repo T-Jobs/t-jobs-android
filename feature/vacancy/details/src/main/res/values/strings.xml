@@ -1,0 +1,15 @@
+<resources>
+    <string name="feature_vacancy_details_title">Вакансия</string>
+    <string name="feature_vacancy_details_find_relevant_vacancies">Найти релевантные резюме</string>
+    <string name="feature_vacancy_details_team_leads">TeamLeads</string>
+    <string name="feature_vacancy_details_hrs">HRs</string>
+    <string name="feature_vacancy_details_current_tracks">Текущий отбор</string>
+    <string name="feature_vacancy_details_all">Все</string>
+    <string name="feature_vacancy_details_apply">Принять</string>
+    <string name="feature_vacancy_details_applied_candidates">Подавшие заявку</string>
+    <string name="feature_vacancy_details_list_is_empty">Список пуст</string>
+    <string name="feature_vacancy_details_default_track">Стандартный Трек</string>
+    <string name="feature_vacancy_details_follow">Отслеживать</string>
+    <string name="feature_vacancy_details_unfollow">Перестать отслеживать</string>
+    <string name="feature_vacancy_details_edit">Редактировать</string>
+</resources>

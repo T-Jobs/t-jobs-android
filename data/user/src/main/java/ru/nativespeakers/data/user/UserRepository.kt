@@ -56,4 +56,8 @@ class UserRepository @Inject constructor(
     suspend fun followVacancy(vacancyId: Long): Result<Unit> {
         return userDataSource.followVacancy(vacancyId)
     }
+
+    suspend fun unfollowVacancy(vacancyId: Long): Result<Unit> {
+        return userDataSource.unfollowVacancy(vacancyId)
+    }
 }
