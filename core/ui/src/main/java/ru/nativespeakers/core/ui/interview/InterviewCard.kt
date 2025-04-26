@@ -37,7 +37,9 @@ import ru.nativespeakers.core.designsystem.Primary3
 import ru.nativespeakers.core.designsystem.Primary6
 import ru.nativespeakers.core.designsystem.Primary8
 import ru.nativespeakers.core.designsystem.TJobTheme
+import ru.nativespeakers.core.model.InterviewNetwork
 import ru.nativespeakers.core.model.InterviewStatus
+import ru.nativespeakers.core.model.TrackNetwork
 import ru.nativespeakers.core.ui.conditional
 import ru.nativespeakers.core.ui.photo.PersonPhoto
 import ru.nativespeakers.core.ui.toUi
@@ -210,6 +212,23 @@ private fun InterviewCardPerson(
         Spacer(Modifier.weight(1f))
     }
 }
+
+fun interviewCardUiState(
+    interviewer: PersonAndPhotoUiState?,
+    interview: InterviewNetwork,
+    track: TrackNetwork,
+) = InterviewCardUiState(
+    interviewId = interview.id,
+    interviewName = interview.interviewType.name,
+    interviewerUiState = interviewer,
+    candidateUiState = PersonAndPhotoUiState(
+        name = track.candidate.name,
+        surname = track.candidate.surname,
+        photoUrl = track.candidate.photoUrl
+    ),
+    status = interview.status,
+    date = interview.datePicked
+)
 
 @Preview
 @Composable

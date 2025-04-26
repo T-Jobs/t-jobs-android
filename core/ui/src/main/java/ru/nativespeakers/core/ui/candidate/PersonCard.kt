@@ -16,6 +16,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -29,20 +31,23 @@ import ru.nativespeakers.core.designsystem.Base5
 import ru.nativespeakers.core.designsystem.Primary10
 import ru.nativespeakers.core.designsystem.Primary6
 import ru.nativespeakers.core.designsystem.TJobTheme
+import ru.nativespeakers.core.model.CandidateNetwork
+import ru.nativespeakers.core.model.StaffNetwork
 import ru.nativespeakers.core.ui.R
 import ru.nativespeakers.core.ui.interview.PersonAndPhotoUiState
 import ru.nativespeakers.core.ui.photo.PersonPhoto
+import ru.nativespeakers.core.ui.photo.toPersonAndPhotoUiState
 
 @Immutable
-data class CandidateCardUiState(
+data class PersonCardUiState(
     val id: Long = 0,
-    val candidate: PersonAndPhotoUiState = PersonAndPhotoUiState(),
+    val state: PersonAndPhotoUiState = PersonAndPhotoUiState(),
     val vacancyCount: Int = 0,
 )
 
 @Composable
-fun CandidateCard(
-    state: CandidateCardUiState,
+fun PersonCard(
+    state: PersonCardUiState,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -74,12 +79,12 @@ fun CandidateCard(
                 .padding(12.dp)
         ) {
             PersonPhoto(
-                state = state.candidate,
+                state = state.state,
                 modifier = Modifier.size(42.dp)
             )
             Column {
                 Text(
-                    text = "${state.candidate.name} ${state.candidate.surname}",
+                    text = "${state.state.name} ${state.state.surname}",
                     style = MaterialTheme.typography.bodyLarge,
                     color = Primary10
                 )
@@ -100,14 +105,48 @@ fun CandidateCard(
     }
 }
 
+@Composable
+fun PersonCardWithRadioButton(
+    state: PersonCardUiState,
+    selected: Boolean,
+    onSelect: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(20.dp),
+        modifier = modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onSelect
+            )
+    ) {
+        PersonCard(
+            state = state,
+            onClick = {},
+            modifier = Modifier.weight(1f)
+        )
+
+        RadioButton(
+            selected = selected,
+            onClick = onSelect,
+            colors = RadioButtonDefaults.colors(
+                selectedColor = MaterialTheme.colorScheme.primary,
+                unselectedColor = Base5,
+            )
+        )
+    }
+}
+
 @Preview
 @Composable
-private fun CandidateCardPreview() {
+private fun PersonCardPreview() {
     TJobTheme {
-        CandidateCard(
-            state = CandidateCardUiState(
+        PersonCard(
+            state = PersonCardUiState(
                 id = 0,
-                candidate = PersonAndPhotoUiState(
+                state = PersonAndPhotoUiState(
                     name = "Пьер",
                     surname = "Безухов",
                     photoUrl = null
@@ -119,3 +158,36 @@ private fun CandidateCardPreview() {
         )
     }
 }
+
+@Preview
+@Composable
+private fun PersonCardWithRadioButtonPreview() {
+    TJobTheme {
+        PersonCardWithRadioButton(
+            selected = true,
+            state = PersonCardUiState(
+                id = 0,
+                state = PersonAndPhotoUiState(
+                    name = "Пьер",
+                    surname = "Безухов",
+                    photoUrl = null
+                ),
+                vacancyCount = 7
+            ),
+            onSelect = {},
+            modifier = Modifier.width(300.dp)
+        )
+    }
+}
+
+fun CandidateNetwork.toPersonCardUiState() = PersonCardUiState(
+    id = id,
+    state = this.toPersonAndPhotoUiState(),
+    vacancyCount = tracks.size + appliedVacancies.size
+)
+
+fun StaffNetwork.toPersonCardUiState() = PersonCardUiState(
+    id = id,
+    state = toPersonAndPhotoUiState(),
+    vacancyCount = vacanciesIds.size
+)

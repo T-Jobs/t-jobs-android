@@ -37,9 +37,13 @@ import ru.nativespeakers.core.designsystem.Primary2
 import ru.nativespeakers.core.designsystem.Primary8
 import ru.nativespeakers.core.designsystem.Primary9
 import ru.nativespeakers.core.designsystem.TJobTheme
+import ru.nativespeakers.core.model.CandidateNetwork
+import ru.nativespeakers.core.model.StaffNetwork
+import ru.nativespeakers.core.model.VacancyNetwork
 import ru.nativespeakers.core.ui.conditional
 import ru.nativespeakers.core.ui.interview.PersonAndPhotoUiState
 import ru.nativespeakers.core.ui.photo.PersonPhoto
+import ru.nativespeakers.core.ui.photo.toPersonAndPhotoUiState
 import ru.nativespeakers.core.ui.R.string as coreUiStrings
 
 @Immutable
@@ -478,3 +482,29 @@ private fun VacancyCardPreview_State2() {
         )
     }
 }
+
+fun vacancyCardUiState(
+    vacancyNetwork: VacancyNetwork,
+    candidates: List<CandidateNetwork>,
+    teamLeads: List<StaffNetwork>,
+    hrs: List<StaffNetwork>,
+) = VacancyCardUiState(
+    id = vacancyNetwork.id,
+    name = vacancyNetwork.name,
+    city = vacancyNetwork.town,
+    firstTwoTags = vacancyNetwork.tags.take(2).map { it.name },
+    firstTwoHrs = hrs
+        .take(2)
+        .map { it.toPersonAndPhotoUiState() },
+    hrsCount = hrs.size,
+    firstTwoTeamLeads = teamLeads
+        .take(2)
+        .map { it.toPersonAndPhotoUiState() },
+    teamLeadsCount = teamLeads.size,
+    firstTwoCandidates = candidates
+        .take(2)
+        .map { it.toPersonAndPhotoUiState() },
+    candidatesCount = candidates.size,
+    salaryLowerBoundRub = vacancyNetwork.salaryMin,
+    salaryHigherBoundRub = vacancyNetwork.salaryMax
+)

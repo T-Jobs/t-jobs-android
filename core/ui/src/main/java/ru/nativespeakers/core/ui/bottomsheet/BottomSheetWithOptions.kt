@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
@@ -30,6 +31,7 @@ data class BottomSheetOption(
     val name: String,
     val leadingIcon: ImageVector? = null,
     val onClick: () -> Unit = {},
+    val painter: Painter? = null,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,6 +92,12 @@ private fun Option(
         if (option.leadingIcon != null) {
             Icon(
                 imageVector = option.leadingIcon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
+        } else if (option.painter != null) {
+            Icon(
+                painter = option.painter,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary
             )

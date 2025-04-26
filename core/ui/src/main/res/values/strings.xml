@@ -27,4 +27,7 @@
     <string name="core_ui_vacancies_count">вакансий</string>
     <string name="core_ui_search">Поиск</string>
     <string name="core_ui_ready">Готово</string>
+    <string name="core_ui_auto">Авто</string>
+    <string name="core_ui_replace">Заменить</string>
+    <string name="core_ui_delete">Удалить</string>
 </resources>

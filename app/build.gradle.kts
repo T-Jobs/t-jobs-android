@@ -47,6 +47,7 @@ dependencies {
     implementation(projects.feature.filters)
     implementation(projects.feature.home)
     implementation(projects.feature.profile)
+    implementation(projects.feature.track)
     implementation(projects.feature.vacancy.alltracks)
     implementation(projects.feature.vacancy.appliedcandidates)
     implementation(projects.feature.vacancy.create)

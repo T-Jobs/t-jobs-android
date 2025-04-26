@@ -56,7 +56,7 @@ import ru.nativespeakers.core.designsystem.Primary3
 import ru.nativespeakers.core.designsystem.Primary4
 import ru.nativespeakers.core.designsystem.Primary6
 import ru.nativespeakers.core.designsystem.Primary8
-import ru.nativespeakers.core.ui.candidate.CandidateCard
+import ru.nativespeakers.core.ui.candidate.PersonCard
 import ru.nativespeakers.core.ui.interview.InterviewCard
 import ru.nativespeakers.core.ui.paging.LazyPagingItemsColumn
 import ru.nativespeakers.core.ui.photo.PersonPhoto
@@ -295,7 +295,7 @@ private fun HomeScreenContent(
                     itemKey = { it.id },
                     itemsEmptyComposable = {},
                     itemComposable = {
-                        CandidateCard(
+                        PersonCard(
                             state = it,
                             onClick = { navigateToCandidateWithId(it.id) },
                             modifier = Modifier.fillMaxWidth()

@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import ru.nativespeakers.core.designsystem.Base4
 import ru.nativespeakers.core.designsystem.Base6
 import ru.nativespeakers.core.designsystem.Primary6
 import ru.nativespeakers.core.ui.R
@@ -31,7 +30,7 @@ fun EmptyScreen(
     ) {
         Spacer(modifier = Modifier.weight(1f))
         Image(
-            painter = painterResource(R.drawable.coffee),
+            painter = painterResource(R.drawable.core_ui_coffee),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             colorFilter = ColorFilter.tint(color = Primary6),

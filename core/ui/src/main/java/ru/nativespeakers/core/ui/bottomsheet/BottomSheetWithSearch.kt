@@ -2,6 +2,7 @@ package ru.nativespeakers.core.ui.bottomsheet
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -40,6 +41,7 @@ fun <T> BottomSheetWithSearch(
     onDismissRequest: () -> Unit,
     sheetState: SheetState,
     modifier: Modifier = Modifier,
+    verticalArrangement: Arrangement.Vertical = Arrangement.Top,
 ) {
     ModalBottomSheet(
         dragHandle = {
@@ -100,6 +102,7 @@ fun <T> BottomSheetWithSearch(
         val items = state()
         LazyColumn(
             contentPadding = PaddingValues(16.dp),
+            verticalArrangement = verticalArrangement,
             modifier = Modifier.fillMaxWidth()
         ) {
             items(

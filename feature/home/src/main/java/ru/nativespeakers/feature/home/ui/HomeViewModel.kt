@@ -20,20 +20,19 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 import ru.nativespeakers.core.model.AppRole
-import ru.nativespeakers.core.model.CandidateNetwork
-import ru.nativespeakers.core.model.InterviewNetwork
-import ru.nativespeakers.core.model.StaffNetwork
 import ru.nativespeakers.core.model.TagNetwork
 import ru.nativespeakers.core.model.TrackNetwork
-import ru.nativespeakers.core.model.VacancyNetwork
 import ru.nativespeakers.core.ui.BasicUiState
-import ru.nativespeakers.core.ui.candidate.CandidateCardUiState
+import ru.nativespeakers.core.ui.candidate.PersonCardUiState
+import ru.nativespeakers.core.ui.candidate.toPersonCardUiState
 import ru.nativespeakers.core.ui.interview.InterviewCardUiState
 import ru.nativespeakers.core.ui.interview.PersonAndPhotoUiState
+import ru.nativespeakers.core.ui.interview.interviewCardUiState
 import ru.nativespeakers.core.ui.paging.PagingDataUiState
 import ru.nativespeakers.core.ui.photo.toPersonAndPhotoUiState
 import ru.nativespeakers.core.ui.track.TrackCardUiState
 import ru.nativespeakers.core.ui.vacancy.VacancyCardUiState
+import ru.nativespeakers.core.ui.vacancy.vacancyCardUiState
 import ru.nativespeakers.data.candidate.CandidateRepository
 import ru.nativespeakers.data.tag.TagRepository
 import ru.nativespeakers.data.track.TrackRepository
@@ -82,7 +81,7 @@ class HomeViewModel @Inject constructor(
 
     private var searchQuery by mutableStateOf("")
 
-    val searchCandidatesUiState = PagingDataUiState<CandidateCardUiState>()
+    val searchCandidatesUiState = PagingDataUiState<PersonCardUiState>()
     val searchVacanciesUiState = PagingDataUiState<VacancyCardUiState>()
 
     init {
@@ -125,7 +124,7 @@ class HomeViewModel @Inject constructor(
                     .cachedIn(viewModelScope)
             }
                 .flatMapLatest { it }
-                .map { pagingData -> pagingData.map { it.toCandidateCardUiState() } }
+                .map { pagingData -> pagingData.map { it.toPersonCardUiState() } }
                 .collectLatest { searchCandidatesUiState.updateData(it) }
         }
     }
@@ -168,7 +167,7 @@ class HomeViewModel @Inject constructor(
                         val hrs = staff.filter { AppRole.HR in it.roles }
                         val teamLeads = staff.filter { AppRole.TEAM_LEAD in it.roles }
 
-                        mapToVacancyCardUiState(
+                        vacancyCardUiState(
                             vacancyNetwork = vacancy,
                             candidates = candidatesResult.getOrThrow(),
                             hrs = hrs,
@@ -230,7 +229,11 @@ class HomeViewModel @Inject constructor(
 
             relevantInterviewsUiState = relevantInterviewsUiState.copy(
                 value = relevantInterviews.zip(tracks) { interview, track ->
-                    mapToInterviewCardUiState(personAndPhotoUiState.value, interview, track)
+                    interviewCardUiState(
+                        interviewer = personAndPhotoUiState.value,
+                        interview = interview,
+                        track = track,
+                    )
                 },
                 isLoading = false,
                 isLoaded = true,
@@ -280,7 +283,7 @@ class HomeViewModel @Inject constructor(
 
             relevantVacanciesUiState = relevantVacanciesUiState.copy(
                 value = relevantVacancies.mapIndexed { i, vacancyNetwork ->
-                    mapToVacancyCardUiState(
+                    vacancyCardUiState(
                         vacancyNetwork = vacancyNetwork,
                         candidates = candidates[i],
                         teamLeads = teamLeads[i],
@@ -339,56 +342,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 }
-
-private fun CandidateNetwork.toCandidateCardUiState() =
-    CandidateCardUiState(
-        id = id,
-        candidate = this.toPersonAndPhotoUiState(),
-        vacancyCount = tracks.size + appliedVacancies.size
-    )
-
-private fun mapToInterviewCardUiState(
-    personAndPhotoUiState: PersonAndPhotoUiState,
-    interview: InterviewNetwork,
-    track: TrackNetwork
-) = InterviewCardUiState(
-    interviewId = interview.id,
-    interviewName = interview.interviewType.name,
-    interviewerUiState = personAndPhotoUiState,
-    candidateUiState = PersonAndPhotoUiState(
-        name = track.candidate.name,
-        surname = track.candidate.surname,
-        photoUrl = track.candidate.photoUrl
-    ),
-    status = interview.status,
-    date = interview.datePicked
-)
-
-private fun mapToVacancyCardUiState(
-    vacancyNetwork: VacancyNetwork,
-    candidates: List<CandidateNetwork>,
-    teamLeads: List<StaffNetwork>,
-    hrs: List<StaffNetwork>,
-) = VacancyCardUiState(
-    id = vacancyNetwork.id,
-    name = vacancyNetwork.name,
-    city = vacancyNetwork.town,
-    firstTwoTags = vacancyNetwork.tags.take(2).map { it.name },
-    firstTwoHrs = hrs
-        .take(2)
-        .map { it.toPersonAndPhotoUiState() },
-    hrsCount = hrs.size,
-    firstTwoTeamLeads = teamLeads
-        .take(2)
-        .map { it.toPersonAndPhotoUiState() },
-    teamLeadsCount = teamLeads.size,
-    firstTwoCandidates = candidates
-        .take(2)
-        .map { it.toPersonAndPhotoUiState() },
-    candidatesCount = candidates.size,
-    salaryLowerBoundRub = vacancyNetwork.salaryMin,
-    salaryHigherBoundRub = vacancyNetwork.salaryMax
-)
 
 private fun TrackNetwork.toTrackCardUiState() =
     TrackCardUiState(
