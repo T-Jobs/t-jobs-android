@@ -1,0 +1,5 @@
+<resources>
+    <string name="feature_track_details_meetings">Встречи</string>
+    <string name="feature_track_details_title">Трек</string>
+    <string name="feature_track_details_finish_track">Завершить трек</string>
+</resources>

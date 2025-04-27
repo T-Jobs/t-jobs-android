@@ -1,6 +1,7 @@
 package ru.nativespeakers.data.interview
 
 import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.InternalSerializationApi
 import ru.nativespeakers.core.model.InterviewBaseNetwork
 import ru.nativespeakers.core.model.InterviewNetwork
 import ru.nativespeakers.core.model.InterviewTypeNetwork
@@ -13,7 +14,8 @@ interface InterviewDataSource {
     suspend fun findById(ids: List<Long>): Result<List<InterviewNetwork>>
     suspend fun searchInterviewTypeByName(name: String): Result<List<InterviewTypeNetwork>>
     suspend fun deleteById(id: Long): Result<Unit>
-    suspend fun createInterview(createInterviewDto: CreateInterviewDto): Result<Unit>
+    @OptIn(InternalSerializationApi::class)
+    suspend fun createInterview(createInterviewDto: CreateInterviewDto): Result<InterviewNetwork>
     suspend fun setInterviewer(interviewId: Long, interviewerId: Long): Result<Unit>
     suspend fun setAutoInterviewer(interviewId: Long): Result<Unit>
     suspend fun setDate(interviewId: Long, date: LocalDateTime): Result<Unit>

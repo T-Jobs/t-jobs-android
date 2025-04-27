@@ -23,8 +23,8 @@ import ru.nativespeakers.core.model.AppRole
 import ru.nativespeakers.core.model.TagNetwork
 import ru.nativespeakers.core.model.TrackNetwork
 import ru.nativespeakers.core.ui.BasicUiState
-import ru.nativespeakers.core.ui.candidate.PersonCardUiState
-import ru.nativespeakers.core.ui.candidate.toPersonCardUiState
+import ru.nativespeakers.core.ui.person.PersonCardUiState
+import ru.nativespeakers.core.ui.person.toPersonCardUiState
 import ru.nativespeakers.core.ui.interview.InterviewCardUiState
 import ru.nativespeakers.core.ui.interview.PersonAndPhotoUiState
 import ru.nativespeakers.core.ui.interview.interviewCardUiState

@@ -3,6 +3,7 @@ package ru.nativespeakers.core.network
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format
 import kotlinx.datetime.format.char
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -10,7 +11,8 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-internal object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
+@OptIn(ExperimentalSerializationApi::class)
+object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
     private val format = LocalDateTime.Format {
         year()
         char('-')

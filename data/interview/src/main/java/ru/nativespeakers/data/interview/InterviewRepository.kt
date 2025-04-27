@@ -1,6 +1,7 @@
 package ru.nativespeakers.data.interview
 
 import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.InternalSerializationApi
 import ru.nativespeakers.core.model.InterviewBaseNetwork
 import ru.nativespeakers.core.model.InterviewNetwork
 import ru.nativespeakers.core.model.InterviewTypeNetwork
@@ -38,7 +39,8 @@ class InterviewRepository @Inject constructor(
         return interviewDataSource.deleteById(id)
     }
 
-    suspend fun createInterview(createInterviewDto: CreateInterviewDto): Result<Unit> {
+    @OptIn(InternalSerializationApi::class)
+    suspend fun createInterview(createInterviewDto: CreateInterviewDto): Result<InterviewNetwork> {
         return interviewDataSource.createInterview(createInterviewDto)
     }
 

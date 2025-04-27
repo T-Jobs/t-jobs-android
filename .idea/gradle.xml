@@ -26,6 +26,7 @@
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/build-logic/convention" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/clipboard" />
             <option value="$PROJECT_DIR$/core/common" />
             <option value="$PROJECT_DIR$/core/designsystem" />
             <option value="$PROJECT_DIR$/core/model" />
@@ -48,6 +49,9 @@
             <option value="$PROJECT_DIR$/feature/home" />
             <option value="$PROJECT_DIR$/feature/profile" />
             <option value="$PROJECT_DIR$/feature/track" />
+            <option value="$PROJECT_DIR$/feature/track/addinterview" />
+            <option value="$PROJECT_DIR$/feature/track/common" />
+            <option value="$PROJECT_DIR$/feature/track/details" />
             <option value="$PROJECT_DIR$/feature/vacancy" />
             <option value="$PROJECT_DIR$/feature/vacancy/alltracks" />
             <option value="$PROJECT_DIR$/feature/vacancy/appliedcandidates" />

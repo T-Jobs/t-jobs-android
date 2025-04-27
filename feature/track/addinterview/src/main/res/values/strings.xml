@@ -1,0 +1,9 @@
+<resources>
+    <string name="feature_track_addinterview_title">Добавить встречу</string>
+    <string name="feature_track_addinterview_choose_section">Выберите секцию</string>
+    <string name="feature_track_addinterview_auto">Авто</string>
+    <string name="feature_track_addinterview_replace">Изменить</string>
+    <string name="feature_track_addinterview_empty">Пусто</string>
+    <string name="feature_track_addinterview_create">Создать</string>
+    <string name="feature_track_addinterview_">Создать</string>
+</resources>

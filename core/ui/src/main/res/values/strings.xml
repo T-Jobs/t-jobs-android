@@ -29,5 +29,6 @@
     <string name="core_ui_ready">Готово</string>
     <string name="core_ui_auto">Авто</string>
     <string name="core_ui_replace">Заменить</string>
+    <string name="core_ui_change">Изменить</string>
     <string name="core_ui_delete">Удалить</string>
 </resources>

@@ -1,10 +1,13 @@
 package ru.nativespeakers.core.ui.track
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,6 +36,32 @@ import ru.nativespeakers.core.designsystem.TJobTheme
 import ru.nativespeakers.core.ui.R
 import ru.nativespeakers.core.ui.interview.PersonAndPhotoUiState
 import ru.nativespeakers.core.ui.photo.PersonPhoto
+
+@Composable
+fun MembersSection(
+    candidateUiState: PersonAndPhotoUiState,
+    staffUiState: PersonAndPhotoUiState?,
+    onHrChangeClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+        modifier = modifier
+    ) {
+        TrackMemberSection(
+            isStaff = false,
+            state = candidateUiState,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        TrackMemberSection(
+            isStaff = true,
+            state = staffUiState,
+            onChangeButtonClick = onHrChangeClick,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
 
 @Composable
 fun TrackMemberSection(

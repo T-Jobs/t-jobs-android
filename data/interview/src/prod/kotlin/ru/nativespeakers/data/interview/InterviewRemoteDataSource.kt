@@ -6,11 +6,15 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.forms.submitForm
 import io.ktor.client.request.get
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
 import io.ktor.http.parameters
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.InternalSerializationApi
 import ru.nativespeakers.core.common.IoDispatcher
 import ru.nativespeakers.core.model.InterviewBaseNetwork
 import ru.nativespeakers.core.model.InterviewNetwork
@@ -92,11 +96,15 @@ internal class InterviewRemoteDataSource @Inject constructor(
         }
     }
 
-    override suspend fun createInterview(createInterviewDto: CreateInterviewDto): Result<Unit> =
+    @OptIn(InternalSerializationApi::class)
+    override suspend fun createInterview(createInterviewDto: CreateInterviewDto): Result<InterviewNetwork> =
         withContext(ioDispatcher) {
-            val response = httpClient.post("/interview/add-to-track")
+            val response = httpClient.post("/interview/add-to-track") {
+                contentType(ContentType.Application.Json)
+                setBody(createInterviewDto)
+            }
             when (response.status) {
-                HttpStatusCode.OK -> Result.success(Unit)
+                HttpStatusCode.OK -> Result.success(response.body())
                 else -> Result.failure(Exception())
             }
         }

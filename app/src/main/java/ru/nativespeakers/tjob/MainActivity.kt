@@ -28,8 +28,10 @@ import ru.nativespeakers.feature.home.homeScreen
 import ru.nativespeakers.feature.home.navigateToHome
 import ru.nativespeakers.feature.profile.navigateToProfile
 import ru.nativespeakers.feature.profile.profileScreen
-import ru.nativespeakers.feature.track.navigateToTrack
-import ru.nativespeakers.feature.track.trackScreen
+import ru.nativespeakers.feature.track.addinterview.addInterviewScreen
+import ru.nativespeakers.feature.track.addinterview.navigateToAddInterview
+import ru.nativespeakers.feature.track.details.navigateToTrack
+import ru.nativespeakers.feature.track.details.trackScreen
 import ru.nativespeakers.feature.vacancy.alltracks.allTracksScreen
 import ru.nativespeakers.feature.vacancy.alltracks.navigateToAllTracks
 import ru.nativespeakers.feature.vacancy.appliedcandidates.appliedCandidatesScreen
@@ -157,7 +159,10 @@ fun TJobApp() {
                     navigateBack = navController::popBackStack,
                     navigateToVacancyWithId = navController::navigateToVacancyDetails,
                     navigateToInterviewWithId = {},
+                    navigateToAddInterviewScreen = navController::navigateToAddInterview,
                 )
+
+                addInterviewScreen(navController)
             }
         }
     }

@@ -13,6 +13,8 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -28,7 +30,9 @@ fun SearchInterviewType(
     interviewType: InterviewTypeNetwork,
     selected: Boolean,
     onCheckedChange: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    withRadioButton: Boolean = false,
+    withCheckbox: Boolean = true,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -56,14 +60,25 @@ fun SearchInterviewType(
             modifier = Modifier.weight(1f)
         )
 
-        Checkbox(
-            checked = selected,
-            onCheckedChange = { onCheckedChange() },
-            colors = CheckboxDefaults.colors(
-                checkedColor = MaterialTheme.colorScheme.primary,
-                uncheckedColor = Base5,
-                checkmarkColor = MaterialTheme.colorScheme.onPrimary
+        if (withCheckbox) {
+            Checkbox(
+                checked = selected,
+                onCheckedChange = { onCheckedChange() },
+                colors = CheckboxDefaults.colors(
+                    checkedColor = MaterialTheme.colorScheme.primary,
+                    uncheckedColor = Base5,
+                    checkmarkColor = MaterialTheme.colorScheme.onPrimary
+                )
             )
-        )
+        } else if (withRadioButton) {
+            RadioButton(
+                selected = selected,
+                onClick = onCheckedChange,
+                colors = RadioButtonDefaults.colors(
+                    selectedColor = MaterialTheme.colorScheme.primary,
+                    unselectedColor = Base5,
+                )
+            )
+        }
     }
 }

@@ -27,8 +27,8 @@ fun EmptyPersonPhoto(
             .clip(CircleShape)
             .background(Blue4)
     ) {
-        val firstNameLetter = name.first().uppercaseChar()
-        val firstSurnameLetter = surname.first().uppercaseChar()
+        val firstNameLetter = name.firstOrNull()?.uppercaseChar() ?: ""
+        val firstSurnameLetter = surname.firstOrNull()?.uppercaseChar() ?: ""
         Text(
             text = "$firstNameLetter$firstSurnameLetter",
             color = Blue8,
