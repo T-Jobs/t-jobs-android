@@ -10,6 +10,8 @@ import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import ru.nativespeakers.core.ui.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,12 +29,12 @@ fun SelectTimeDialog(
             onDismissRequest = onDismiss,
             confirmButton = {
                 TextButton(onClick = onConfirm) {
-                    Text("OK")
+                    Text(stringResource(R.string.core_ui_ok))
                 }
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.core_ui_cancel))
                 }
             },
             title = {},
