@@ -361,6 +361,7 @@ private fun AppliedCandidatesSection(
         if (firstThreeCandidates.isNotEmpty()) {
             FlowRow(
                 horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 for (candidate in firstThreeCandidates) {
                     AppliedCandidateCard(
