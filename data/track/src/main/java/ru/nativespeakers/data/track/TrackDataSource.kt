@@ -9,4 +9,5 @@ interface TrackDataSource {
     suspend fun setHrForTrack(trackId: Long, hrId: Long): Result<Unit>
     suspend fun finishTrackById(id: Long): Result<Unit>
     suspend fun createTrack(candidateId: Long, vacancyId: Long): Result<TrackNetwork>
+    suspend fun continueTrack(trackId: Long): Result<Unit>
 }

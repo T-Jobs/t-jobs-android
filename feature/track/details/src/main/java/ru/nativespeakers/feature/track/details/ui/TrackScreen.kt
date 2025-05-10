@@ -157,7 +157,9 @@ private fun TrackScreenContent(
                 MembersSection(
                     candidateUiState = state.candidateNetwork.toPersonAndPhotoUiState(),
                     staffUiState = state.hr.toPersonAndPhotoUiState(),
-                    onHrChangeClick = { showSearchHrsBottomSheet = true },
+                    onAutoChooseClick = {},
+                    onStaffChangeClick = { showSearchHrsBottomSheet = true },
+                    enableAutoSelection = false,
                 )
             }
 

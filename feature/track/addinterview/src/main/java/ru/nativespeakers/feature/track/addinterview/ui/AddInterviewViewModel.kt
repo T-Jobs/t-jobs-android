@@ -40,6 +40,12 @@ internal class AddInterviewViewModel @Inject constructor(
         loadAllInterviewTypes()
     }
 
+    fun setAutoInterviewer() {
+        interviewCreateUiState = interviewCreateUiState.copy(
+            interviewer = null
+        )
+    }
+
     fun updateLink(link: String?) {
         if (link == null) return
 

@@ -47,6 +47,7 @@
             <option value="$PROJECT_DIR$/feature/competencies" />
             <option value="$PROJECT_DIR$/feature/filters" />
             <option value="$PROJECT_DIR$/feature/home" />
+            <option value="$PROJECT_DIR$/feature/interview" />
             <option value="$PROJECT_DIR$/feature/profile" />
             <option value="$PROJECT_DIR$/feature/track" />
             <option value="$PROJECT_DIR$/feature/track/addinterview" />

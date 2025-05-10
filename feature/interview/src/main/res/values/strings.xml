@@ -1,0 +1,15 @@
+<resources>
+    <string name="feature_interview_feedback">Фидбэк</string>
+    <string name="feature_interview_positive">Положительный</string>
+    <string name="feature_interview_negative">Отрицательный</string>
+    <string name="feature_interview_start_write">Начните писать</string>
+    <string name="feature_interview_auto_choose">Автоматический подбор</string>
+    <string name="feature_interview_find_interviewer">Найти интервьюера</string>
+    <string name="feature_interview_reject_interview">Отказаться от интервью</string>
+    <string name="feature_interview_cancel_interview">Отменить интервью</string>
+    <string name="feature_interview_approve">Принять</string>
+    <string name="feature_interview_cancel">Отклонить</string>
+    <string name="feature_interview_finish_track">Завершить трек</string>
+    <string name="feature_interview_pass_candidate">Пропустить дальше</string>
+    <string name="feature_interview_save_feedback">Отправить фидбэк</string>
+</resources>

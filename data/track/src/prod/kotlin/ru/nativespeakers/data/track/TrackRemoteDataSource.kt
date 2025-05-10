@@ -99,4 +99,18 @@ internal class TrackRemoteDataSource @Inject constructor(
                 else -> Result.failure(Exception())
             }
         }
+
+    override suspend fun continueTrack(trackId: Long): Result<Unit> =
+        withContext(ioDispatcher) {
+            val response = httpClient.post("/track/continue") {
+                url {
+                    parameters.append("id", trackId.toString())
+                }
+            }
+
+            when (response.status) {
+                HttpStatusCode.OK -> Result.success(response.body())
+                else -> Result.failure(Exception())
+            }
+        }
 }

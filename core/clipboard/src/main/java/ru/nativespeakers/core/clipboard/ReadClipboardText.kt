@@ -1,7 +1,13 @@
 package ru.nativespeakers.core.clipboard
 
-import androidx.compose.ui.platform.ClipboardManager
+import android.content.ClipData
+import androidx.compose.ui.platform.Clipboard
 
-fun getClipboardText(manager: ClipboardManager): String? {
-    return manager.getText()?.text
+fun Clipboard.getClipboardText(): String? {
+    return nativeClipboard.primaryClip?.toString()
+}
+
+fun Clipboard.setClipboardText(text: String?) {
+    val clipData = ClipData.newPlainText(text, text)
+    nativeClipboard.setPrimaryClip(clipData)
 }

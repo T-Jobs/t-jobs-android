@@ -10,6 +10,7 @@ android {
 dependencies {
     api(projects.core.designsystem)
     implementation(projects.core.model)
+    implementation(projects.core.clipboard)
 
     api(libs.androidx.paging.compose)
     api(libs.androidx.compose.foundation)

@@ -46,6 +46,7 @@ dependencies {
     implementation(projects.feature.competencies)
     implementation(projects.feature.filters)
     implementation(projects.feature.home)
+    implementation(projects.feature.interview)
     implementation(projects.feature.profile)
     implementation(projects.feature.track.addinterview)
     implementation(projects.feature.track.details)

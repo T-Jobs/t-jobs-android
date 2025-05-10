@@ -33,4 +33,7 @@
     <string name="core_ui_delete">Удалить</string>
     <string name="core_ui_ok">OK</string>
     <string name="core_ui_cancel">Отменить</string>
+    <string name="core_ui_empty">Пусто</string>
+    <string name="core_ui_auto_choose">Автоматический подбор</string>
+    <string name="core_ui_choose_by_hand">Выбрать в ручную</string>
 </resources>

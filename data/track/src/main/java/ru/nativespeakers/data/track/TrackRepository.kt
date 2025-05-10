@@ -33,4 +33,8 @@ class TrackRepository @Inject constructor(
     suspend fun createTrack(candidateId: Long, vacancyId: Long): Result<TrackNetwork> {
         return trackDataSource.createTrack(candidateId, vacancyId)
     }
+
+    suspend fun continueTrack(trackId: Long): Result<Unit> {
+        return trackDataSource.continueTrack(trackId)
+    }
 }

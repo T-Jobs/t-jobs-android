@@ -26,6 +26,8 @@ import ru.nativespeakers.feature.filters.filtersScreen
 import ru.nativespeakers.feature.filters.navigateToFilters
 import ru.nativespeakers.feature.home.homeScreen
 import ru.nativespeakers.feature.home.navigateToHome
+import ru.nativespeakers.feature.interview.interviewScreen
+import ru.nativespeakers.feature.interview.navigateToInterview
 import ru.nativespeakers.feature.profile.navigateToProfile
 import ru.nativespeakers.feature.profile.profileScreen
 import ru.nativespeakers.feature.track.addinterview.addInterviewScreen
@@ -115,7 +117,7 @@ fun TJobApp() {
                 homeScreen(
                     navigateToProfile = navController::navigateToProfile,
                     navigateToVacancyWithId = navController::navigateToVacancyDetails,
-                    navigateToInterviewWithId = {},
+                    navigateToInterviewWithId = navController::navigateToInterview,
                     navigateToCandidateWithId = {},
                     navigateToTrackWithId = navController::navigateToTrack,
                     navigateToFilters = navController::navigateToFilters
@@ -158,11 +160,13 @@ fun TJobApp() {
                 trackScreen(
                     navigateBack = navController::popBackStack,
                     navigateToVacancyWithId = navController::navigateToVacancyDetails,
-                    navigateToInterviewWithId = {},
+                    navigateToInterviewWithId = navController::navigateToInterview,
                     navigateToAddInterviewScreen = navController::navigateToAddInterview,
                 )
 
                 addInterviewScreen(navController)
+
+                interviewScreen(navigateBack = navController::popBackStack)
             }
         }
     }

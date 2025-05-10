@@ -10,7 +10,9 @@ fun LocalDateTime?.toUi(): String {
     if (this == null) return "--:--"
 
     val monthString = monthNumberToString(monthNumber)
-    return "$dayOfMonth $monthString $hour:$minute"
+    val hourFormat = "%02d".format(hour)
+    val minuteFormat = "%02d".format(minute)
+    return "$dayOfMonth $monthString $hourFormat:$minuteFormat"
 }
 
 @Composable

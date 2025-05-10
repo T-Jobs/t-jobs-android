@@ -14,12 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBackIosNew
-import androidx.compose.material.icons.outlined.CalendarMonth
-import androidx.compose.material.icons.outlined.ContentPaste
 import androidx.compose.material.icons.outlined.FindReplace
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -45,28 +42,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
-import ru.nativespeakers.core.clipboard.getClipboardText
-import ru.nativespeakers.core.designsystem.Base1
 import ru.nativespeakers.core.designsystem.Base10
 import ru.nativespeakers.core.designsystem.Base4
-import ru.nativespeakers.core.designsystem.Base6
 import ru.nativespeakers.core.designsystem.Base8
 import ru.nativespeakers.core.designsystem.Primary1
 import ru.nativespeakers.core.designsystem.Primary10
-import ru.nativespeakers.core.designsystem.Primary6
 import ru.nativespeakers.core.designsystem.Primary7
 import ru.nativespeakers.core.model.InterviewTypeNetwork
 import ru.nativespeakers.core.ui.bottomsheet.BottomSheetWithSearch
 import ru.nativespeakers.core.ui.date.SelectDateSection
+import ru.nativespeakers.core.ui.interview.CopyPasteLinkSection
 import ru.nativespeakers.core.ui.interview.SearchInterviewType
 import ru.nativespeakers.core.ui.person.PersonCardWithRadioButton
 import ru.nativespeakers.core.ui.person.toPersonCardUiState
@@ -121,7 +112,8 @@ internal fun AddInterviewScreen(
             MembersSection(
                 candidateUiState = viewModel.candidate,
                 staffUiState = viewModel.interviewCreateUiState.interviewer?.toPersonAndPhotoUiState(),
-                onHrChangeClick = { showSearchInterviewersBottomSheet = true },
+                onAutoChooseClick = viewModel::setAutoInterviewer,
+                onStaffChangeClick = { showSearchInterviewersBottomSheet = true },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -129,13 +121,14 @@ internal fun AddInterviewScreen(
 
             SelectDateSection(
                 selectedDate = viewModel.interviewCreateUiState.date,
+                onAutoChooseClick = { viewModel.updateDate(null) },
                 onDateSelected = viewModel::updateDate,
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            EnterLinkSection(
+            CopyPasteLinkSection(
                 link = viewModel.interviewCreateUiState.link,
                 onPasteLinkClick = viewModel::updateLink,
                 modifier = Modifier.fillMaxWidth()
@@ -240,89 +233,6 @@ private fun CreateButton(
             text = stringResource(R.string.feature_track_addinterview_create),
             style = MaterialTheme.typography.titleMedium,
         )
-    }
-}
-
-@Composable
-private fun EnterLinkSection(
-    link: String?,
-    onPasteLinkClick: (String?) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-    ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .clip(CircleShape)
-                .background(Base1)
-                .padding(10.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.CalendarMonth,
-                tint = Base6,
-                contentDescription = null,
-            )
-        }
-
-        Spacer(modifier = Modifier.width(16.dp))
-
-        val string = link ?: stringResource(R.string.feature_track_addinterview_empty)
-        Text(
-            text = string,
-            overflow = TextOverflow.Ellipsis,
-            color = Base6,
-            style = MaterialTheme.typography.titleMedium,
-            maxLines = 1,
-            modifier = Modifier.weight(1f)
-        )
-
-        val clipboardManager = LocalClipboardManager.current
-        ChangeButton(
-            imageVector = Icons.Outlined.ContentPaste,
-            text = null,
-            onClick = {
-                val text = getClipboardText(clipboardManager)
-                val processedText = text?.trim()?.replace("\n", "")
-                onPasteLinkClick(processedText)
-            }
-        )
-    }
-}
-
-@Composable
-private fun ChangeButton(
-    imageVector: ImageVector,
-    text: String?,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Button(
-        onClick = onClick,
-        shape = CircleShape,
-        contentPadding = PaddingValues(10.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Primary1,
-        ),
-        modifier = modifier
-    ) {
-        Icon(
-            imageVector = imageVector,
-            tint = Primary6,
-            contentDescription = null,
-        )
-
-        if (text != null) {
-            Spacer(modifier = Modifier.width(10.dp))
-
-            Text(
-                text = text,
-                color = Primary7,
-                style = MaterialTheme.typography.bodyMedium,
-            )
-        }
     }
 }
 

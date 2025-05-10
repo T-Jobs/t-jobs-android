@@ -26,4 +26,7 @@ data class InterviewNetwork(
     @JsonNames("able_set_time")
     val isAbleToSetTime: Boolean,
     val link: String? = null,
-)
+) {
+    val isFinished
+        get() = status == InterviewStatus.FAILED || status == InterviewStatus.PASSED
+}

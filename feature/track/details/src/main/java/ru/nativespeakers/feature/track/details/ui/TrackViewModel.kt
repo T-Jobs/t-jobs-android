@@ -2,7 +2,6 @@ package ru.nativespeakers.feature.track.details.ui
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -80,7 +79,7 @@ class TrackViewModel @AssistedInject constructor(
     var searchHrs by mutableStateOf(BasicUiState(emptyList<StaffNetwork>()))
         private set
 
-    var currentSelectedHrId by mutableLongStateOf(-1L)
+    var currentSelectedHrId by mutableStateOf<Long?>(null)
 
     init {
         loadData()

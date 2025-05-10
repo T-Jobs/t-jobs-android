@@ -146,7 +146,14 @@ internal class InterviewRemoteDataSource @Inject constructor(
                 url {
                     with(parameters) {
                         append("interview_id", interviewId.toString())
-                        append("date", "${date.year}-${date.month}-${date.hour} ${date.hour}:${date.minute}:${date.second}")
+
+                        val monthFormat = "%02d".format(date.monthNumber)
+                        val dayFormat = "%02d".format(date.dayOfMonth)
+                        val hourFormat = "%02d".format(date.hour)
+                        val minutesFormat = "%02d".format(date.minute)
+                        val secondsFormat = "%02d".format(date.second)
+
+                        append("date", "${date.year}-$monthFormat-$dayFormat $hourFormat:$minutesFormat:$secondsFormat")
                     }
                 }
             }
@@ -194,6 +201,7 @@ internal class InterviewRemoteDataSource @Inject constructor(
         success: Boolean
     ): Result<Unit> = withContext(ioDispatcher) {
         val response = httpClient.submitForm(
+            url = "/interview/set-feedback",
             formParameters = parameters { append("feedback", feedback) }
         ) {
             url {
