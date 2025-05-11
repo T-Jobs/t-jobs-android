@@ -76,6 +76,7 @@ import ru.nativespeakers.core.ui.Competency
 import ru.nativespeakers.core.ui.bottomsheet.BottomSheetOption
 import ru.nativespeakers.core.ui.bottomsheet.BottomSheetWithOptions
 import ru.nativespeakers.core.ui.interview.PersonAndPhotoUiState
+import ru.nativespeakers.core.ui.lifecycle.ResumedEventExecutor
 import ru.nativespeakers.core.ui.photo.PersonPhoto
 import ru.nativespeakers.core.ui.photo.toPersonAndPhotoUiState
 import ru.nativespeakers.core.ui.role.isHr
@@ -129,9 +130,13 @@ internal fun VacancyDetailsScreen(
         }
     )
 
+    ResumedEventExecutor(viewModel) {
+        viewModel.loadData()
+    }
+
     val state = viewModel.vacancyDetailsUiState
     when {
-        state.isLoading -> LoadingScreen()
+        state.isLoading && !state.isLoaded -> LoadingScreen()
         state.isError && !state.isLoaded -> ErrorScreen(
             onRetryButtonClick = viewModel::loadData
         )
