@@ -39,6 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ru.nativespeakers.core.designsystem.Base0
 import ru.nativespeakers.core.designsystem.Base5
 import ru.nativespeakers.core.ui.conditional
+import ru.nativespeakers.core.ui.lifecycle.ResumedEventExecutor
 import ru.nativespeakers.core.ui.photo.PersonPhoto
 import ru.nativespeakers.core.ui.photo.toPersonAndPhotoUiState
 import ru.nativespeakers.core.ui.role.isHr
@@ -55,8 +56,13 @@ fun ProfileScreen(
     navigateToCreateVacancyClick: () -> Unit,
 ) {
     val state = profileViewModel.userInfo
+
+    ResumedEventExecutor(profileViewModel) {
+        profileViewModel.loadUserInfo()
+    }
+
     when {
-        state.isLoading -> LoadingScreen()
+        state.isLoading && !state.isLoaded -> LoadingScreen()
         !state.isLoaded && state.isError -> ErrorScreen(
             onRetryButtonClick = profileViewModel::loadUserInfo
         )
