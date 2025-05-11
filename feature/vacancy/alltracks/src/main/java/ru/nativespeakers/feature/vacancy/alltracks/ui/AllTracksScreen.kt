@@ -28,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ru.nativespeakers.core.designsystem.Base10
 import ru.nativespeakers.core.designsystem.Base8
 import ru.nativespeakers.core.model.TrackNetwork
+import ru.nativespeakers.core.ui.lifecycle.ResumedEventExecutor
 import ru.nativespeakers.core.ui.screen.ErrorScreen
 import ru.nativespeakers.core.ui.screen.LoadingScreen
 import ru.nativespeakers.core.ui.track.TrackCard
@@ -46,9 +47,13 @@ internal fun AllTracksScreen(
         }
     )
 
+    ResumedEventExecutor(viewModel) {
+        viewModel.loadTracks()
+    }
+
     val state = viewModel.tracks
     when {
-        state.isLoading -> LoadingScreen()
+        state.isLoading && !state.isLoaded -> LoadingScreen()
         state.isError && !state.isLoaded -> ErrorScreen(
             onRetryButtonClick = viewModel::loadTracks
         )
