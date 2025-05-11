@@ -51,14 +51,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.launch
 import ru.nativespeakers.core.designsystem.Base0
+import ru.nativespeakers.core.designsystem.Primary0
 import ru.nativespeakers.core.designsystem.Primary2
 import ru.nativespeakers.core.designsystem.Primary3
 import ru.nativespeakers.core.designsystem.Primary4
 import ru.nativespeakers.core.designsystem.Primary6
 import ru.nativespeakers.core.designsystem.Primary8
-import ru.nativespeakers.core.ui.person.PersonCard
 import ru.nativespeakers.core.ui.interview.InterviewCard
 import ru.nativespeakers.core.ui.paging.LazyPagingItemsColumn
+import ru.nativespeakers.core.ui.person.PersonCard
 import ru.nativespeakers.core.ui.photo.PersonPhoto
 import ru.nativespeakers.core.ui.role.isHr
 import ru.nativespeakers.core.ui.role.isTeamLead
@@ -119,7 +120,6 @@ private fun HomeScreenContent(
     navigateToFilters: () -> Unit,
 ) {
     val searchBarState = rememberSearchBarState()
-    val textFieldState = rememberTextFieldState()
     val coroutineScope = rememberCoroutineScope()
 
     var currentTab by remember { mutableStateOf(AvailableTab.INTERVIEWS) }
@@ -128,19 +128,30 @@ private fun HomeScreenContent(
     val candidatesSearchItems =
         homeViewModel.searchCandidatesUiState.data.collectAsLazyPagingItems()
 
+    val hrOrTeamLead = isHr() || isTeamLead()
+
     val inputField = @Composable {
+        val textFieldState = rememberTextFieldState()
         SearchBarDefaults.InputField(
-            searchBarState = searchBarState,
-            textFieldState = textFieldState,
+            state = textFieldState,
             onSearch = {
                 homeViewModel.updateSearchQuery(it)
                 coroutineScope.launch { searchBarState.animateToCollapsed() }
             },
+            expanded = searchBarState.currentValue == SearchBarValue.Expanded,
+            onExpandedChange = {
+                if (hrOrTeamLead) {
+                    coroutineScope.launch {
+                        searchBarState.animateToExpanded()
+                    }
+                }
+            },
+            enabled = hrOrTeamLead,
             placeholder = {
                 Text(
                     text = stringResource(homeStrings.feature_home_search),
                     style = MaterialTheme.typography.titleMedium,
-                    maxLines = 1
+                    maxLines = 1,
                 )
             },
             leadingIcon = {
@@ -200,7 +211,8 @@ private fun HomeScreenContent(
                 unfocusedPlaceholderColor = Primary8,
                 focusedPlaceholderColor = Primary4,
                 unfocusedContainerColor = Primary3,
-                focusedContainerColor = Color.Transparent
+                focusedContainerColor = Color.Transparent,
+                disabledContainerColor = Primary0,
             ),
             modifier = Modifier.fillMaxWidth()
         )
@@ -456,7 +468,7 @@ private fun TabRow(
     onRelevantTracksClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (!isHr() && !isTeamLead() && !isSearchExpanded) {
+    if (!isHr() && !isTeamLead()) {
         Spacer(modifier = Modifier.height(16.dp))
         return
     }
