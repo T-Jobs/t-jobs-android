@@ -6,6 +6,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
+import ru.nativespeakers.feature.home.InitialSearchCandidatesFilters
 import ru.nativespeakers.feature.vacancy.details.ui.VacancyDetailsScreen
 
 @Serializable
@@ -21,7 +22,7 @@ fun NavGraphBuilder.vacancyDetailsScreen(
     navigateToShowAllTracksScreen: (Long) -> Unit,
     navigateToShowAllAppliedCandidatesScreen: (Long) -> Unit,
     navigateToTrackWithId: (Long) -> Unit,
-    navigateToRelevantResumeScreen: () -> Unit,
+    navigateToRelevantResumeScreen: (InitialSearchCandidatesFilters) -> Unit,
     navigateToEditVacancyScreenWithId: (Long) -> Unit,
 ) {
     composable<VacancyDetailsRoute> { backStackEntry ->

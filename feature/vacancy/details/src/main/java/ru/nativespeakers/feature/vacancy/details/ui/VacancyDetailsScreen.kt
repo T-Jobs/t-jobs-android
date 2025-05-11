@@ -85,6 +85,7 @@ import ru.nativespeakers.core.ui.screen.LoadingScreen
 import ru.nativespeakers.core.ui.track.TrackCard
 import ru.nativespeakers.core.ui.track.toTrackCardUiState
 import ru.nativespeakers.core.ui.vacancy.SalaryBlock
+import ru.nativespeakers.feature.home.InitialSearchCandidatesFilters
 import ru.nativespeakers.feature.vacancy.common.AppliedCandidateCard
 import ru.nativespeakers.feature.vacancy.details.R
 
@@ -122,7 +123,7 @@ internal fun VacancyDetailsScreen(
     navigateToShowAllAppliedCandidatesScreen: () -> Unit,
     navigateToTrackWithId: (Long) -> Unit,
     navigateToEditVacancyScreen: () -> Unit,
-    navigateToRelevantResumeScreen: () -> Unit,
+    navigateToRelevantResumeScreen: (InitialSearchCandidatesFilters) -> Unit,
 ) {
     val viewModel = hiltViewModel(
         creationCallback = { factory: VacancyDetailsViewModel.Factory ->
@@ -162,7 +163,7 @@ private fun VacancyDetailsScreenContent(
     navigateToShowAllTracksScreen: () -> Unit,
     navigateToShowAllAppliedCandidatesScreen: () -> Unit,
     navigateToEditVacancyScreen: () -> Unit,
-    onFindRelevantResumesClick: () -> Unit,
+    onFindRelevantResumesClick: (InitialSearchCandidatesFilters) -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
@@ -211,7 +212,13 @@ private fun VacancyDetailsScreenContent(
             )
 
             FindRelevantResumesButton(
-                onClick = onFindRelevantResumesClick,
+                onClick = {
+                    val filters = InitialSearchCandidatesFilters(
+                        maxSalary = state.salaryHigherBound,
+                        tagIds = state.tags.flatMap { it.value }.map { it.id },
+                    )
+                    onFindRelevantResumesClick(filters)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)

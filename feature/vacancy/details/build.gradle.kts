@@ -13,5 +13,7 @@ dependencies {
     implementation(projects.data.track)
     implementation(projects.data.user)
     implementation(projects.data.vacancy)
+
     implementation(projects.feature.vacancy.common)
+    implementation(projects.feature.home)
 }

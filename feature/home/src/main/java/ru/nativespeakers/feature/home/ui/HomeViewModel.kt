@@ -23,12 +23,12 @@ import ru.nativespeakers.core.model.AppRole
 import ru.nativespeakers.core.model.TagNetwork
 import ru.nativespeakers.core.model.TrackNetwork
 import ru.nativespeakers.core.ui.BasicUiState
-import ru.nativespeakers.core.ui.person.PersonCardUiState
-import ru.nativespeakers.core.ui.person.toPersonCardUiState
 import ru.nativespeakers.core.ui.interview.InterviewCardUiState
 import ru.nativespeakers.core.ui.interview.PersonAndPhotoUiState
 import ru.nativespeakers.core.ui.interview.interviewCardUiState
 import ru.nativespeakers.core.ui.paging.PagingDataUiState
+import ru.nativespeakers.core.ui.person.PersonCardUiState
+import ru.nativespeakers.core.ui.person.toPersonCardUiState
 import ru.nativespeakers.core.ui.photo.toPersonAndPhotoUiState
 import ru.nativespeakers.core.ui.track.TrackCardUiState
 import ru.nativespeakers.core.ui.vacancy.VacancyCardUiState
@@ -86,6 +86,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         loadUserInfoAndRelevantInterviews()
+        loadAvailableTags()
 
         observeSearchCandidates()
         observeSearchVacancies()

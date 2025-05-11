@@ -33,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -69,6 +70,7 @@ import ru.nativespeakers.core.ui.screen.ErrorScreen
 import ru.nativespeakers.core.ui.screen.LoadingScreen
 import ru.nativespeakers.core.ui.track.TrackCard
 import ru.nativespeakers.core.ui.vacancy.VacancyCard
+import ru.nativespeakers.feature.home.InitialSearchCandidatesFilters
 import ru.nativespeakers.feature.home.R
 import ru.nativespeakers.feature.home.R.string as homeStrings
 
@@ -86,8 +88,26 @@ fun HomeScreen(
     navigateToCandidateWithId: (Long) -> Unit,
     navigateToTrackWithId: (Long) -> Unit,
     navigateToFilters: () -> Unit,
+    initialFilters: InitialSearchCandidatesFilters? = null,
 ) {
     val homeViewModel = hiltViewModel<HomeViewModel>()
+    initialFilters?.let { filters ->
+        LaunchedEffect(homeViewModel, homeViewModel.availableFiltersUiState.isLoaded) {
+            if (homeViewModel.availableFiltersUiState.isLoaded &&
+                homeViewModel.selectedFiltersUiState.value == FiltersUiState()
+            ) {
+                val filtersUiState = FiltersUiState(
+                    salary = filters.maxSalary,
+                    tags = homeViewModel.availableFiltersUiState.value.tags.filter {
+                        it.id in filters.tagIds
+                    }
+                )
+                homeViewModel.updateCurrentSearchFilters(filtersUiState)
+
+                homeViewModel.updateSearchTabCategory(AvailableSearchTab.CANDIDATES)
+            }
+        }
+    }
 
     ResumedEventExecutor(homeViewModel) {
         homeViewModel.loadUserInfoAndRelevantInterviews()
@@ -102,6 +122,7 @@ fun HomeScreen(
         else -> {
             HomeScreenContent(
                 homeViewModel = homeViewModel,
+                initiallyNavigateToFindCandidates = initialFilters != null,
                 navigateToProfile = navigateToProfile,
                 navigateToVacancyWithId = navigateToVacancyWithId,
                 navigateToInterviewWithId = navigateToInterviewWithId,
@@ -117,6 +138,7 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenContent(
     homeViewModel: HomeViewModel,
+    initiallyNavigateToFindCandidates: Boolean,
     navigateToProfile: () -> Unit,
     navigateToVacancyWithId: (Long) -> Unit,
     navigateToInterviewWithId: (Long) -> Unit,
@@ -124,7 +146,13 @@ private fun HomeScreenContent(
     navigateToTrackWithId: (Long) -> Unit,
     navigateToFilters: () -> Unit,
 ) {
-    val searchBarState = rememberSearchBarState()
+    val searchBarState = rememberSearchBarState(
+        initialValue = if (initiallyNavigateToFindCandidates) {
+            SearchBarValue.Expanded
+        } else {
+            SearchBarValue.Collapsed
+        }
+    )
     val coroutineScope = rememberCoroutineScope()
 
     var currentTab by remember { mutableStateOf(AvailableTab.INTERVIEWS) }

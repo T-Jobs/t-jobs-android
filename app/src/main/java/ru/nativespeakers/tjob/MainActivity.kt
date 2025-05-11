@@ -24,6 +24,7 @@ import ru.nativespeakers.feature.competencies.competenciesScreen
 import ru.nativespeakers.feature.competencies.navigateToCompetencies
 import ru.nativespeakers.feature.filters.filtersScreen
 import ru.nativespeakers.feature.filters.navigateToFilters
+import ru.nativespeakers.feature.home.HomeRoute
 import ru.nativespeakers.feature.home.homeScreen
 import ru.nativespeakers.feature.home.navigateToHome
 import ru.nativespeakers.feature.interview.interviewScreen
@@ -57,117 +58,123 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun TJobApp() {
-    TJobTheme {
-        val navController = rememberNavController()
-        val authViewModel = hiltViewModel<AuthViewModel>()
-        val roles by authViewModel.roles.collectAsStateWithLifecycle()
+fun TJobApp() = TJobTheme {
+    val navController = rememberNavController()
+    val authViewModel = hiltViewModel<AuthViewModel>()
+    val roles by authViewModel.roles.collectAsStateWithLifecycle()
 
-        LaunchedEffect(roles) {
-            if (roles.isNotEmpty()) {
-                val currentDestination = navController.currentDestination?.id
-                if (currentDestination != null) {
-                    navController.navigateToHome(
-                        navOptions = NavOptions.Builder()
-                            .setLaunchSingleTop(true)
-                            .setPopUpTo(
-                                destinationId = currentDestination,
-                                inclusive = true
-                            )
-                            .build()
-                    )
-                } else {
-                    navController.navigateToHome(
-                        navOptions = NavOptions.Builder()
-                            .setLaunchSingleTop(true)
-                            .build()
-                    )
-                }
+    LaunchedEffect(roles) {
+        if (roles.isNotEmpty()) {
+            val currentDestination = navController.currentDestination?.id
+            if (currentDestination != null) {
+                navController.navigateToHome(
+                    navOptions = NavOptions.Builder()
+                        .setLaunchSingleTop(true)
+                        .setPopUpTo(
+                            destinationId = currentDestination,
+                            inclusive = true
+                        )
+                        .build()
+                )
             } else {
-                val currentDestination = navController.currentDestination?.id
-                if (currentDestination != null) {
-                    navController.navigateToLogin(
-                        navOptions = NavOptions.Builder()
-                            .setLaunchSingleTop(true)
-                            .setPopUpTo(
-                                destinationId = currentDestination,
-                                inclusive = true
-                            )
-                            .build()
-                    )
-                } else {
-                    navController.navigateToLogin(
-                        navOptions = NavOptions.Builder()
-                            .setLaunchSingleTop(true)
-                            .build()
-                    )
-                }
+                navController.navigateToHome(
+                    navOptions = NavOptions.Builder()
+                        .setLaunchSingleTop(true)
+                        .build()
+                )
+            }
+        } else {
+            val currentDestination = navController.currentDestination?.id
+            if (currentDestination != null) {
+                navController.navigateToLogin(
+                    navOptions = NavOptions.Builder()
+                        .setLaunchSingleTop(true)
+                        .setPopUpTo(
+                            destinationId = currentDestination,
+                            inclusive = true
+                        )
+                        .build()
+                )
+            } else {
+                navController.navigateToLogin(
+                    navOptions = NavOptions.Builder()
+                        .setLaunchSingleTop(true)
+                        .build()
+                )
             }
         }
+    }
 
-        CompositionLocalProvider(
-            LocalAppRoles provides roles
+    CompositionLocalProvider(
+        LocalAppRoles provides roles
+    ) {
+        NavHost(
+            navController = navController,
+            startDestination = LoginRoute
         ) {
-            NavHost(
-                navController = navController,
-                startDestination = LoginRoute
-            ) {
-                loginScreen()
+            loginScreen()
 
-                homeScreen(
-                    navigateToProfile = navController::navigateToProfile,
-                    navigateToVacancyWithId = navController::navigateToVacancyDetails,
-                    navigateToInterviewWithId = navController::navigateToInterview,
-                    navigateToCandidateWithId = {},
-                    navigateToTrackWithId = navController::navigateToTrack,
-                    navigateToFilters = navController::navigateToFilters
-                )
+            homeScreen(
+                navigateToProfile = navController::navigateToProfile,
+                navigateToVacancyWithId = navController::navigateToVacancyDetails,
+                navigateToInterviewWithId = navController::navigateToInterview,
+                navigateToCandidateWithId = {},
+                navigateToTrackWithId = navController::navigateToTrack,
+                navigateToFilters = navController::navigateToFilters
+            )
 
-                filtersScreen(navController)
+            filtersScreen(navController)
 
-                profileScreen(
-                    navigateBack = navController::popBackStack,
-                    navigateToCompetenciesScreen = navController::navigateToCompetencies,
-                    navigateToCreateVacancyClick = navController::navigateToCreateVacancy
-                )
+            profileScreen(
+                navigateBack = navController::popBackStack,
+                navigateToCompetenciesScreen = navController::navigateToCompetencies,
+                navigateToCreateVacancyClick = navController::navigateToCreateVacancy
+            )
 
-                competenciesScreen(navController)
+            competenciesScreen(navController)
 
-                createVacancyScreen(
-                    navigateBack = navController::popBackStack
-                )
+            createVacancyScreen(
+                navigateBack = navController::popBackStack
+            )
 
-                vacancyDetailsScreen(
-                    navigateBack = navController::popBackStack,
-                    navigateToShowAllAppliedCandidatesScreen = navController::navigateToAppliedCandidates,
-                    navigateToTrackWithId = navController::navigateToTrack,
-                    navigateToShowAllTracksScreen = navController::navigateToAllTracks,
-                    navigateToRelevantResumeScreen = {},
-                    navigateToEditVacancyScreenWithId = navController::navigateToEditVacancy
-                )
+            vacancyDetailsScreen(
+                navigateBack = navController::popBackStack,
+                navigateToShowAllAppliedCandidatesScreen = navController::navigateToAppliedCandidates,
+                navigateToTrackWithId = navController::navigateToTrack,
+                navigateToShowAllTracksScreen = navController::navigateToAllTracks,
+                navigateToEditVacancyScreenWithId = navController::navigateToEditVacancy,
+                navigateToRelevantResumeScreen = {
+                    navController.navigateToHome(
+                        initialSearchCandidatesFilters = it,
+                        navOptions = NavOptions.Builder()
+                            .setPopUpTo(HomeRoute::class, inclusive = true)
+                            .setLaunchSingleTop(true)
+                            .build()
+                    )
+                },
+            )
 
-                editVacancyScreen(navController::popBackStack)
+            editVacancyScreen(navController::popBackStack)
 
-                allTracksScreen(
-                    navigateBack = navController::popBackStack,
-                    navigateToTrackWithId = navController::navigateToTrack,
-                )
+            allTracksScreen(
+                navigateBack = navController::popBackStack,
+                navigateToTrackWithId = navController::navigateToTrack,
+            )
 
-                appliedCandidatesScreen(
-                    navigateBack = navController::popBackStack,
-                )
+            appliedCandidatesScreen(
+                navigateBack = navController::popBackStack,
+            )
 
-                trackScreen(
-                    navigateBack = navController::popBackStack,
-                    navigateToVacancyWithId = navController::navigateToVacancyDetails,
-                    navigateToInterviewWithId = navController::navigateToInterview,
-                    navigateToAddInterviewScreen = navController::navigateToAddInterview,
-                )
+            trackScreen(
+                navigateBack = navController::popBackStack,
+                navigateToVacancyWithId = navController::navigateToVacancyDetails,
+                navigateToInterviewWithId = navController::navigateToInterview,
+                navigateToAddInterviewScreen = navController::navigateToAddInterview,
+            )
 
-                addInterviewScreen(navController)
+            addInterviewScreen(navController)
 
-                interviewScreen(navigateBack = navController::popBackStack)
-            }
+            interviewScreen(navigateBack = navController::popBackStack)
         }
     }
 }
