@@ -58,6 +58,7 @@ import ru.nativespeakers.core.ui.person.toPersonCardUiState
 import ru.nativespeakers.core.ui.gestures.SwipeToDismissComposable
 import ru.nativespeakers.core.ui.interview.InterviewCard
 import ru.nativespeakers.core.ui.interview.InterviewCardUiState
+import ru.nativespeakers.core.ui.lifecycle.ResumedEventExecutor
 import ru.nativespeakers.core.ui.photo.toPersonAndPhotoUiState
 import ru.nativespeakers.core.ui.role.isHr
 import ru.nativespeakers.core.ui.screen.ErrorScreen
@@ -96,9 +97,13 @@ internal fun TrackScreen(
         }
     )
 
+    ResumedEventExecutor(viewModel) {
+        viewModel.loadData()
+    }
+
     val state = viewModel.trackDetailsUiState
     when {
-        state.isLoading -> LoadingScreen()
+        state.isLoading && !state.isLoaded -> LoadingScreen()
         !state.isLoaded && state.isError -> ErrorScreen(viewModel::loadData)
         state.isLoaded -> TrackScreenContent(
             viewModel = viewModel,
