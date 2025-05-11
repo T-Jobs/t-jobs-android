@@ -85,12 +85,7 @@ class HomeViewModel @Inject constructor(
     val searchVacanciesUiState = PagingDataUiState<VacancyCardUiState>()
 
     init {
-        viewModelScope.launch {
-            loadUserInfo().join()
-            if (personAndPhotoUiState.isError) return@launch
-
-            loadRelevantInterviews()
-        }
+        loadUserInfoAndRelevantInterviews()
 
         observeSearchCandidates()
         observeSearchVacancies()
@@ -176,6 +171,15 @@ class HomeViewModel @Inject constructor(
                     }
                 }
                 .collectLatest { searchVacanciesUiState.updateData(it) }
+        }
+    }
+
+    fun loadUserInfoAndRelevantInterviews() {
+        viewModelScope.launch {
+            loadUserInfo().join()
+            if (personAndPhotoUiState.isError) return@launch
+
+            loadRelevantInterviews()
         }
     }
 

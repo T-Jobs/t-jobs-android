@@ -58,6 +58,7 @@ import ru.nativespeakers.core.designsystem.Primary4
 import ru.nativespeakers.core.designsystem.Primary6
 import ru.nativespeakers.core.designsystem.Primary8
 import ru.nativespeakers.core.ui.interview.InterviewCard
+import ru.nativespeakers.core.ui.lifecycle.ResumedEventExecutor
 import ru.nativespeakers.core.ui.paging.LazyPagingItemsColumn
 import ru.nativespeakers.core.ui.person.PersonCard
 import ru.nativespeakers.core.ui.photo.PersonPhoto
@@ -88,10 +89,14 @@ fun HomeScreen(
 ) {
     val homeViewModel = hiltViewModel<HomeViewModel>()
 
+    ResumedEventExecutor(homeViewModel) {
+        homeViewModel.loadUserInfoAndRelevantInterviews()
+    }
+
     when {
-        homeViewModel.personAndPhotoUiState.isLoading -> LoadingScreen()
+        homeViewModel.personAndPhotoUiState.isLoading && !homeViewModel.personAndPhotoUiState.isLoaded -> LoadingScreen()
         homeViewModel.personAndPhotoUiState.isError -> {
-            ErrorScreen(onRetryButtonClick = homeViewModel::loadUserInfo)
+            ErrorScreen(onRetryButtonClick = homeViewModel::loadUserInfoAndRelevantInterviews)
         }
 
         else -> {
