@@ -36,6 +36,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
 import ru.nativespeakers.core.designsystem.Base10
 import ru.nativespeakers.core.designsystem.Base8
+import ru.nativespeakers.core.ui.lifecycle.ResumedEventExecutor
 import ru.nativespeakers.core.ui.screen.ErrorScreen
 import ru.nativespeakers.core.ui.screen.LoadingScreen
 import ru.nativespeakers.feature.vacancy.appliedcandidates.R
@@ -52,9 +53,13 @@ internal fun AppliedCandidatesScreen(
         }
     )
 
+    ResumedEventExecutor(viewModel) {
+        viewModel.loadCandidates()
+    }
+
     val state = viewModel.candidates
     when {
-        state.isLoading -> LoadingScreen()
+        state.isLoading && !state.isLoaded -> LoadingScreen()
         state.isError && !state.isLoaded -> ErrorScreen(
             onRetryButtonClick = viewModel::loadCandidates
         )
