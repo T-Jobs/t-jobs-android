@@ -80,6 +80,7 @@ import ru.nativespeakers.core.ui.bottomsheet.BottomSheetWithSearch
 import ru.nativespeakers.core.ui.date.SelectDateSection
 import ru.nativespeakers.core.ui.interview.CopyPasteLinkSection
 import ru.nativespeakers.core.ui.interview.InterviewStatusCard
+import ru.nativespeakers.core.ui.lifecycle.ResumedEventExecutor
 import ru.nativespeakers.core.ui.person.PersonCardWithRadioButton
 import ru.nativespeakers.core.ui.person.toPersonCardUiState
 import ru.nativespeakers.core.ui.photo.toPersonAndPhotoUiState
@@ -168,8 +169,12 @@ internal fun InterviewScreen(
         }
     )
 
+    ResumedEventExecutor(viewModel) {
+        viewModel.loadData()
+    }
+
     when {
-        viewModel.isLoading -> LoadingScreen()
+        viewModel.isLoading && !viewModel.isLoaded -> LoadingScreen()
         !viewModel.isLoaded -> ErrorScreen(viewModel::loadData)
 
         viewModel.isLoaded -> InterviewScreenContent(
