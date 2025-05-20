@@ -110,11 +110,13 @@ private fun rememberInterviewOptions(
             onClick = onRejectInterviewClick,
         )
 
-        options += BottomSheetOption(
-            name = stringResource(R.string.feature_interview_save_feedback),
-            leadingIcon = Icons.Outlined.Balance,
-            onClick = onSendFeedbackClick,
-        )
+        if (!finished) {
+            options += BottomSheetOption(
+                name = stringResource(R.string.feature_interview_save_feedback),
+                leadingIcon = Icons.Outlined.Balance,
+                onClick = onSendFeedbackClick,
+            )
+        }
     }
 
     if (!finished && isHr()) {

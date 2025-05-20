@@ -91,9 +91,9 @@ fun SelectDateSection(
     var timePickerVisible by remember { mutableStateOf(false) }
     val timePickerState = rememberTimePickerState()
 
-    var selectedDateMs by remember { mutableStateOf<Long?>(null) }
-    var selectedHour by remember { mutableStateOf<Int?>(null) }
-    var selectedMinute by remember { mutableStateOf<Int?>(null) }
+    var newSelectedDateMs by remember { mutableStateOf<Long?>(null) }
+    var newSelectedHour by remember { mutableStateOf<Int?>(null) }
+    var newSelectedMinute by remember { mutableStateOf<Int?>(null) }
 
     var bottomSheetVisible by remember { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState()
@@ -141,7 +141,7 @@ fun SelectDateSection(
         SelectDateDialog(
             datePickerState = datePickerState,
             onDismiss = { datePickerVisible = false },
-            onDateSelected = { selectedDateMs = it },
+            onDateSelected = { newSelectedDateMs = it },
         )
     }
 
@@ -149,8 +149,8 @@ fun SelectDateSection(
         SelectTimeDialog(
             timePickerState = timePickerState,
             onConfirm = {
-                selectedMinute = timePickerState.minute
-                selectedHour = timePickerState.hour
+                newSelectedMinute = timePickerState.minute
+                newSelectedHour = timePickerState.hour
                 timePickerVisible = false
             },
             onDismiss = { timePickerVisible = false }
@@ -158,8 +158,8 @@ fun SelectDateSection(
     }
 
     // Opens just after date is selected
-    LaunchedEffect(selectedDateMs) {
-        if (selectedDateMs != null) {
+    LaunchedEffect(newSelectedDateMs) {
+        if (newSelectedDateMs != null) {
             timePickerVisible = true
 
             val currentTime = Calendar.getInstance()
@@ -170,24 +170,25 @@ fun SelectDateSection(
     }
 
     // Reset all the time if even one was not selected
-    LaunchedEffect(selectedHour, selectedMinute) {
-        if (selectedHour == null || selectedMinute == null) {
-            selectedDateMs = null
-            selectedHour = null
-            selectedMinute = null
-
-            onAutoChooseClick()
+    LaunchedEffect(newSelectedHour, newSelectedMinute) {
+        if (newSelectedHour == null || newSelectedMinute == null) {
+            newSelectedHour = null
+            newSelectedHour = null
+            newSelectedMinute = null
         }
     }
 
     // Date was selected
-    LaunchedEffect(selectedDateMs, selectedMinute, selectedHour) {
-        val dateMs = selectedDateMs
-        val minutes = selectedMinute
-        val hours = selectedHour
+    LaunchedEffect(newSelectedDateMs, newSelectedMinute, newSelectedHour) {
+        val dateMs = newSelectedDateMs
+        val minutes = newSelectedMinute
+        val hours = newSelectedHour
 
         if (dateMs != null && minutes != null && hours != null) {
             val date = createLocalDateTime(dateMs, hours, minutes)
+            newSelectedDateMs = null
+            newSelectedHour = null
+            newSelectedMinute = null
             onDateSelected(date)
         }
     }

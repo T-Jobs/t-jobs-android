@@ -15,6 +15,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flattenConcat
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
@@ -119,7 +120,7 @@ class HomeViewModel @Inject constructor(
                     .distinctUntilChanged()
                     .cachedIn(viewModelScope)
             }
-                .flatMapLatest { it }
+                .flattenConcat()
                 .map { pagingData -> pagingData.map { it.toPersonCardUiState() } }
                 .collectLatest { searchCandidatesUiState.updateData(it) }
         }

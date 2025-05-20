@@ -372,7 +372,8 @@ private fun AppliedCandidatesSection(
         val firstThreeCandidates = candidates.take(3)
         if (firstThreeCandidates.isNotEmpty()) {
             FlowRow(
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.SpaceAround,
+                maxItemsInEachRow = 3,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 for (candidate in firstThreeCandidates) {
@@ -482,8 +483,6 @@ private fun StaffSection(
                     personAndPhotoUiState = it.toPersonAndPhotoUiState()
                 )
             }
-
-
         }
 
         if (staff.isEmpty()) {
