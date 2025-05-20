@@ -13,6 +13,7 @@ data class ResumeNetwork(
     val candidateId: Long,
     @JsonNames("salary_min")
     val salaryMin: Int,
+    val name: String,
     val description: String,
     val tags: List<TagNetwork>,
     val date: LocalDateTime,

@@ -1,0 +1,7 @@
+<resources>
+    <string name="feature_candidate_title">Кандидат</string>
+    <string name="feature_candidate_candidate">Кандидат</string>
+    <string name="feature_candidate_resumes">Резюме</string>
+    <string name="feature_candidate_briefs">Заявки</string>
+    <string name="feature_candidate_tracks">Треки</string>
+</resources>
