@@ -50,6 +50,7 @@
             <option value="$PROJECT_DIR$/feature/home" />
             <option value="$PROJECT_DIR$/feature/interview" />
             <option value="$PROJECT_DIR$/feature/profile" />
+            <option value="$PROJECT_DIR$/feature/resume" />
             <option value="$PROJECT_DIR$/feature/track" />
             <option value="$PROJECT_DIR$/feature/track/addinterview" />
             <option value="$PROJECT_DIR$/feature/track/common" />

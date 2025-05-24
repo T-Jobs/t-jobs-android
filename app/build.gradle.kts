@@ -49,6 +49,7 @@ dependencies {
     implementation(projects.feature.home)
     implementation(projects.feature.interview)
     implementation(projects.feature.profile)
+    implementation(projects.feature.resume)
     implementation(projects.feature.track.addinterview)
     implementation(projects.feature.track.details)
     implementation(projects.feature.vacancy.alltracks)

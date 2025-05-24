@@ -33,6 +33,8 @@ import ru.nativespeakers.feature.interview.interviewScreen
 import ru.nativespeakers.feature.interview.navigateToInterview
 import ru.nativespeakers.feature.profile.navigateToProfile
 import ru.nativespeakers.feature.profile.profileScreen
+import ru.nativespeakers.feature.resume.navigateToResume
+import ru.nativespeakers.feature.resume.resumeScreen
 import ru.nativespeakers.feature.track.addinterview.addInterviewScreen
 import ru.nativespeakers.feature.track.addinterview.navigateToAddInterview
 import ru.nativespeakers.feature.track.details.navigateToTrack
@@ -180,10 +182,12 @@ fun TJobApp() = TJobTheme {
 
             candidateScreen(
                 navigateToVacancyWithId = navController::navigateToVacancyDetails,
-                navigateToResumeWithId = {},
+                navigateToResumeWithId = navController::navigateToResume,
                 navigateToTrackWithId = navController::navigateToTrack,
                 navigateBack = navController::popBackStack,
             )
+
+            resumeScreen(navController::popBackStack)
         }
     }
 }

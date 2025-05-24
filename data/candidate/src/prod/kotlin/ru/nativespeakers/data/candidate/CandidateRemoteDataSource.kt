@@ -78,7 +78,7 @@ internal class CandidateRemoteDataSource @Inject constructor(
 
     override suspend fun resumeById(id: Long): Result<ResumeNetwork> =
         withContext(ioDispatcher) {
-            val response = httpClient.get("/candidate/${id}")
+            val response = httpClient.get("/candidate/resume/${id}")
             when (response.status) {
                 HttpStatusCode.OK -> Result.success(response.body())
                 else -> Result.failure(Exception())

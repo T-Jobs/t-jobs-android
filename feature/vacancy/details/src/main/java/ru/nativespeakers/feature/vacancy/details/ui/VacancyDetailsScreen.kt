@@ -524,7 +524,7 @@ private fun StaffItem(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun TagsSection(
+fun TagsSection(
     tags: Map<TagCategoryNetwork, List<TagNetwork>>,
     modifier: Modifier = Modifier
 ) {
