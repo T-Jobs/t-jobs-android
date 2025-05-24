@@ -22,7 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -72,7 +72,7 @@ fun CopyPasteLinkSection(
             modifier = Modifier.weight(1f)
         )
 
-        val clipboard = LocalClipboard.current
+        val clipboard = LocalClipboardManager.current
         ChangeButton(
             imageVector = Icons.Outlined.ContentPaste,
             text = null,

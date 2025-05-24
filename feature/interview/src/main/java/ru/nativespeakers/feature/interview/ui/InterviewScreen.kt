@@ -261,7 +261,10 @@ private fun InterviewScreenContent(
                 currentInterviewerId = interviewer?.id,
                 onAcceptTimeClick = viewModel::approveTime,
                 onDeclineTimeClick = viewModel::rejectTime,
-                onFinishTrackClick = viewModel::finishTrack,
+                onFinishTrackClick = {
+                    viewModel.finishTrack()
+                    navigateBack()
+                },
                 onPassCandidateClick = viewModel::passCandidate,
                 modifier = Modifier.fillMaxWidth()
             )
