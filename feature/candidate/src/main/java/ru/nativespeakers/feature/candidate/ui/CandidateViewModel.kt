@@ -45,8 +45,22 @@ internal class CandidateViewModel @AssistedInject constructor(
     var tracks by mutableStateOf(BasicUiState<List<TrackCardUiState>>(emptyList()))
         private set
 
+    var vacanciesToInviteCandidate by mutableStateOf(BasicUiState<List<VacancyCardUiState>>(emptyList()))
+        private set
+
     init {
         loadData()
+    }
+
+    fun inviteCandidateOnVacancy(vacancyId: Long) {
+        viewModelScope.launch {
+            val result: Result<Unit> = Result.success(Unit)
+            if (result.isSuccess) {
+                vacanciesToInviteCandidate = vacanciesToInviteCandidate.copy(
+                    value = vacanciesToInviteCandidate.value.filterNot { it.id == vacancyId }
+                )
+            }
+        }
     }
 
     fun applyCandidate(vacancyId: Long) {
@@ -101,6 +115,72 @@ internal class CandidateViewModel @AssistedInject constructor(
                     isLoading = false,
                     isError = false,
                     isLoaded = true,
+                )
+            }
+        }
+    }
+
+    fun loadVacanciesToInviteCandidate() {
+        viewModelScope.launch {
+            candidate.value?.let {
+                vacanciesToInviteCandidate = vacanciesToInviteCandidate.copy(isLoading = true)
+
+                val hrVacancies = userRepository.userVacancies(true)
+                if (hrVacancies.isFailure) {
+                    vacanciesToInviteCandidate = vacanciesToInviteCandidate.copy(
+                        isLoading = false,
+                        isLoaded = vacanciesToInviteCandidate.isLoaded,
+                        isError = true,
+                    )
+                    return@launch
+                }
+
+                val vacancies = hrVacancies.getOrThrow()
+                val actualVacanciesToInvite = vacancies.filter {
+                    hrVacancy -> hrVacancy.id !in it.appliedVacancies
+                }
+
+                val candidateIds = actualVacanciesToInvite.flatMap { it.appliedCandidatesIds }
+                val staffIds = actualVacanciesToInvite.flatMap { it.staffIds }
+
+                val staffResult = async { userRepository.findUsersByIds(staffIds) }
+                val candidateResult = async { candidateRepository.findById(candidateIds) }
+                if (staffResult.await().isFailure || candidateResult.await().isFailure) {
+                    vacanciesToInviteCandidate = vacanciesToInviteCandidate.copy(
+                        isLoading = false,
+                        isLoaded = briefs.isLoaded,
+                        isError = true,
+                    )
+                    return@launch
+                }
+
+                val staffs = staffResult.await().getOrThrow()
+                val hrs = staffs
+                    .filter { AppRole.HR in it.roles }
+                    .associateBy { it.id }
+
+                val teamLeads = staffs
+                    .filter { AppRole.TEAM_LEAD in it.roles }
+                    .associateBy { it.id }
+
+                val candidates = candidateResult.await().getOrThrow().associateBy { it.id }
+
+                val vacancyCards = actualVacanciesToInvite.map { vacancy ->
+                    vacancyCardUiState(
+                        vacancyNetwork = vacancy,
+                        candidates = vacancy.appliedCandidatesIds.map { candidates[it]!! },
+                        teamLeads = vacancy.staffIds
+                            .mapNotNull { teamLeads.getOrElse(it) { null } },
+                        hrs = vacancy.staffIds
+                            .mapNotNull { hrs.getOrElse(it) { null } },
+                    )
+                }
+
+                vacanciesToInviteCandidate = vacanciesToInviteCandidate.copy(
+                    value = vacancyCards,
+                    isLoading = false,
+                    isLoaded = true,
+                    isError = false,
                 )
             }
         }

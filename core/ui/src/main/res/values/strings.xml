@@ -39,4 +39,5 @@
     <string name="core_ui_open_form">Открыть форму</string>
     <string name="core_ui_open_apply">Принять</string>
     <string name="core_ui_open_reject">Отклонить</string>
+    <string name="core_ui_open_invite">Позвать</string>
 </resources>

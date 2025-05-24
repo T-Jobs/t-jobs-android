@@ -9,4 +9,6 @@
     <string name="feature_candidate_tracks_empty">Список треков пуст</string>
     <string name="feature_candidate_tracks_active">Активные</string>
     <string name="feature_candidate_tracks_history">История</string>
+    <string name="feature_candidate_invite_candidate">Позвать на вакансию</string>
+    <string name="feature_candidate_invite_candidate_vacancies_empty">Список вакансий пуст</string>
 </resources>

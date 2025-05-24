@@ -28,7 +28,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.nativespeakers.core.designsystem.Base5
+import ru.nativespeakers.core.ui.BasicUiState
 import ru.nativespeakers.core.ui.R
+import ru.nativespeakers.core.ui.screen.EmptyScreen
+import ru.nativespeakers.core.ui.screen.ErrorScreen
+import ru.nativespeakers.core.ui.screen.LoadingScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -110,6 +114,69 @@ fun <T> BottomSheetWithSearch(
                 key = { itemKey(items[it]) }
             ) {
                 itemComposable(items[it])
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun <T> BottomSheetWithMultipleItems(
+    state: () -> BasicUiState<List<T>>,
+    onRetryLoad: () -> Unit,
+    emptyStateMessage: String,
+    itemKey: (T) -> Any,
+    itemComposable: @Composable LazyItemScope.(T) -> Unit,
+    onDismissRequest: () -> Unit,
+    sheetState: SheetState,
+    modifier: Modifier = Modifier,
+    verticalArrangement: Arrangement.Vertical = Arrangement.Top,
+) {
+    ModalBottomSheet(
+        dragHandle = {
+            BottomSheetDefaults.DragHandle(
+                width = 70.dp,
+                shape = MaterialTheme.shapes.medium,
+                color = Color(0xFFD9D9D9),
+                modifier = Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = {}
+                )
+            )
+        },
+        onDismissRequest = onDismissRequest,
+        sheetState = sheetState,
+        shape = MaterialTheme.shapes.large.copy(
+            bottomEnd = CornerSize(0.dp),
+            bottomStart = CornerSize(0.dp)
+        ),
+        containerColor = MaterialTheme.colorScheme.surface,
+        modifier = modifier
+    ) {
+        val state = state()
+
+        when {
+            state.isLoading && !state.isLoaded -> LoadingScreen()
+            state.isError && !state.isLoaded -> ErrorScreen(onRetryLoad)
+            state.isLoaded -> {
+                val items = state.value
+                if (items.isEmpty()) {
+                    EmptyScreen(emptyStateMessage)
+                } else {
+                    LazyColumn(
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = verticalArrangement,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        items(
+                            count = items.size,
+                            key = { itemKey(items[it]) }
+                        ) {
+                            itemComposable(items[it])
+                        }
+                    }
+                }
             }
         }
     }

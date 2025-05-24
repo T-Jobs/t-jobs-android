@@ -7,6 +7,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,8 +17,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +38,7 @@ import ru.nativespeakers.core.designsystem.Base0
 import ru.nativespeakers.core.designsystem.Base6
 import ru.nativespeakers.core.designsystem.Green5
 import ru.nativespeakers.core.designsystem.Primary2
+import ru.nativespeakers.core.designsystem.Primary6
 import ru.nativespeakers.core.designsystem.Primary8
 import ru.nativespeakers.core.designsystem.Primary9
 import ru.nativespeakers.core.designsystem.TJobTheme
@@ -62,6 +67,50 @@ data class VacancyCardUiState(
     val salaryLowerBoundRub: Int? = null,
     val salaryHigherBoundRub: Int? = null,
 )
+
+@Composable
+fun VacancyCardWithInviteOption(
+    state: VacancyCardUiState,
+    onClick: () -> Unit,
+    onInviteCandidateClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+    ) {
+        VacancyCard(
+            state = state,
+            onClick = onClick,
+            modifier = Modifier.weight(1f)
+        )
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier
+                .clickable(
+                    interactionSource = remember(::MutableInteractionSource),
+                    indication = null,
+                    onClick = onInviteCandidateClick,
+                )
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Add,
+                contentDescription = null,
+                tint = Primary6,
+                modifier = Modifier.size(16.dp)
+            )
+
+            Text(
+                text = stringResource(R.string.core_ui_open_invite),
+                style = MaterialTheme.typography.labelLarge,
+                color = Primary6,
+            )
+        }
+    }
+}
 
 @Composable
 fun VacancyCardWithApplyRejectButtons(
@@ -160,7 +209,7 @@ private fun Header(
         verticalArrangement = Arrangement.spacedBy(6.dp),
         modifier = modifier
     ) {
-        Row {
+        FlowRow {
             Text(
                 text = vacancyName,
                 style = MaterialTheme.typography.titleLarge,
@@ -236,8 +285,8 @@ private fun Persons(
     candidatesCount: Int,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    FlowRow(
+        verticalArrangement = Arrangement.Center,
         horizontalArrangement = Arrangement.SpaceAround,
         modifier = modifier
     ) {

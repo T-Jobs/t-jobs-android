@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.ArrowBackIosNew
 import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -27,10 +28,12 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -45,6 +48,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.launch
 import ru.nativespeakers.core.designsystem.Base10
 import ru.nativespeakers.core.designsystem.Base5
 import ru.nativespeakers.core.designsystem.Base8
@@ -52,6 +56,9 @@ import ru.nativespeakers.core.designsystem.Primary0
 import ru.nativespeakers.core.designsystem.Primary10
 import ru.nativespeakers.core.designsystem.Primary6
 import ru.nativespeakers.core.model.InterviewStatus
+import ru.nativespeakers.core.ui.bottomsheet.BottomSheetOption
+import ru.nativespeakers.core.ui.bottomsheet.BottomSheetWithMultipleItems
+import ru.nativespeakers.core.ui.bottomsheet.BottomSheetWithOptions
 import ru.nativespeakers.core.ui.interview.PersonAndPhotoUiState
 import ru.nativespeakers.core.ui.lifecycle.ResumedEventExecutor
 import ru.nativespeakers.core.ui.photo.PersonPhoto
@@ -67,12 +74,33 @@ import ru.nativespeakers.core.ui.track.TrackCardUiState
 import ru.nativespeakers.core.ui.vacancy.VacancyCard
 import ru.nativespeakers.core.ui.vacancy.VacancyCardUiState
 import ru.nativespeakers.core.ui.vacancy.VacancyCardWithApplyRejectButtons
+import ru.nativespeakers.core.ui.vacancy.VacancyCardWithInviteOption
 import ru.nativespeakers.feature.candidate.R
 
 private enum class AvailableTab(val index: Int) {
     RESUMES(0),
     BRIEFS(1),
     TRACKS(2),
+}
+
+@Composable
+private fun rememberCandidateOptions(
+    onInviteCandidateClick: () -> Unit,
+): List<BottomSheetOption> {
+    return if (isHr()) {
+        val inviteCandidate = stringResource(R.string.feature_candidate_invite_candidate)
+        remember(onInviteCandidateClick) {
+            listOf(
+                BottomSheetOption(
+                    name = inviteCandidate,
+                    leadingIcon = Icons.Outlined.Add,
+                    onClick = onInviteCandidateClick,
+                )
+            )
+        }
+    } else {
+        emptyList()
+    }
 }
 
 @Composable
@@ -120,11 +148,35 @@ private fun CandidateScreenContent(
 
     val candidate = viewModel.candidate.value
 
+    val optionsBottomSheetState = rememberModalBottomSheetState()
+    var optionsBottomSheetVisible by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+
+    var inviteCandidateBottomSheetVisible by remember { mutableStateOf(false) }
+    val inviteCandidateBottomSheetState = rememberModalBottomSheetState()
+
+    val candidateOptions = rememberCandidateOptions {
+        scope.launch { optionsBottomSheetState.hide() }.invokeOnCompletion {
+            if (!optionsBottomSheetState.isVisible) {
+                optionsBottomSheetVisible = false
+            }
+        }
+
+        inviteCandidateBottomSheetVisible = true
+        if (!viewModel.vacanciesToInviteCandidate.isLoaded) {
+            viewModel.loadVacanciesToInviteCandidate()
+        }
+    }
+
     Scaffold(
         topBar = {
             Header(
                 onBackPressed = navigateBack,
-                onMoreClick = {},
+                onMoreClick = {
+                    if (candidateOptions.isNotEmpty()) {
+                        optionsBottomSheetVisible = true
+                    }
+                },
                 scrollBehavior = scrollBehavior,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -183,6 +235,54 @@ private fun CandidateScreenContent(
                 onTrackClick = navigateToTrackWithId,
             )
         }
+    }
+
+    if (optionsBottomSheetVisible) {
+        BottomSheetWithOptions(
+            options = candidateOptions,
+            onDismissRequest = {
+                scope.launch { optionsBottomSheetState.hide() }.invokeOnCompletion {
+                    if (!optionsBottomSheetState.isVisible) {
+                        optionsBottomSheetVisible = false
+                    }
+                }
+            },
+            sheetState = optionsBottomSheetState,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+
+    if (inviteCandidateBottomSheetVisible) {
+        BottomSheetWithMultipleItems(
+            state = { viewModel.vacanciesToInviteCandidate },
+            onRetryLoad = viewModel::loadVacanciesToInviteCandidate,
+            emptyStateMessage = stringResource(R.string.feature_candidate_invite_candidate_vacancies_empty),
+            itemKey = { it.id },
+            itemComposable = {
+                VacancyCardWithInviteOption(
+                    state = it,
+                    onClick = {},
+                    onInviteCandidateClick = {
+                        viewModel.inviteCandidateOnVacancy(it.id)
+                        scope.launch { inviteCandidateBottomSheetState.hide() }.invokeOnCompletion {
+                            if (!inviteCandidateBottomSheetState.isVisible) {
+                                inviteCandidateBottomSheetVisible = false
+                            }
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
+            onDismissRequest = {
+                scope.launch { inviteCandidateBottomSheetState.hide() }.invokeOnCompletion {
+                    if (!inviteCandidateBottomSheetState.isVisible) {
+                        inviteCandidateBottomSheetVisible = false
+                    }
+                }
+            },
+            sheetState = inviteCandidateBottomSheetState,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 
@@ -297,6 +397,7 @@ private fun LazyListScope.selectedTabContent(
 
                         if (active.isNotEmpty()) {
                             item {
+                                Spacer(Modifier.height(16.dp))
                                 Text(
                                     text = stringResource(R.string.feature_candidate_tracks_active),
                                     style = MaterialTheme.typography.bodyLarge,

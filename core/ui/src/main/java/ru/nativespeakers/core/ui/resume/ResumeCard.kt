@@ -10,10 +10,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowRightAlt
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -100,7 +104,16 @@ fun ResumeCard(
                     fontSize = 10.sp,
                     color = Primary6,
                 )
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Outlined.ArrowRightAlt,
+                    contentDescription = null,
+                    tint = Primary6,
+                    modifier = Modifier.size(18.dp)
+                )
             }
+
+            Spacer(Modifier.height(6.dp))
 
             Date(state.creationDate)
         }
