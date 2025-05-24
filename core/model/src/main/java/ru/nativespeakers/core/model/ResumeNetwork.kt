@@ -1,6 +1,6 @@
 package ru.nativespeakers.core.model
 
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonNames
@@ -16,5 +16,6 @@ data class ResumeNetwork(
     val name: String,
     val description: String,
     val tags: List<TagNetwork>,
-    val date: LocalDateTime,
+    @JsonNames("data")
+    val date: LocalDate,
 )

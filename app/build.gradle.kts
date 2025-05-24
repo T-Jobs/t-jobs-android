@@ -43,6 +43,7 @@ dependencies {
     implementation(projects.core.ui)
 
     implementation(projects.feature.auth)
+    implementation(projects.feature.candidate)
     implementation(projects.feature.competencies)
     implementation(projects.feature.filters)
     implementation(projects.feature.home)

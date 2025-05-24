@@ -3,7 +3,6 @@ package ru.nativespeakers.core.ui.resume
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,10 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.LocalDate
 import ru.nativespeakers.core.designsystem.Base6
 import ru.nativespeakers.core.designsystem.Primary2
 import ru.nativespeakers.core.designsystem.Primary6
@@ -45,8 +41,7 @@ data class ResumeCardUiState(
     val id: Long = 0,
     val name: String = "",
     val firstThreeTags: List<TagNetwork> = emptyList(),
-    val creationDate: LocalDateTime = Clock.System.now()
-        .toLocalDateTime(TimeZone.currentSystemDefault()),
+    val creationDate: LocalDate = LocalDate(2020, 1, 10),
 )
 
 @Composable
@@ -114,7 +109,7 @@ fun ResumeCard(
 
 @Composable
 private fun Date(
-    date: LocalDateTime,
+    date: LocalDate,
     modifier: Modifier = Modifier
 ) {
     val day = "%02d".format(date.dayOfMonth)

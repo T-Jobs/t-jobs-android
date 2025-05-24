@@ -37,4 +37,6 @@
     <string name="core_ui_auto_choose">Автоматический подбор</string>
     <string name="core_ui_choose_by_hand">Выбрать в ручную</string>
     <string name="core_ui_open_form">Открыть форму</string>
+    <string name="core_ui_open_apply">Принять</string>
+    <string name="core_ui_open_reject">Отклонить</string>
 </resources>

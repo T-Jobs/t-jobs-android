@@ -87,7 +87,7 @@ internal class CandidateRemoteDataSource @Inject constructor(
 
     override suspend fun resumeById(ids: List<Long>): Result<List<ResumeNetwork>> =
         withContext(ioDispatcher) {
-            val response = httpClient.get("/candidate") {
+            val response = httpClient.get("/candidate/resume") {
                 url {
                     if (ids.isNotEmpty()) {
                         parameters.append("ids", ids.joinToString(separator = ","))

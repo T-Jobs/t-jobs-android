@@ -1,15 +1,18 @@
 package ru.nativespeakers.feature.candidate.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBackIosNew
 import androidx.compose.material.icons.outlined.MoreHoriz
@@ -32,6 +35,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
@@ -42,17 +46,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.nativespeakers.core.designsystem.Base10
+import ru.nativespeakers.core.designsystem.Base5
 import ru.nativespeakers.core.designsystem.Base8
+import ru.nativespeakers.core.designsystem.Primary0
 import ru.nativespeakers.core.designsystem.Primary10
 import ru.nativespeakers.core.designsystem.Primary6
+import ru.nativespeakers.core.model.InterviewStatus
 import ru.nativespeakers.core.ui.interview.PersonAndPhotoUiState
 import ru.nativespeakers.core.ui.lifecycle.ResumedEventExecutor
 import ru.nativespeakers.core.ui.photo.PersonPhoto
 import ru.nativespeakers.core.ui.photo.toPersonAndPhotoUiState
+import ru.nativespeakers.core.ui.resume.ResumeCard
+import ru.nativespeakers.core.ui.resume.ResumeCardUiState
 import ru.nativespeakers.core.ui.role.isHr
-import ru.nativespeakers.core.ui.role.isTeamLead
+import ru.nativespeakers.core.ui.screen.EmptyScreen
 import ru.nativespeakers.core.ui.screen.ErrorScreen
 import ru.nativespeakers.core.ui.screen.LoadingScreen
+import ru.nativespeakers.core.ui.track.TrackCard
+import ru.nativespeakers.core.ui.track.TrackCardUiState
+import ru.nativespeakers.core.ui.vacancy.VacancyCard
+import ru.nativespeakers.core.ui.vacancy.VacancyCardUiState
+import ru.nativespeakers.core.ui.vacancy.VacancyCardWithApplyRejectButtons
 import ru.nativespeakers.feature.candidate.R
 
 private enum class AvailableTab(val index: Int) {
@@ -64,6 +78,9 @@ private enum class AvailableTab(val index: Int) {
 @Composable
 internal fun CandidateScreen(
     candidateId: Long,
+    navigateToResumeWithId: (Long) -> Unit,
+    navigateToVacancyWithId: (Long) -> Unit,
+    navigateToTrackWithId: (Long) -> Unit,
     navigateBack: () -> Unit,
 ) {
     val viewModel = hiltViewModel(
@@ -77,10 +94,13 @@ internal fun CandidateScreen(
     }
 
     when {
-        viewModel.isLoading && !viewModel.isLoaded -> LoadingScreen()
-        !viewModel.isLoaded -> ErrorScreen(viewModel::loadData)
-        viewModel.isLoaded -> CandidateScreenContent(
+        viewModel.candidate.isLoading && !viewModel.candidate.isLoaded -> LoadingScreen()
+        !viewModel.candidate.isLoaded && viewModel.candidate.isError -> ErrorScreen(viewModel::loadData)
+        viewModel.candidate.isLoaded -> CandidateScreenContent(
             viewModel = viewModel,
+            navigateToResumeWithId = navigateToResumeWithId,
+            navigateToVacancyWithId = navigateToVacancyWithId,
+            navigateToTrackWithId = navigateToTrackWithId,
             navigateBack = navigateBack,
         )
     }
@@ -90,13 +110,15 @@ internal fun CandidateScreen(
 @Composable
 private fun CandidateScreenContent(
     viewModel: CandidateViewModel,
+    navigateToResumeWithId: (Long) -> Unit,
+    navigateToVacancyWithId: (Long) -> Unit,
+    navigateToTrackWithId: (Long) -> Unit,
     navigateBack: () -> Unit,
 ) {
     var currentTab by rememberSaveable { mutableStateOf(AvailableTab.RESUMES) }
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     val candidate = viewModel.candidate.value
-    val resumes = viewModel.resumes.value
 
     Scaffold(
         topBar = {
@@ -110,28 +132,227 @@ private fun CandidateScreenContent(
         containerColor = MaterialTheme.colorScheme.surface,
     ) { paddingValues ->
         LazyColumn(
-            contentPadding = PaddingValues(16.dp),
             modifier = Modifier
+                .fillMaxSize()
                 .padding(paddingValues)
         ) {
             item {
                 CandidateInfo(
                     state = candidate!!.toPersonAndPhotoUiState(),
                     tgId = candidate.tgId,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Primary0)
+                        .padding(16.dp)
                 )
             }
 
             item {
                 TabRow(
-                    currentTab = currentTab,
+                    currentTabSelected = currentTab,
                     onResumesClick = {
-                        
-                    }
+                        currentTab = AvailableTab.RESUMES
+                        if (!viewModel.resumes.isLoaded) {
+                            viewModel.loadResumes()
+                        }
+                    },
+                    onBriefsClick = {
+                        currentTab = AvailableTab.BRIEFS
+                        if (!viewModel.briefs.isLoaded) {
+                            viewModel.loadBriefs()
+                        }
+                    },
+                    onTracksClick = {
+                        currentTab = AvailableTab.TRACKS
+                        if (!viewModel.tracks.isLoaded) {
+                            viewModel.loadTracks()
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Primary0)
+                        .padding(horizontal = 16.dp)
                 )
             }
 
+            selectedTabContent(
+                currentTabSelected = currentTab,
+                viewModel = viewModel,
+                onResumeClick = navigateToResumeWithId,
+                onVacancyClick = navigateToVacancyWithId,
+                onTrackClick = navigateToTrackWithId,
+            )
+        }
+    }
+}
 
+private fun LazyListScope.selectedTabContent(
+    currentTabSelected: AvailableTab,
+    viewModel: CandidateViewModel,
+    onResumeClick: (Long) -> Unit,
+    onVacancyClick: (Long) -> Unit,
+    onTrackClick: (Long) -> Unit,
+) {
+    when (currentTabSelected) {
+        AvailableTab.RESUMES -> {
+            when {
+                viewModel.resumes.isLoading && !viewModel.resumes.isLoaded -> item { LoadingScreen() }
+                !viewModel.resumes.isLoaded && viewModel.resumes.isError -> item {
+                    ErrorScreen(viewModel::loadResumes)
+                }
+
+                viewModel.resumes.isLoaded -> {
+                    val resumes = viewModel.resumes.value
+                    if (resumes.isEmpty()) {
+                        item {
+                            EmptyScreen(stringResource(R.string.feature_candidate_resumes_empty))
+                        }
+                    } else {
+                        items(
+                            items = resumes,
+                            key = ResumeCardUiState::id
+                        ) {
+                            Spacer(Modifier.height(16.dp))
+                            ResumeCard(
+                                state = it,
+                                onClick = { onResumeClick(it.id) },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp)
+                            )
+                        }
+                    }
+                }
+
+            }
+        }
+
+        AvailableTab.BRIEFS -> {
+            when {
+                viewModel.briefs.isLoading && !viewModel.briefs.isLoaded -> item { LoadingScreen() }
+                !viewModel.briefs.isLoaded && viewModel.briefs.isError -> item {
+                    ErrorScreen(viewModel::loadBriefs)
+                }
+
+                viewModel.briefs.isLoaded -> {
+                    val briefs = viewModel.briefs.value
+                    if (briefs.isEmpty()) {
+                        item {
+                            EmptyScreen(stringResource(R.string.feature_candidate_vacancies_empty))
+                        }
+                    } else {
+                        items(
+                            items = briefs,
+                            key = VacancyCardUiState::id,
+                        ) {
+                            if (isHr()) {
+                                Spacer(Modifier.height(16.dp))
+                                VacancyCardWithApplyRejectButtons(
+                                    state = it,
+                                    onClick = { onVacancyClick(it.id) },
+                                    onApplyClick = { viewModel.applyCandidate(it.id) },
+                                    onRejectClick = { viewModel.rejectCandidate(it.id) },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp)
+                                )
+                            } else {
+                                Spacer(Modifier.height(16.dp))
+                                VacancyCard(
+                                    state = it,
+                                    onClick = { onVacancyClick(it.id) },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        AvailableTab.TRACKS -> {
+            when {
+                viewModel.tracks.isLoading && !viewModel.tracks.isLoaded -> item { LoadingScreen() }
+                !viewModel.tracks.isLoaded && viewModel.tracks.isError -> item {
+                    ErrorScreen(viewModel::loadTracks)
+                }
+
+                viewModel.tracks.isLoaded -> {
+                    val tracks = viewModel.tracks.value
+                    if (tracks.isEmpty()) {
+                        item {
+                            EmptyScreen(stringResource(R.string.feature_candidate_tracks_empty))
+                        }
+                    } else {
+                        val trackGroups = tracks.groupBy {
+                            it.lastInterviewStatus != InterviewStatus.FAILED &&
+                                    it.lastInterviewStatus != InterviewStatus.PASSED
+                        }
+
+                        val active = trackGroups[true].orEmpty()
+                        val history = trackGroups[false].orEmpty()
+
+                        if (active.isNotEmpty()) {
+                            item {
+                                Text(
+                                    text = stringResource(R.string.feature_candidate_tracks_active),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+                            items(
+                                items = active,
+                                key = TrackCardUiState::id
+                            ) {
+                                Spacer(Modifier.height(16.dp))
+                                TrackCard(
+                                    state = it,
+                                    onClick = { onTrackClick(it.id) },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp)
+                                )
+                            }
+                        }
+
+                        if (history.isNotEmpty()) {
+                            item {
+                                Spacer(Modifier.height(16.dp))
+
+                                Text(
+                                    text = stringResource(R.string.feature_candidate_tracks_history),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp)
+                                )
+                            }
+                            items(
+                                items = history,
+                                key = TrackCardUiState::id
+                            ) {
+                                Spacer(Modifier.height(16.dp))
+                                TrackCard(
+                                    state = it,
+                                    onClick = { onTrackClick(it.id) },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .alpha(0.7f)
+                                        .padding(horizontal = 16.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+
+            }
         }
     }
 }
@@ -159,6 +380,7 @@ private fun TabRow(
                     .tabIndicatorOffset(selectedTabIndex, matchContentSize = true)
             )
         },
+        divider = {},
         modifier = modifier
     ) {
         Text(
@@ -247,8 +469,8 @@ private fun CandidateInfo(
 
         Text(
             text = stringResource(R.string.feature_candidate_candidate),
-            style = MaterialTheme.typography.titleLarge,
-            color = Primary10,
+            style = MaterialTheme.typography.labelMedium,
+            color = Base5,
         )
 
         Spacer(Modifier.height(16.dp))

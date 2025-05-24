@@ -20,6 +20,8 @@ import ru.nativespeakers.feature.auth.ui.AuthViewModel
 import ru.nativespeakers.feature.auth.LoginRoute
 import ru.nativespeakers.feature.auth.loginScreen
 import ru.nativespeakers.feature.auth.navigateToLogin
+import ru.nativespeakers.feature.candidate.candidateScreen
+import ru.nativespeakers.feature.candidate.navigateToCandidate
 import ru.nativespeakers.feature.competencies.competenciesScreen
 import ru.nativespeakers.feature.competencies.navigateToCompetencies
 import ru.nativespeakers.feature.filters.filtersScreen
@@ -118,7 +120,7 @@ fun TJobApp() = TJobTheme {
                 navigateToProfile = navController::navigateToProfile,
                 navigateToVacancyWithId = navController::navigateToVacancyDetails,
                 navigateToInterviewWithId = navController::navigateToInterview,
-                navigateToCandidateWithId = {},
+                navigateToCandidateWithId = navController::navigateToCandidate,
                 navigateToTrackWithId = navController::navigateToTrack,
                 navigateToFilters = navController::navigateToFilters
             )
@@ -175,6 +177,13 @@ fun TJobApp() = TJobTheme {
             addInterviewScreen(navController)
 
             interviewScreen(navigateBack = navController::popBackStack)
+
+            candidateScreen(
+                navigateToVacancyWithId = navController::navigateToVacancyDetails,
+                navigateToResumeWithId = {},
+                navigateToTrackWithId = navController::navigateToTrack,
+                navigateBack = navController::popBackStack,
+            )
         }
     }
 }

@@ -40,11 +40,12 @@ import ru.nativespeakers.core.designsystem.TJobTheme
 import ru.nativespeakers.core.model.CandidateNetwork
 import ru.nativespeakers.core.model.StaffNetwork
 import ru.nativespeakers.core.model.VacancyNetwork
+import ru.nativespeakers.core.ui.PrimaryAndSecondaryButtons
+import ru.nativespeakers.core.ui.R
 import ru.nativespeakers.core.ui.conditional
 import ru.nativespeakers.core.ui.interview.PersonAndPhotoUiState
 import ru.nativespeakers.core.ui.photo.PersonPhoto
 import ru.nativespeakers.core.ui.photo.toPersonAndPhotoUiState
-import ru.nativespeakers.core.ui.R.string as coreUiStrings
 
 @Immutable
 data class VacancyCardUiState(
@@ -61,6 +62,34 @@ data class VacancyCardUiState(
     val salaryLowerBoundRub: Int? = null,
     val salaryHigherBoundRub: Int? = null,
 )
+
+@Composable
+fun VacancyCardWithApplyRejectButtons(
+    state: VacancyCardUiState,
+    onClick: () -> Unit,
+    onApplyClick: () -> Unit,
+    onRejectClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        modifier = modifier
+    ) {
+        VacancyCard(
+            state = state,
+            onClick = onClick,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        PrimaryAndSecondaryButtons(
+            primaryText = stringResource(R.string.core_ui_open_apply),
+            secondaryText = stringResource(R.string.core_ui_open_reject),
+            onPrimaryClick = onApplyClick,
+            onSecondaryClick = onRejectClick,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
 
 @Composable
 fun VacancyCard(
@@ -169,7 +198,7 @@ fun SalaryBlock(
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = stringResource(coreUiStrings.core_ui_on_hands),
+                text = stringResource(R.string.core_ui_on_hands),
                 color = Base6,
                 style = MaterialTheme.typography.labelMedium
             )
@@ -213,19 +242,19 @@ private fun Persons(
         modifier = modifier
     ) {
         PersonsBlock(
-            who = stringResource(coreUiStrings.core_ui_hrs),
+            who = stringResource(R.string.core_ui_hrs),
             firstTwoPersons = firstTwoHrs,
             personsCount = hrsCount,
             photoSize = 26.dp
         )
         PersonsBlock(
-            who = stringResource(coreUiStrings.core_ui_team_leads),
+            who = stringResource(R.string.core_ui_team_leads),
             firstTwoPersons = firstTwoTeamLeads,
             personsCount = teamLeadsCount,
             photoSize = 26.dp
         )
         PersonsBlock(
-            who = stringResource(coreUiStrings.core_ui_candidates),
+            who = stringResource(R.string.core_ui_candidates),
             firstTwoPersons = firstTwoCandidates,
             personsCount = candidatesCount,
             photoSize = 26.dp
@@ -330,8 +359,8 @@ private fun getStringForSalary(
     salaryLowerBoundRub != null && salaryHigherBoundRub != null -> {
         "${salaryLowerBoundRub.moneyToString()} - ${salaryHigherBoundRub.moneyToString()}"
     }
-    salaryLowerBoundRub != null -> "${stringResource(coreUiStrings.core_ui_from)} ${salaryLowerBoundRub.moneyToString()}"
-    salaryHigherBoundRub != null -> "${stringResource(coreUiStrings.core_ui_until)} ${salaryHigherBoundRub.moneyToString()}"
+    salaryLowerBoundRub != null -> "${stringResource(R.string.core_ui_from)} ${salaryLowerBoundRub.moneyToString()}"
+    salaryHigherBoundRub != null -> "${stringResource(R.string.core_ui_until)} ${salaryHigherBoundRub.moneyToString()}"
     else -> null
 }
 

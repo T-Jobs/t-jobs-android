@@ -4,4 +4,9 @@
     <string name="feature_candidate_resumes">Резюме</string>
     <string name="feature_candidate_briefs">Заявки</string>
     <string name="feature_candidate_tracks">Треки</string>
+    <string name="feature_candidate_resumes_empty">Список резюме пуст</string>
+    <string name="feature_candidate_vacancies_empty">Список объявлений на вакансии пуст</string>
+    <string name="feature_candidate_tracks_empty">Список треков пуст</string>
+    <string name="feature_candidate_tracks_active">Активные</string>
+    <string name="feature_candidate_tracks_history">История</string>
 </resources>

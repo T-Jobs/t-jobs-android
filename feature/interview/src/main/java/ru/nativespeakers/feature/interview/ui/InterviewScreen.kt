@@ -74,6 +74,7 @@ import ru.nativespeakers.core.designsystem.Red6
 import ru.nativespeakers.core.designsystem.Yellow2
 import ru.nativespeakers.core.designsystem.Yellow4
 import ru.nativespeakers.core.model.InterviewStatus
+import ru.nativespeakers.core.ui.PrimaryAndSecondaryButtons
 import ru.nativespeakers.core.ui.bottomsheet.BottomSheetOption
 import ru.nativespeakers.core.ui.bottomsheet.BottomSheetWithOptions
 import ru.nativespeakers.core.ui.bottomsheet.BottomSheetWithSearch
@@ -413,67 +414,6 @@ private fun InterviewStatusContent(
                 onPrimaryClick = onFinishTrackClick,
                 onSecondaryClick = onPassCandidateClick,
                 modifier = Modifier.fillMaxWidth()
-            )
-        }
-    }
-}
-
-@Composable
-private fun PrimaryAndSecondaryButtons(
-    primaryText: String,
-    secondaryText: String,
-    onPrimaryClick: () -> Unit,
-    onSecondaryClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier
-    ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .clip(MaterialTheme.shapes.small)
-                .background(
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = MaterialTheme.shapes.small
-                )
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = onPrimaryClick,
-                )
-                .weight(1f)
-                .padding(vertical = 6.dp)
-        ) {
-            Text(
-                text = primaryText,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimary,
-            )
-        }
-
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .clip(MaterialTheme.shapes.small)
-                .background(
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    shape = MaterialTheme.shapes.small
-                )
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = onSecondaryClick,
-                )
-                .weight(1f)
-                .padding(vertical = 6.dp)
-        ) {
-            Text(
-                text = secondaryText,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
         }
     }

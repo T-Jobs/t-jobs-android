@@ -45,12 +45,24 @@ internal class CandidateViewModel @AssistedInject constructor(
     var tracks by mutableStateOf(BasicUiState<List<TrackCardUiState>>(emptyList()))
         private set
 
-    val isLoading = candidate.isLoading || resumes.isLoading
-
-    val isLoaded = candidate.isLoaded && resumes.isLoaded
-
     init {
         loadData()
+    }
+
+    fun applyCandidate(vacancyId: Long) {
+        viewModelScope.launch {
+            val result = trackRepository.approveApplication(candidateId, vacancyId)
+            if (result.isSuccess) {
+                loadBriefs()
+            }
+        }
+    }
+
+    fun rejectCandidate(vacancyId: Long) {
+        viewModelScope.launch {
+
+
+        }
     }
 
     fun loadData() {
