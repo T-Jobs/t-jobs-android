@@ -55,6 +55,22 @@ internal class TrackRemoteDataSource @Inject constructor(
             }
         }
 
+    override suspend fun declineApplication(candidateId: Long, vacancyId: Long): Result<Unit> =
+        withContext(ioDispatcher) {
+            val response = httpClient.submitForm(
+                url = "/track/decline-application",
+                formParameters = parameters {
+                    append("candidate_id", candidateId.toString())
+                    append("vacancy_id", vacancyId.toString())
+                }
+            )
+
+            when (response.status) {
+                HttpStatusCode.OK -> Result.success(response.body())
+                else -> Result.failure(Exception())
+            }
+        }
+
     override suspend fun setHrForTrack(trackId: Long, hrId: Long): Result<Unit> =
         withContext(ioDispatcher) {
             val response = httpClient.post("/track/set-hr") {

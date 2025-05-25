@@ -54,7 +54,7 @@ internal class CandidateViewModel @AssistedInject constructor(
 
     fun inviteCandidateOnVacancy(vacancyId: Long) {
         viewModelScope.launch {
-            val result: Result<Unit> = Result.success(Unit)
+            val result = trackRepository.createTrack(candidateId, vacancyId)
             if (result.isSuccess) {
                 vacanciesToInviteCandidate = vacanciesToInviteCandidate.copy(
                     value = vacanciesToInviteCandidate.value.filterNot { it.id == vacancyId }
@@ -67,15 +67,21 @@ internal class CandidateViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val result = trackRepository.approveApplication(candidateId, vacancyId)
             if (result.isSuccess) {
-                loadBriefs()
+                briefs = briefs.copy(
+                    value = briefs.value.filterNot { it.id == vacancyId }
+                )
             }
         }
     }
 
     fun rejectCandidate(vacancyId: Long) {
         viewModelScope.launch {
-
-
+            val result = trackRepository.declineApplication(candidateId, vacancyId)
+            if (result.isSuccess) {
+                briefs = briefs.copy(
+                    value = briefs.value.filterNot { it.id == vacancyId }
+                )
+            }
         }
     }
 

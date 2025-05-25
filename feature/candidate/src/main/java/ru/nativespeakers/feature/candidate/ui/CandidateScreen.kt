@@ -3,6 +3,7 @@ package ru.nativespeakers.feature.candidate.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -281,6 +282,7 @@ private fun CandidateScreenContent(
                 }
             },
             sheetState = inviteCandidateBottomSheetState,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxWidth()
         )
     }

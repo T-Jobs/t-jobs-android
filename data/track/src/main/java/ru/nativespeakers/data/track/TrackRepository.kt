@@ -22,6 +22,10 @@ class TrackRepository @Inject constructor(
         return trackDataSource.approveApplication(candidateId, vacancyId)
     }
 
+    suspend fun declineApplication(candidateId: Long, vacancyId: Long): Result<Unit> {
+        return trackDataSource.declineApplication(candidateId, vacancyId)
+    }
+
     suspend fun setHrForTrack(trackId: Long, hrId: Long): Result<Unit> {
         return trackDataSource.setHrForTrack(trackId, hrId)
     }
