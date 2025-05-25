@@ -22,11 +22,12 @@ import ru.nativespeakers.core.ui.R
 @Composable
 fun EmptyScreen(
     message: String,
+    modifier: Modifier = Modifier.fillMaxSize()
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier
     ) {
         Spacer(modifier = Modifier.weight(1f))
         Image(

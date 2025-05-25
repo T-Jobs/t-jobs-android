@@ -307,7 +307,12 @@ private fun LazyListScope.selectedTabContent(
                     val resumes = viewModel.resumes.value
                     if (resumes.isEmpty()) {
                         item {
-                            EmptyScreen(stringResource(R.string.feature_candidate_resumes_empty))
+                            EmptyScreen(
+                                message = stringResource(R.string.feature_candidate_resumes_empty),
+                                modifier = Modifier
+                                    .height(120.dp)
+                                    .fillMaxWidth()
+                            )
                         }
                     } else {
                         items(
@@ -340,7 +345,12 @@ private fun LazyListScope.selectedTabContent(
                     val briefs = viewModel.briefs.value
                     if (briefs.isEmpty()) {
                         item {
-                            EmptyScreen(stringResource(R.string.feature_candidate_vacancies_empty))
+                            EmptyScreen(
+                                message = stringResource(R.string.feature_candidate_vacancies_empty),
+                                modifier = Modifier
+                                    .height(120.dp)
+                                    .fillMaxWidth()
+                            )
                         }
                     } else {
                         items(
@@ -386,7 +396,12 @@ private fun LazyListScope.selectedTabContent(
                     val tracks = viewModel.tracks.value
                     if (tracks.isEmpty()) {
                         item {
-                            EmptyScreen(stringResource(R.string.feature_candidate_tracks_empty))
+                            EmptyScreen(
+                                message = stringResource(R.string.feature_candidate_tracks_empty),
+                                modifier = Modifier
+                                    .height(120.dp)
+                                    .fillMaxWidth()
+                            )
                         }
                     } else {
                         val trackGroups = tracks.groupBy {

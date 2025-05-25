@@ -49,12 +49,13 @@ import ru.nativespeakers.core.ui.R.string as coreUiStrings
 
 @Immutable
 data class TrackCardUiState(
-    val id: Long,
-    val hr: PersonAndPhotoUiState,
-    val candidate: PersonAndPhotoUiState,
-    val interviewsCount: Int,
-    val lastInterviewStatus: InterviewStatus,
-    val vacancy: String,
+    val id: Long = -1,
+    val hr: PersonAndPhotoUiState = PersonAndPhotoUiState(),
+    val candidate: PersonAndPhotoUiState = PersonAndPhotoUiState(),
+    val interviewsCount: Int = -1,
+    val lastInterviewStatus: InterviewStatus = InterviewStatus.NONE,
+    val vacancy: String = "",
+    val vacancyId: Long = -1,
 )
 
 @Composable
@@ -226,7 +227,8 @@ fun TrackNetwork.toTrackCardUiState() = TrackCardUiState(
     candidate = candidate.toPersonAndPhotoUiState(),
     interviewsCount = interviewsIds.size,
     lastInterviewStatus = lastStatus,
-    vacancy = vacancy.name
+    vacancy = vacancy.name,
+    vacancyId = vacancy.id,
 )
 
 @Preview

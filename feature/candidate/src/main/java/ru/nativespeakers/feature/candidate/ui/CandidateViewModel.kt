@@ -45,7 +45,11 @@ internal class CandidateViewModel @AssistedInject constructor(
     var tracks by mutableStateOf(BasicUiState<List<TrackCardUiState>>(emptyList()))
         private set
 
-    var vacanciesToInviteCandidate by mutableStateOf(BasicUiState<List<VacancyCardUiState>>(emptyList()))
+    var vacanciesToInviteCandidate by mutableStateOf(
+        BasicUiState<List<VacancyCardUiState>>(
+            emptyList()
+        )
+    )
         private set
 
     init {
@@ -56,9 +60,9 @@ internal class CandidateViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val result = trackRepository.createTrack(candidateId, vacancyId)
             if (result.isSuccess) {
-                vacanciesToInviteCandidate = vacanciesToInviteCandidate.copy(
-                    value = vacanciesToInviteCandidate.value.filterNot { it.id == vacancyId }
-                )
+                loadCandidate().invokeOnCompletion {
+                    loadVacanciesToInviteCandidate()
+                }
             }
         }
     }
@@ -67,9 +71,7 @@ internal class CandidateViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val result = trackRepository.approveApplication(candidateId, vacancyId)
             if (result.isSuccess) {
-                briefs = briefs.copy(
-                    value = briefs.value.filterNot { it.id == vacancyId }
-                )
+                loadCandidate().invokeOnCompletion { loadBriefs() }
             }
         }
     }
@@ -78,9 +80,7 @@ internal class CandidateViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val result = trackRepository.declineApplication(candidateId, vacancyId)
             if (result.isSuccess) {
-                briefs = briefs.copy(
-                    value = briefs.value.filterNot { it.id == vacancyId }
-                )
+                loadCandidate().invokeOnCompletion { loadBriefs() }
             }
         }
     }
@@ -89,46 +89,44 @@ internal class CandidateViewModel @AssistedInject constructor(
         loadCandidate().invokeOnCompletion { loadResumes() }
     }
 
-    fun loadTracks() {
-        viewModelScope.launch {
-            candidate.value?.let {
-                tracks = tracks.copy(isLoading = true)
+    fun loadTracks() = viewModelScope.launch {
+        candidate.value?.let { candidate ->
+            tracks = tracks.copy(isLoading = true)
 
-                val trackIds = it.tracks
-                if (trackIds.isEmpty()) {
-                    tracks = tracks.copy(
-                        value = emptyList(),
-                        isLoading = false,
-                        isLoaded = true,
-                        isError = false,
-                    )
-                    return@launch
-                }
-
-                val tracksResult = trackRepository.findById(trackIds)
-                if (tracksResult.isFailure) {
-                    tracks = tracks.copy(
-                        isLoading = false,
-                        isLoaded = tracks.isLoaded,
-                        isError = true,
-                    )
-                    return@launch
-                }
-
-                val trackCards = tracksResult.getOrThrow().map { it.toTrackCardUiState() }
+            val trackIds = candidate.tracks
+            if (trackIds.isEmpty()) {
                 tracks = tracks.copy(
-                    value = trackCards,
+                    value = emptyList(),
                     isLoading = false,
-                    isError = false,
                     isLoaded = true,
+                    isError = false,
                 )
+                return@launch
             }
+
+            val tracksResult = trackRepository.findById(trackIds)
+            if (tracksResult.isFailure) {
+                tracks = tracks.copy(
+                    isLoading = false,
+                    isLoaded = tracks.isLoaded,
+                    isError = true,
+                )
+                return@launch
+            }
+
+            val trackCards = tracksResult.getOrThrow().map { it.toTrackCardUiState() }
+            tracks = tracks.copy(
+                value = trackCards,
+                isLoading = false,
+                isError = false,
+                isLoaded = true,
+            )
         }
     }
 
     fun loadVacanciesToInviteCandidate() {
         viewModelScope.launch {
-            candidate.value?.let {
+            candidate.value?.let { candidate ->
                 vacanciesToInviteCandidate = vacanciesToInviteCandidate.copy(isLoading = true)
 
                 val hrVacancies = userRepository.userVacancies(true)
@@ -141,9 +139,23 @@ internal class CandidateViewModel @AssistedInject constructor(
                     return@launch
                 }
 
+                if (!tracks.isLoaded && !tracks.isLoading) {
+                    loadTracks().join()
+                }
+
+                if (tracks.isError && !tracks.isLoaded) {
+                    vacanciesToInviteCandidate = vacanciesToInviteCandidate.copy(
+                        isLoading = false,
+                        isLoaded = briefs.isLoaded,
+                        isError = true,
+                    )
+                    return@launch
+                }
+
                 val vacancies = hrVacancies.getOrThrow()
-                val actualVacanciesToInvite = vacancies.filter {
-                    hrVacancy -> hrVacancy.id !in it.appliedVacancies
+                val trackVacancies = tracks.value.map { it.vacancyId }
+                val actualVacanciesToInvite = vacancies.filterNot {
+                    it.id in candidate.appliedVacancies || it.id in trackVacancies
                 }
 
                 val candidateIds = actualVacanciesToInvite.flatMap { it.appliedCandidatesIds }
@@ -269,10 +281,8 @@ internal class CandidateViewModel @AssistedInject constructor(
         candidate = candidate.copy(isLoading = true)
 
         val result = candidateRepository.findById(candidateId)
-        val newValue = if (result.isSuccess) result.getOrThrow() else candidate.value
-
         candidate = candidate.copy(
-            value = newValue,
+            value = result.getOrNull(),
             isLoading = false,
             isLoaded = candidate.isLoaded || result.isSuccess,
             isError = result.isFailure,

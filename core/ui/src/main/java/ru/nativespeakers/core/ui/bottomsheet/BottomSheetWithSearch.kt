@@ -5,6 +5,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -162,7 +163,12 @@ fun <T> BottomSheetWithMultipleItems(
             state.isLoaded -> {
                 val items = state.value
                 if (items.isEmpty()) {
-                    EmptyScreen(emptyStateMessage)
+                    EmptyScreen(
+                        message = emptyStateMessage,
+                        modifier = Modifier
+                            .height(120.dp)
+                            .fillMaxWidth()
+                    )
                 } else {
                     LazyColumn(
                         contentPadding = PaddingValues(16.dp),
