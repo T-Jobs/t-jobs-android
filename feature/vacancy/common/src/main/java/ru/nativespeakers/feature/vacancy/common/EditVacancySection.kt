@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,11 +39,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import org.burnoutcrew.reorderable.ReorderableItem
-import org.burnoutcrew.reorderable.ReorderableLazyListState
-import org.burnoutcrew.reorderable.detectReorderAfterLongPress
-import org.burnoutcrew.reorderable.rememberReorderableLazyListState
-import org.burnoutcrew.reorderable.reorderable
 import ru.nativespeakers.core.designsystem.Base3
 import ru.nativespeakers.core.designsystem.Base4
 import ru.nativespeakers.core.designsystem.Primary6
@@ -54,6 +50,9 @@ import ru.nativespeakers.core.ui.SalaryPicker
 import ru.nativespeakers.core.ui.TagGroup
 import ru.nativespeakers.core.ui.bottomsheet.BottomSheetWithSearch
 import ru.nativespeakers.core.ui.interview.SearchInterviewType
+import sh.calvin.reorderable.ReorderableItem
+import sh.calvin.reorderable.ReorderableLazyListState
+import sh.calvin.reorderable.rememberReorderableLazyListState
 
 @Immutable
 data class EditVacancyUiState(
@@ -99,17 +98,16 @@ fun EditVacancySection(
         valueRange = 0f..1_000_000f
     )
 
-    val state = rememberReorderableLazyListState(
-        onMove = { from, to -> onReorderInterviews(from.index - 2, to.index - 2) }
-    )
+    val lazyListState = rememberLazyListState()
+    val state = rememberReorderableLazyListState(lazyListState) { from, to ->
+        onReorderInterviews(from.index - 2, to.index - 2)
+    }
 
     LazyColumn(
-        state = state.listState,
+        state = lazyListState,
         horizontalAlignment = Alignment.CenterHorizontally,
         contentPadding = PaddingValues(vertical = 30.dp),
         modifier = modifier
-            .reorderable(state)
-            .detectReorderAfterLongPress(state)
     ) {
         item {
             Column {
@@ -293,7 +291,7 @@ private fun LazyListScope.trackSelector(
             key = { it.id }
         ) { item ->
             ReorderableItem(
-                reorderableState = state,
+                state = state,
                 key = item.id,
             ) { isDragging ->
                 val elevation by animateDpAsState(if (isDragging) 16.dp else 0.dp)
@@ -308,6 +306,7 @@ private fun LazyListScope.trackSelector(
                         .shadow(elevation)
                         .background(color = MaterialTheme.colorScheme.surface)
                         .padding(horizontal = 16.dp)
+                        .draggableHandle()
                 )
             }
         }
