@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.nativespeakers.core.designsystem.Base0
 import ru.nativespeakers.core.designsystem.Base5
+import ru.nativespeakers.core.model.AppRole
 import ru.nativespeakers.core.ui.conditional
 import ru.nativespeakers.core.ui.lifecycle.ResumedEventExecutor
 import ru.nativespeakers.core.ui.photo.PersonPhoto
@@ -47,6 +48,19 @@ import ru.nativespeakers.core.ui.role.isInterviewer
 import ru.nativespeakers.core.ui.screen.ErrorScreen
 import ru.nativespeakers.core.ui.screen.LoadingScreen
 import ru.nativespeakers.feature.profile.R
+
+@Composable
+private fun List<AppRole>.getAppRoleName() = mutableListOf<String>().apply {
+    if (AppRole.TEAM_LEAD in this@getAppRoleName) {
+        add(stringResource(R.string.feature_profile_team_lead))
+    }
+    if (AppRole.HR in this@getAppRoleName) {
+        add(stringResource(R.string.feature_profile_hr))
+    }
+    if (AppRole.INTERVIEWER in this@getAppRoleName) {
+        add(stringResource(R.string.feature_profile_interviewer))
+    }
+}.joinToString(separator = ", ")
 
 @Composable
 fun ProfileScreen(
@@ -120,9 +134,8 @@ private fun ProfileScreenContent(
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            val rolesText = userInfo.roles.joinToString(separator = ", ")
             Text(
-                text = rolesText,
+                text = userInfo.roles.getAppRoleName(),
                 style = MaterialTheme.typography.titleMedium,
                 color = Base5
             )

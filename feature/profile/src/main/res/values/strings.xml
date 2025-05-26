@@ -3,4 +3,7 @@
     <string name="feature_profile_interviewer_mode">Режим интервьюера</string>
     <string name="feature_profile_competencies">Компетенции</string>
     <string name="feature_profile_create_vacancy">Создать вакансию</string>
+    <string name="feature_profile_hr">Рекрутер</string>
+    <string name="feature_profile_interviewer">Интервьюер</string>
+    <string name="feature_profile_team_lead">Руководитель команды</string>
 </resources>
