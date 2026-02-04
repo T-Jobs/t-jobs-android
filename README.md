@@ -77,21 +77,32 @@ git clone https://github.com/your-organization/hr-flow-android.git
 - Быстрый доступ к отслеживаемым вакансиям
 - Поиск кандидатов и вакансий
 
+![image](screenshots/main1.png)
+![image](screenshots/main2.png)
+
 ### 2. Экран вакансии
 - Информация о вакансии
 - Кандидаты на отборе
 - Подавшие заявку кандидаты
 - Базовый трек вакансии
 
+![image](screenshots/vacancy1.png)
+
 ### 3. Экран кандидата
 - Профиль кандидата
 - История собеседований
 - Активные треки и заявки
 
+![image](screenshots/competencies1.png)
+
 ### 4. Экран собеседования
 - Детали интервью
 - Статус и этапы
 - Фидбэк и результаты
+
+![image](screenshots/interview1.png)
+![image](screenshots/track1.png)
+![image](screenshots/track2.png)
 
 ## Преимущества выбранного стека
 1. **Jetpack Compose** — современный декларативный UI
